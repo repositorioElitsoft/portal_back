@@ -8,11 +8,11 @@
 		<version>2.7.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.sistema</groupId>
-	<artifactId>PortalElitsoft-Backend</artifactId>
+	<groupId>com.elitsoft</groupId>
+	<artifactId>proyectoCuestionario_backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PortalElitsoft-Backend</name>
-	<description>Backend de portal Elitsoft</description>
+	<name>proyectoCuestionario_backend</name>
+	<description>Backend de proyecto cuestionario</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
