@@ -2,6 +2,8 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.lang.Nullable;
+
 import java.util.List;
 import javax.persistence.*;
 
@@ -27,8 +29,13 @@ public class Usuario  {
     private String usr_pass;
     private String usr_tel;
     private String usr_url_link;
+
+    private String usr_rol;
     
     // Relación muchos a uno con la entidad Pais
+
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pais_id") // Nombre de la columna que será clave foránea
     private Pais pais;
@@ -41,6 +48,12 @@ public class Usuario  {
 
     }
 
+    public String getUsr_rol(){
+        return this.usr_rol;
+    }
+    public void setUsr_rol(String usr_rol){
+        this.usr_rol = usr_rol;
+    }
     public Long getUsr_id() {
         return usr_id;
     }

@@ -53,10 +53,10 @@ public class HerramientaServiceImpl implements HerramientaService {
     }
     
     
-    //@Override
-    //public List<Object[]> obtenerHerramientasConProductosPorUsuario(Long usuarioId) {
-      //  return herramientaRepository.obtenerHerramientasConProductosPorUsuario(usuarioId);
-    //}
+    @Override
+    public List<Herramienta> obtenerHerramientasConProductosPorUsuario(Long usuarioId) {
+        return herramientaRepository.obtenerHerramientasConProductosPorUsuario(usuarioId);
+    }
 
    
 }

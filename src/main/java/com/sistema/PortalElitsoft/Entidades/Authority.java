@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.sistema.PortalElitsoft.Entidades;
-import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
 
 /**
  *
  * @author Elitsoft83
  */
+/*
 public class Authority implements GrantedAuthority {
     
     private String authority;
@@ -25,3 +26,4 @@ public class Authority implements GrantedAuthority {
     
     
 }
+*/
