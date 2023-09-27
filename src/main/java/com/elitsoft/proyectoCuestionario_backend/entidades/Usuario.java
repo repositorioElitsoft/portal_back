@@ -31,7 +31,7 @@ public class Usuario  {
     private String usr_url_link;
 
     private String usr_rol;
-    
+    private String usr_ver_code;
     // Relación muchos a uno con la entidad Pais
 
 
@@ -126,6 +126,12 @@ public class Usuario  {
         this.usr_url_link = usr_url_link;
     }
 
+    public String getUsr_ver_code(){
+        return this.usr_ver_code;
+    }
+    public void setUsr_ver_code(String usr_ver_code){
+        this.usr_ver_code = usr_ver_code;
+    }
     public Pais getPais() {
         return pais;
     }

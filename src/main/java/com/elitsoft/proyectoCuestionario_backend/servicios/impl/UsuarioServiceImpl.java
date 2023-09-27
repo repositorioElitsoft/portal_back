@@ -5,8 +5,11 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Pais;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
+import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
-    
+
+    @Autowired
+    private EmailServiceImpl emailService;
     @Autowired
     private UsuarioRepository usuarioRepository;
     
@@ -46,9 +51,12 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
+        usuario.setUsr_ver_code(UUID.randomUUID().toString());
 
+        Usuario nuevoUsuario = usuarioRepository.save(usuario);
+        emailService.sendVerificationEmail(nuevoUsuario);
 
-        return usuarioRepository.save(usuario);
+        return nuevoUsuario;
     }
     
     @Override
@@ -56,6 +64,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         return usuarioRepository.findById(usr_id).orElse(null);
     }
 
-    
+
+
     
 }

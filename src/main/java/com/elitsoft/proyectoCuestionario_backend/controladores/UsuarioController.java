@@ -8,6 +8,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,14 @@ public class UsuarioController {
     @GetMapping("/sendTest")
     public void sendTestEmail(){
         emailService.sendSimpleMessage("felipe.diaz@elitsoft-chile.com","test","elitsoftrob@gmail.com");
+    }
+
+    @GetMapping("/verificar")
+    public void verificarUsuario(@Param("code") String ver_code){
+
+        //TODO: this
+        //return usuarioService
+
     }
 
 //    @DeleteMapping("/{usuarioId}")
