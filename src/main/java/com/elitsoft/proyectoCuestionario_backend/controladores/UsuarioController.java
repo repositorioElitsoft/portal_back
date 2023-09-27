@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Rol;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +28,8 @@ public class UsuarioController {
     
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/")
     public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception{
@@ -37,6 +40,11 @@ public class UsuarioController {
     @GetMapping("/{usr_id}")
     public Usuario obtenerUsuario(@PathVariable("usr_id") Long usr_id)throws Exception{
         return usuarioService.obtenerUsuario(usr_id);
+    }
+
+    @GetMapping("/sendTest")
+    public void sendTestEmail(){
+        emailService.sendSimpleMessage("felipe.diaz@elitsoft-chile.com","test","elitsoftrob@gmail.com");
     }
 
 //    @DeleteMapping("/{usuarioId}")

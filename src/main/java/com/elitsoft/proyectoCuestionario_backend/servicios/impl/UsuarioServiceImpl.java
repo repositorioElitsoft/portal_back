@@ -8,6 +8,7 @@ import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,6 +43,10 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
         usuario.setPais(pais);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+        usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
+
 
         return usuarioRepository.save(usuario);
     }
