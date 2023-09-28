@@ -34,6 +34,11 @@ public class UsuarioController {
         return usuarioService.guardarUsuario(usuario);
     }
 
+    @PutMapping("/")
+    public Boolean actualizarUsuario(@RequestBody Usuario usuario, @RequestHeader("Authorization") String Jwt){
+        return usuarioService.actualizarUsuario(usuario,Jwt);
+    }
+
 
     @GetMapping("/{usr_id}")
     public Usuario obtenerUsuario(@PathVariable("usr_id") Long usr_id)throws Exception{

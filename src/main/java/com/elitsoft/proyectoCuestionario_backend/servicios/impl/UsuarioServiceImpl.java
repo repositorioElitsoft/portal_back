@@ -1,6 +1,8 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.Config.JWT.JwtAuthenticationFilter;
+import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pais;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
@@ -13,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -126,5 +129,56 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
 
-    
+    public Boolean actualizarUsuario(Usuario usuario,String jwt){
+        System.out.println(jwt);
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return false;
+        }
+
+        System.out.println(token.getPrincipal().toString());
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+        if (!usuarioOpt.isPresent()){
+            return false;
+        }
+
+        Usuario usuarioExistente = usuarioOpt.get();
+
+        if(usuario.getPais() != null){
+            if(usuario.getPais().getPais_id() != null){
+                Pais pais = new Pais();
+                pais.setPais_id(usuario.getPais().getPais_id());
+                usuarioExistente.setPais(pais);
+            }
+        }
+
+        if(usuario.getUsr_ap_mat() != null){
+            usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
+        }
+
+        if(usuario.getUsr_ap_pat()!= null){
+            usuarioExistente.setUsr_ap_pat(usuario.getUsr_ap_pat());
+        }
+
+        if(usuario.getUsr_nom()!= null){
+            usuarioExistente.setUsr_nom(usuario.getUsr_nom());
+        }
+
+        if(usuario.getUsr_rut()!= null){
+            usuarioExistente.setUsr_rut(usuario.getUsr_rut());
+        }
+
+        if(usuario.getUsr_tel()!= null){
+            usuarioExistente.setUsr_tel(usuario.getUsr_tel());
+        }
+        if(usuario.getUsr_url_link()!= null){
+            usuarioExistente.setUsr_url_link(usuario.getUsr_url_link());
+        }
+
+
+        Usuario usuarioActualizado = usuarioRepository.save(usuarioExistente);
+        return true;
+    }
+
 }

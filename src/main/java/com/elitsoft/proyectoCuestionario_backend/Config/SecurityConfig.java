@@ -33,6 +33,8 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final static String ADMIN = "ROLE_ADMIN";
+    private final static String GUEST = "ROLE_GUEST";
+    private final static String REC = "ROLE_REC";
 
 
     @Bean
@@ -44,13 +46,17 @@ public class SecurityConfig {
         jwtAuthenticationFilter.setFilterProcessesUrl("/login");
 
 
+
         http.
                 csrf().disable()
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
                 //Permitir solamente métodos GETs autorizados con el rol de ADMIN
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
-                .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/**","POST")).hasAnyAuthority(ADMIN,GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/**","PUT")).hasAnyAuthority(ADMIN,GUEST)
+                //.requestMatchers(new AntPathRequestMatcher("/**","GET")).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

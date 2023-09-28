@@ -26,7 +26,6 @@ public class HerramientaController {
         this.laboralService = laboralService;
     }
 
-
     @PostMapping("/")
     public ResponseEntity<Laboral> guardarLaboral(
             @RequestBody Laboral laboral,
@@ -40,7 +39,6 @@ public class HerramientaController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     @GetMapping("/listar")
     public ResponseEntity<List<Herramienta>> obtenerListaHerramientas() {

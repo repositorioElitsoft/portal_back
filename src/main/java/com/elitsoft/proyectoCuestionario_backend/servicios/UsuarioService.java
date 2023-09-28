@@ -24,5 +24,7 @@ public interface UsuarioService {
 
     public void pedirRestaurarPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException;
     public Boolean cambiarPassword(String code, String password);
+
+    public Boolean actualizarUsuario(Usuario usuario, String jwt);
     
 }

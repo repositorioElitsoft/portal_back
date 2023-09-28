@@ -3,16 +3,20 @@ package com.elitsoft.proyectoCuestionario_backend.Config.JWT;
 import com.elitsoft.proyectoCuestionario_backend.Config.CustomUserDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.Collections;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -54,11 +58,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //Hace llamado de construcción del token
         String token = TokenUtils.createToken(userDetails.getUsername(), userDetails.getAuthorities());
 
+
+
+        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+
         //Se preparan el header de HTTP para poder cargar el TOken
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(
-                "{\"" + "Authorization" + "\":\"" + "Bearer "+ token + "\"}"
+                "{\"" + "Authorization" + "\":\"" + "Bearer "+ token + "\"," +
+                        "\"Role\": \"" +role +"\"}"
         );
         response.getWriter().flush();
         super.successfulAuthentication(request, response, chain, authResult);

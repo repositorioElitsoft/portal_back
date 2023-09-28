@@ -40,6 +40,7 @@ public class TokenUtils {
 
     public static UsernamePasswordAuthenticationToken getAuthentication(String token){
 
+        token = token.replace("Bearer ", "");
         try{
             //Se extraen las claims halladas en el token
             Claims claims = Jwts.parserBuilder()
@@ -63,4 +64,6 @@ public class TokenUtils {
             return null;
         }
     }
+
+
 }
