@@ -7,12 +7,16 @@ import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
+
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
 
 /**
  *
@@ -61,6 +65,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         return nuevoUsuario;
     }
 
+    @Override
     public Boolean verificarUsuario(String code){
 
         Optional<Usuario> user = usuarioRepository.findByUsrVerCode(code);
@@ -82,6 +87,43 @@ public class UsuarioServiceImpl implements UsuarioService{
         return usuarioRepository.findById(usr_id).orElse(null);
     }
 
+    @Override
+    public Boolean cambiarPassword(String code, String password){
+
+        if(code.isEmpty()){
+            return false;
+        }
+
+        Optional<Usuario> usuario = usuarioRepository.findByUsrRecPassCode(code);
+        if (!usuario.isPresent()){
+            return false;
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+        usuario.get().setUsr_rec_tkn("");
+        usuario.get().setUsr_pass(encoder.encode(password));
+
+        Usuario savedUser = usuarioRepository.save(usuario.get());
+        return true;
+    }
+    @Override
+    public void pedirRestaurarPassword(Usuario usuarioEntrante) throws MessagingException, UnsupportedEncodingException {
+
+        String email = usuarioEntrante.getUsr_email();
+
+        Optional<Usuario> usuario = usuarioRepository.findByUsrEmail(email);
+        if (!usuario.isPresent()){
+            return;
+        }
+        usuario.get().setUsr_rec_tkn(UUID.randomUUID().toString());
+
+        Usuario usuarioActualizado = usuarioRepository.save(usuario.get());
+
+        if (!usuarioActualizado.getUsr_email().equals(email)){
+            return;
+        }
+        emailService.sendRecoverPassword(usuarioActualizado);
+    }
 
 
     

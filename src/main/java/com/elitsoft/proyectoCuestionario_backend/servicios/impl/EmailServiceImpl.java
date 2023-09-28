@@ -20,8 +20,10 @@ public class EmailServiceImpl implements EmailService {
     //SenderEmail no es el email real, sino el que aparecerá una vez se mande el mensaje.
     //Se puede colocar cualquiera.
     private final String senderEmail = "no-response@elitsoft-chile.com";
-    private String verificationRoute = "http://localhost:8080/verificar?code=";
+    private String verificationRoute = "http://localhost:8080/usuarios/verificar?code=";
+    private String restaurarRoute = "http://localhost:8080/usuarios/restaurar?code=";
 
+    @Override
     public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("no-response@elitsoft-chile.com");
@@ -31,6 +33,7 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
     }
 
+    @Override
     public void sendVerificationEmail(Usuario user) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -53,12 +56,23 @@ public class EmailServiceImpl implements EmailService {
 
     }
 
-    public void sendRecoverPassword(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(senderEmail);
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
+    @Override
+    public void sendRecoverPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        //implementar lógica de código
+
+
+        String messageBody =
+                        "Para restaurar tu contraseña haz click en el siguiente link: <br>"
+                        + "<a href='"+ restaurarRoute + usuario.getUsr_rec_tkn() +"'> Restaurar contraseña </a>  <br>"
+                        + "Si no te has registrado y ignora este email.";
+
+        helper.setFrom(senderEmail, "Equipo Elitsoft");
+        helper.setTo(usuario.getUsr_email());
+        helper.setSubject("Restaurar Contraseña Elitsoft");
+        helper.setText(messageBody, true);
         mailSender.send(message);
     }
 }

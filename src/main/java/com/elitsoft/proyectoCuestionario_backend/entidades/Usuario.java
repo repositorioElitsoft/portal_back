@@ -36,13 +36,16 @@ public class Usuario  {
 
     private Boolean usr_is_ver;
 
+    private String usr_rec_tkn;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pais_id") // Nombre de la columna que será clave foránea
     private Pais pais;
     
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Herramienta> herramientas;
-   
+
+
 
     public Usuario(){
 
@@ -139,6 +142,12 @@ public class Usuario  {
     }
     public void setUsr_ver_code(String usr_ver_code){
         this.usr_ver_code = usr_ver_code;
+    }
+    public String getUsr_rec_tkn(){
+        return this.usr_rec_tkn;
+    }
+    public void setUsr_rec_tkn(String usr_rec_tkn){
+        this.usr_rec_tkn = usr_rec_tkn;
     }
     public Pais getPais() {
         return pais;
