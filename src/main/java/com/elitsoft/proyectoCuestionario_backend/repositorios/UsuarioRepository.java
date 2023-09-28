@@ -16,7 +16,8 @@ import org.springframework.stereotype.Repository;
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     
     Optional <Usuario> findById(Long usr_id);
-
+    @Query("SELECT u FROM Usuario u WHERE u.usr_ver_code = :code")
+    Optional <Usuario> findByUsrVerCode(@Param("code") String code);
     @Query("SELECT u FROM Usuario u WHERE u.usr_email = :email")
     Optional<Usuario> findByUsrEmail(@Param("email") String username);
     

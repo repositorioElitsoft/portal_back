@@ -53,10 +53,28 @@ public class UsuarioServiceImpl implements UsuarioService{
         usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
         usuario.setUsr_ver_code(UUID.randomUUID().toString());
 
+        usuario.setUsr_is_ver(false);
+
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
         emailService.sendVerificationEmail(nuevoUsuario);
 
         return nuevoUsuario;
+    }
+
+    public Boolean verificarUsuario(String code){
+
+        Optional<Usuario> user = usuarioRepository.findByUsrVerCode(code);
+
+        if (!user.isPresent()){
+            return false;
+        }
+
+        Usuario presentUser = user.get();
+        presentUser.setUsr_is_ver(true);
+
+        Usuario savedUser = usuarioRepository.save(presentUser);
+
+        return savedUser.getUsr_is_ver();
     }
     
     @Override

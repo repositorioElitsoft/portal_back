@@ -16,6 +16,6 @@ public interface UsuarioService {
 
     public Usuario obtenerUsuario(Long usr_id)throws Exception ;
 
-    
+    public Boolean verificarUsuario(String code);
     
 }

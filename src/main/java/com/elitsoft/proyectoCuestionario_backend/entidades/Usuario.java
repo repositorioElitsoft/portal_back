@@ -34,7 +34,7 @@ public class Usuario  {
     private String usr_ver_code;
     // Relación muchos a uno con la entidad Pais
 
-
+    private Boolean usr_is_ver;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pais_id") // Nombre de la columna que será clave foránea
@@ -120,6 +120,14 @@ public class Usuario  {
 
     public String getUsr_url_link() {
         return usr_url_link;
+    }
+
+    public void setUsr_is_ver(Boolean usr_is_ver) {
+        this.usr_is_ver = usr_is_ver;
+    }
+
+    public Boolean getUsr_is_ver() {
+        return usr_is_ver;
     }
 
     public void setUsr_url_link(String usr_url_link) {
