@@ -6,6 +6,7 @@ import com.elitsoft.proyectoCuestionario_backend.Config.JWT.JwtAuthenticationFil
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.JwtAuthorizationFilter;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @AllArgsConstructor
 public class SecurityConfig {
 
+
     private final UserDetailsService userDetailsService;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final static String ADMIN = "ROLE_ADMIN";
@@ -45,18 +47,16 @@ public class SecurityConfig {
         jwtAuthenticationFilter.setAuthenticationManager(authManager);
         jwtAuthenticationFilter.setFilterProcessesUrl("/login");
 
-
-
         http.
                 csrf().disable()
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
                 //Permitir solamente métodos GETs autorizados con el rol de ADMIN
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/**","POST")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/**","PUT")).hasAnyAuthority(ADMIN,GUEST)
-                //.requestMatchers(new AntPathRequestMatcher("/**","GET")).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -61,6 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         usuario.setUsr_ver_code(UUID.randomUUID().toString());
 
         usuario.setUsr_is_ver(false);
+        usuario.setUsr_rol("GUEST");
 
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
         emailService.sendVerificationEmail(nuevoUsuario);

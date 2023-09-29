@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Rol;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
@@ -10,7 +11,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -30,8 +35,16 @@ public class UsuarioController {
     private EmailService emailService;
 
     @PostMapping("/")
-    public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception{
-        return usuarioService.guardarUsuario(usuario);
+    public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario) throws Exception{
+        try{
+            usuarioService.guardarUsuario(usuario);
+        }
+        catch (DataAccessException ex){
+            CustomError error = new CustomError();
+            error.setError("El usuario ya existe.");
+            return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<Boolean>(true ,HttpStatus.CREATED);
     }
 
     @PutMapping("/")

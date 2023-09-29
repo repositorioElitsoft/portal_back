@@ -20,22 +20,19 @@ public class Usuario  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long usr_id;
-    
     private String usr_rut;
     private String usr_nom;
     private String usr_ap_pat;
     private String usr_ap_mat;
+    @Column(unique = true)
     private String usr_email;
     private String usr_pass;
     private String usr_tel;
     private String usr_url_link;
-
     private String usr_rol;
     private String usr_ver_code;
     // Relación muchos a uno con la entidad Pais
-
     private Boolean usr_is_ver;
-
     private String usr_rec_tkn;
 
     @ManyToOne(fetch = FetchType.LAZY)
