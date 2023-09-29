@@ -43,7 +43,8 @@ public class CategoriaController {
     public ResponseEntity<?> listarCategorias(){
         return ResponseEntity.ok(categoriaService.obtenerCategorias());
     }
-    //petición para actualizar categoria 
+    //petición para actualizar categoria
+    //TODO: Pedir id de categoria para actualizar
     @PutMapping("/")
     public Categoria actualizarCategoria(@RequestBody Categoria categoria){
         return categoriaService.actualizarCategoria(categoria);

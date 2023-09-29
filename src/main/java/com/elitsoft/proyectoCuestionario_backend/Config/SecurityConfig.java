@@ -54,6 +54,7 @@ public class SecurityConfig {
                 //Permitir solamente métodos GETs autorizados con el rol de ADMIN
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/**","POST")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/**","PUT")).hasAnyAuthority(ADMIN,GUEST)
