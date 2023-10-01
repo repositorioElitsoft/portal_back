@@ -131,13 +131,11 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 
     public Boolean actualizarUsuario(Usuario usuario,String jwt){
-        System.out.println(jwt);
+
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null){
             return false;
         }
-
-        System.out.println(token.getPrincipal().toString());
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
         if (!usuarioOpt.isPresent()){

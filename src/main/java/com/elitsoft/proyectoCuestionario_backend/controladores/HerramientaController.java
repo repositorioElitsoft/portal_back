@@ -27,17 +27,12 @@ public class HerramientaController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Laboral> guardarLaboral(
-            @RequestBody Laboral laboral,
-            @RequestParam Long usr_id,
-            @RequestParam List<Long> herramientaIds // Cambio aquí: aceptar una lista de IDs de herramientas
-    ) {
-        try {
-            Laboral laboralGuardada = laboralService.guardarLaboral(laboral, usr_id, herramientaIds);
-            return new ResponseEntity<>(laboralGuardada, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Boolean> guardarHerramientas(
+            @RequestBody List<Herramienta> herramientas,
+            @RequestHeader("Authorization") String Jwt) throws Exception {
+
+        herramientaService.guardarHerramientas(herramientas, Jwt);
+        return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
     }
 
     @GetMapping("/listar")

@@ -15,5 +15,5 @@ public class VersionProducto {
     private String vrs_name;
     @ManyToOne
     @JoinColumn(name = "prd_id")
-    private Long prd_id;
+    private Producto prd;
 }
