@@ -44,6 +44,12 @@ public class HerramientaServiceImpl implements HerramientaService {
             return false;
         }
 
+        List<Herramienta> herramientasAntiguas = herramientaRepository.findByUsuario(usuarioOpt.get());
+
+        for (Herramienta herramienta : herramientasAntiguas){
+            herramientaRepository.delete(herramienta);
+        }
+        
         for (Herramienta herramienta : herramientas){
             herramienta.setUsuario(usuarioOpt.get());
             herramientaRepository.save(herramienta);
