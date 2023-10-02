@@ -4,6 +4,8 @@ package com.elitsoft.proyectoCuestionario_backend.servicios;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pais;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  *
  * @author ELITSOFT86
@@ -13,6 +15,7 @@ public interface PaisService {
     
     public Pais obtenerPais(Long pais_id);
     Pais obtenerPaisPorNombre(String pais_nom);
-    
+
+    List<Pais> obtenerPaises();
     
 }

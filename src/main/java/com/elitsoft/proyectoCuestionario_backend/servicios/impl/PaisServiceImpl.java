@@ -7,6 +7,8 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  *
  * @author Maeva Martínez
@@ -26,8 +28,11 @@ public class PaisServiceImpl implements PaisService {
     public Pais obtenerPaisPorNombre(String pais_nom) {
         return paisRepository.findByPais_nom(pais_nom);
     }
-    
-   
+
+    @Override
+    public List<Pais> obtenerPaises(){
+        return paisRepository.findAll();
+    }
     
     
     
