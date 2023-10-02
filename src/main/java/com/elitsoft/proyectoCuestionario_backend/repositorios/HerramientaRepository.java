@@ -27,9 +27,7 @@ public interface HerramientaRepository extends JpaRepository <Herramienta, Long>
     
     //Metodo para obtener una herramienta por su id
     Optional <Herramienta> findById(Long herr_usr_id);
-    
-    
-    
+
     @Query("SELECT h FROM Herramienta h " +
        "JOIN FETCH h.producto p " +
        "WHERE h.usuario.usr_id = :usuarioId")
