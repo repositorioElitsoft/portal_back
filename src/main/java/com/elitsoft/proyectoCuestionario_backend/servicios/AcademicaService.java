@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface AcademicaService {
     
-    Academica guardarAcademica(Academica academica, Long usr_id) throws Exception;
+    Boolean guardarAcademica(Academica academica, String jwt);
 
     List<Academica> obtenerAcademicasPorUsuario(Usuario usuario);
     

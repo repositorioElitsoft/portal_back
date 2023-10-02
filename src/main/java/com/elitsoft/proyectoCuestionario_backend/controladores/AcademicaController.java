@@ -8,13 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -32,13 +26,13 @@ public class AcademicaController {
     }
     
     @PostMapping("/")
-    public ResponseEntity<Academica> guardarHerramienta(@RequestBody Academica academica,
-                                                           @RequestParam Long usr_id) {
+    public ResponseEntity<Boolean> guardarAcademica(@RequestBody Academica academica,
+                                                           @RequestHeader("Authorization") String jwt) {
         try {
-            Academica savedAcademica = academicaService.guardarAcademica(academica, usr_id);
-            return new ResponseEntity<>(savedAcademica, HttpStatus.CREATED);
+            academicaService.guardarAcademica(academica, jwt);
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface HerramientaService {
     
-    Herramienta guardarHerramienta(Herramienta herramienta, Long usr_id) throws Exception;
+    Boolean guardarHerramientas(List<Herramienta> herramientas, String Jwt) throws Exception;
 
     List<Herramienta> obtenerHerramientasPorUsuario(Usuario usuario);
     

@@ -1,12 +1,18 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,15 +33,28 @@ public class HerramientaServiceImpl implements HerramientaService {
     }
 
     @Override
-    public Herramienta guardarHerramienta(Herramienta herramienta, Long usr_id) throws Exception {
-        Usuario usuario = usuarioRepository.findById(usr_id).orElse(null);
-        if (usuario == null) {
-            throw new Exception("Usuario no encontrado");
+    public Boolean guardarHerramientas(List<Herramienta> herramientas, String Jwt) throws Exception {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(Jwt);
+        if (token == null){
+            return false;
         }
-        herramienta.setUsuario(usuario);
 
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+        if (!usuarioOpt.isPresent()){
+            return false;
+        }
 
-        return herramientaRepository.save(herramienta);
+        List<Herramienta> herramientasAntiguas = herramientaRepository.findByUsuario(usuarioOpt.get());
+
+        for (Herramienta herramienta : herramientasAntiguas){
+            herramientaRepository.delete(herramienta);
+        }
+
+        for (Herramienta herramienta : herramientas){
+            herramienta.setUsuario(usuarioOpt.get());
+            herramientaRepository.save(herramienta);
+        }
+        return true;
     }
 
     @Override

@@ -7,9 +7,12 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -27,24 +30,24 @@ public class HerramientaController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Laboral> guardarLaboral(
-            @RequestBody Laboral laboral,
-            @RequestParam Long usr_id,
-            @RequestParam List<Long> herramientaIds // Cambio aquí: aceptar una lista de IDs de herramientas
-    ) {
+    public ResponseEntity<?> guardarHerramientas(
+            @RequestBody List<Herramienta> herramientas,
+            @RequestHeader("Authorization") String Jwt) throws Exception {
         try {
-            Laboral laboralGuardada = laboralService.guardarLaboral(laboral, usr_id, herramientaIds);
-            return new ResponseEntity<>(laboralGuardada, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            herramientaService.guardarHerramientas(herramientas, Jwt);
         }
+        catch (ConstraintViolationException exception){
+            return new ResponseEntity<>(exception.getMessage(),HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
 
+    /*
     @GetMapping("/listar")
     public ResponseEntity<List<Herramienta>> obtenerListaHerramientas() {
         List<Herramienta> herramientas = herramientaService.obtenerListaHerramientas();
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
-    }
+    }*/
     
    // @GetMapping("/obtener-herramientas-con-productos/{usuarioId}")
    // public ResponseEntity<List<Object[]>> obtenerHerramientasConProductosPorUsuario(@PathVariable Long usuarioId) {

@@ -1,11 +1,15 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.AcademicaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,17 +27,22 @@ public class AcademicaServiceImpl implements AcademicaService {
         this.usuarioRepository = usuarioRepository;
     }
     
-    
-    
     @Override
-    public Academica guardarAcademica(Academica academica, Long usr_id) throws Exception {
-        Usuario usuario = usuarioRepository.findById(usr_id).orElse(null);
-        if (usuario == null) {
-            throw new Exception("Usuario no encontrado");
+    public Boolean guardarAcademica(Academica academica, String jwt)  {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return false;
         }
-        academica.setUsuario(usuario);
 
-        return academicaRepository.save(academica);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+        if (!usuarioOpt.isPresent()){
+            return false;
+        }
+
+        academica.setUsuario(usuarioOpt.get());
+
+        academicaRepository.save(academica);
+        return true;
     }
     
     @Override

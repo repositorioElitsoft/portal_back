@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  *
  * @author Maeva Martínez 
@@ -22,6 +24,11 @@ public class PaisController {
     
     @Autowired
     private PaisService paisService;
+
+    @GetMapping("/")
+    public List<Pais> obtenerPaises(){
+        return paisService.obtenerPaises();
+    }
     
     @GetMapping("/{pais_id}")
     public Pais obtenerPaisId(@PathVariable("pais_id") Long pais_id){
