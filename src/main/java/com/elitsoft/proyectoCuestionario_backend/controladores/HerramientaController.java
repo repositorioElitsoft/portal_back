@@ -7,9 +7,12 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -27,12 +30,16 @@ public class HerramientaController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Boolean> guardarHerramientas(
+    public ResponseEntity<?> guardarHerramientas(
             @RequestBody List<Herramienta> herramientas,
             @RequestHeader("Authorization") String Jwt) throws Exception {
-
-        herramientaService.guardarHerramientas(herramientas, Jwt);
-        return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+        try {
+            herramientaService.guardarHerramientas(herramientas, Jwt);
+        }
+        catch (ConstraintViolationException exception){
+            return new ResponseEntity<>(exception.getMessage(),HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
 
     /*

@@ -48,8 +48,15 @@ public class UsuarioController {
     }
 
     @PutMapping("/")
-    public Boolean actualizarUsuario(@RequestBody Usuario usuario, @RequestHeader("Authorization") String Jwt){
-        return usuarioService.actualizarUsuario(usuario,Jwt);
+    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario, @RequestHeader("Authorization") String Jwt){
+        try {
+            usuarioService.actualizarUsuario(usuario,Jwt);
+        }
+        catch (DataAccessException ex){
+            return new ResponseEntity<>(false ,HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(true ,HttpStatus.OK);
     }
 
 
