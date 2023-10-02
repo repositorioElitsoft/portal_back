@@ -35,11 +35,12 @@ public class HerramientaController {
         return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
     }
 
+    /*
     @GetMapping("/listar")
     public ResponseEntity<List<Herramienta>> obtenerListaHerramientas() {
         List<Herramienta> herramientas = herramientaService.obtenerListaHerramientas();
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
-    }
+    }*/
     
    // @GetMapping("/obtener-herramientas-con-productos/{usuarioId}")
    // public ResponseEntity<List<Object[]>> obtenerHerramientasConProductosPorUsuario(@PathVariable Long usuarioId) {

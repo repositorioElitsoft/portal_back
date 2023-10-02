@@ -25,6 +25,6 @@ public interface LaboralRepository extends JpaRepository <Laboral, Long>{
     // Método para listar toda la info laboral
     List<Laboral> findAll();
     
-    @Query("SELECT DISTINCT l FROM Laboral l LEFT JOIN FETCH l.herramientas h LEFT JOIN FETCH h.producto WHERE l.usuario = :usuario")
+    @Query("SELECT DISTINCT l FROM Laboral l LEFT JOIN FETCH l.herramientas h LEFT JOIN FETCH h.versionProducto WHERE l.usuario = :usuario")
     List<Laboral> findLaboralesWithHerramientasAndProductosByUsuario(@Param("usuario") Usuario usuario);
 }

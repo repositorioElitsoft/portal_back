@@ -1,6 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -17,7 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "TBL_HERR_USR")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
+@Data
 public class Herramienta {
     
     @Id
@@ -25,20 +28,21 @@ public class Herramienta {
     private Long herr_usr_id;
     
     private String herr_usr_anos_exp;
-    private String herr_usr_vrs;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     private Usuario usuario;
    
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prd_id", referencedColumnName = "prd_id") // Nombre de la columna que será clave foránea para la tabla de Producto
-    private Producto producto;
+    @JoinColumn(name = "vrs_prd_id", referencedColumnName = "vrs_id") // Nombre de la columna que será clave foránea para la tabla de Producto
+    private VersionProducto versionProducto;
 
-    private Long cert_id;
-    
-    private Long nvl_id;
-    
+    private Boolean herr_is_cert;
+
+    @Pattern(regexp = "\\b(?:alto|medio|bajo)\\b",
+            message = "Error valores solamente pueden ser alto, medio, or bajo.")
+    private String herr_nvl;
+
 
     public Herramienta() {
     }
@@ -59,14 +63,6 @@ public class Herramienta {
         this.herr_usr_anos_exp = herr_usr_anos_exp;
     }
 
-    public String getHerr_usr_vrs() {
-        return herr_usr_vrs;
-    }
-
-    public void setHerr_usr_vrs(String herr_usr_vrs) {
-        this.herr_usr_vrs = herr_usr_vrs;
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }
@@ -75,29 +71,8 @@ public class Herramienta {
         this.usuario = usuario;
     }
 
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
 
 
-    public Long getCert_id() {
-        return cert_id;
-    }
 
-    public void setCert_id(Long cert_id) {
-        this.cert_id = cert_id;
-    }
-
-    public Long getNvl_id() {
-        return nvl_id;
-    }
-
-    public void setNvl_id(Long nvl_id) {
-        this.nvl_id = nvl_id;
-    }
 
 }
