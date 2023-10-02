@@ -49,7 +49,7 @@ public class HerramientaServiceImpl implements HerramientaService {
         for (Herramienta herramienta : herramientasAntiguas){
             herramientaRepository.delete(herramienta);
         }
-        
+
         for (Herramienta herramienta : herramientas){
             herramienta.setUsuario(usuarioOpt.get());
             herramientaRepository.save(herramienta);
