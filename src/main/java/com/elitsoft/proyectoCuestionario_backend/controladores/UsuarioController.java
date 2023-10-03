@@ -9,6 +9,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -89,4 +90,11 @@ public class UsuarioController {
 //    public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId){
 //        usuarioService.eliminarUsuario(usuarioId);
 //    }
+
+    @GetMapping("/lista-usuarios")
+    public ResponseEntity<List<Usuario>> listarUsuarios(){
+        List<Usuario> usuarios = usuarioService.listarUsuarios();
+        System.out.println(usuarios);
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    }
 }

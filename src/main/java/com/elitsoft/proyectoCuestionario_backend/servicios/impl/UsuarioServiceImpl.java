@@ -1,16 +1,15 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.Config.JWT.JwtAuthenticationFilter;
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pais;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
-import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -180,4 +179,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         return true;
     }
 
+    public List<Usuario> listarUsuarios(){
+        return usuarioRepository.findAll();
+    }
 }
