@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
 
 /**
@@ -21,7 +22,7 @@ public interface UsuarioService {
 
     public Boolean verificarUsuario(String code);
 
-
+    public Optional<Usuario> getUsuarioByToken(String jwt);
     public void pedirRestaurarPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException;
     public Boolean cambiarPassword(String code, String password);
 

@@ -55,6 +55,7 @@ public class SecurityConfig {
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/cargoselitsoft/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/paises/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/**","POST")).hasAnyAuthority(ADMIN,GUEST)
@@ -65,7 +66,6 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                //Filtros
                 .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

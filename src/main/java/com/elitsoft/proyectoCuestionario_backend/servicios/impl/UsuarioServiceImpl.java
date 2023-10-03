@@ -180,4 +180,13 @@ public class UsuarioServiceImpl implements UsuarioService{
         return true;
     }
 
+    @Override
+    public Optional<Usuario> getUsuarioByToken(String jwt){
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return Optional.empty();
+        }
+        return usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+    }
+
 }
