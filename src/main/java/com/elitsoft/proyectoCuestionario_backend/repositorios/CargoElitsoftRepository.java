@@ -11,7 +11,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CargoElitsoftRepository extends JpaRepository <CargoElitsoft, Long>{
     
-    // Método para listar todos los cargogs disponibles en Elitsoft 
+    // Método para listar todos los cargos disponibles en Elitsoft
     List<CargoElitsoft> findAll();
-    
+
+    // para retornar un boolean
+    CargoElitsoft save(CargoElitsoft cargo);
+
+    void deleteById(Long cargo);
+
 }

@@ -2,6 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import java.util.List;
 
@@ -18,4 +19,9 @@ public interface AcademicaService {
     List<Academica> obtenerListaAcademicas();
     
     List<String> obtenerEstadosAcademicosUnicos();
+
+    public Boolean guardar_academica(Academica academica);
+
+    public Boolean remove_academica(Long academica_id);
+
 }

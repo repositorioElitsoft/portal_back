@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.AcademicaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
@@ -50,5 +51,18 @@ public class AcademicaServiceImpl implements AcademicaService {
     public List<String> obtenerEstadosAcademicosUnicos() {
         return academicaRepository.findAllDistinctInfAcadEst();
     }
-    
+
+    @Override
+    public Boolean guardar_academica(Academica academica){
+        academicaRepository.save(academica);
+        return true;
+    }
+    @Override
+    public Boolean remove_academica(Long academica_id) {
+        academicaRepository.deleteById(academica_id);
+        return true;
+
+    }
+
+
 }

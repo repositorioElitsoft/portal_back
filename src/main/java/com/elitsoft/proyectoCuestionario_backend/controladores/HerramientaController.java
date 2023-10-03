@@ -53,5 +53,7 @@ public class HerramientaController {
     //    List<Object[]> herramientasConProductos = herramientaService.obtenerHerramientasConProductosPorUsuario(usuarioId);
    //     return new ResponseEntity<>(herramientasConProductos, HttpStatus.OK);
    // }
+
+    //todo: agregar save
 }
 

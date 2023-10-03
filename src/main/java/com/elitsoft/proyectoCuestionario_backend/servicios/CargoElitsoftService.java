@@ -11,5 +11,9 @@ import java.util.List;
 public interface CargoElitsoftService {
     
     List<CargoElitsoft> obtenerListaCargosElitsoft();
-    
+
+
+    public Boolean guardar_cargos(CargoElitsoft cargo);
+
+    public Boolean remove_cargo(Long cargo);
 }

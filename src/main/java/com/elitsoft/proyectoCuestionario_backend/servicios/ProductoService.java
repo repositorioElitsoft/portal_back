@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import java.util.List;
 
@@ -16,6 +17,9 @@ public interface ProductoService {
     
     // Método para obtener el nombre del producto por su ID
     String obtenerNombreProducto(Long prdId);
-    
-    
+
+
+    public Boolean guardar_producto(Producto producto);
+
+    public Boolean remove_producto(Long producto);
 }
