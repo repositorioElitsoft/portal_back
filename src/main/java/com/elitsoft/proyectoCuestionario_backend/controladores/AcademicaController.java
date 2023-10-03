@@ -26,7 +26,7 @@ public class AcademicaController {
     }
     
     @PostMapping("/")
-    public ResponseEntity<Boolean> guardarAcademica(@RequestBody Academica academica,
+    public ResponseEntity<Boolean> guardarAcademica(@RequestBody List<Academica> academica,
                                                            @RequestHeader("Authorization") String jwt) {
         try {
             academicaService.guardarAcademica(academica, jwt);

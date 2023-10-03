@@ -11,10 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 public interface LaboralService {
     
-    Laboral guardarLaboral(Laboral laboral, Long usr_id, List<Long> herramientaIds) throws Exception;
+    Boolean guardarLaborales(List<Laboral> laboral, String jwt) throws Exception;
     ///List<Laboral> obtenerListaLaboralPorUsuario(Usuario usuario);
+
+    Boolean guardarLaboral(Laboral laboral, String jwt) throws Exception;
+
+
     
-    //<Laboral> obtenerListaLaboral();
+    List<Laboral> obtenerListaLaboral(String jwt) throws Exception;
 
    // List<Laboral> obtenerLaboralesConHerramientasYProductosPorUsuario(Long usr_id);
 

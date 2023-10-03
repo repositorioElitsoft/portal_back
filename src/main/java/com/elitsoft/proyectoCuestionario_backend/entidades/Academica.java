@@ -2,6 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -33,9 +34,9 @@ public class Academica {
     private Date inf_acad_fec_ini;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date inf_acad_fec_fin; 
-    private String inf_acad_est; 
-    
+    private String inf_acad_est;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     private Usuario usuario;
 

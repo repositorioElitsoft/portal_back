@@ -7,11 +7,15 @@ import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaReposit
 import com.elitsoft.proyectoCuestionario_backend.repositorios.LaboralRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
+
+import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import javax.swing.text.html.Option;
 
 /**
  *
@@ -23,34 +27,66 @@ public class LaboralServiceImpl implements LaboralService {
     private final LaboralRepository laboralRepository;
     private final UsuarioRepository usuarioRepository;
     private final HerramientaRepository herramientaRepository;
+    @Autowired
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public LaboralServiceImpl(LaboralRepository laboralRepository, UsuarioRepository usuarioRepository, HerramientaRepository herramientaRepository) {
+    public LaboralServiceImpl(LaboralRepository laboralRepository,
+                              UsuarioRepository usuarioRepository,
+                              HerramientaRepository herramientaRepository,
+                              UsuarioService usuarioService) {
         this.laboralRepository = laboralRepository;
         this.usuarioRepository = usuarioRepository;
         this.herramientaRepository = herramientaRepository;
+        this.usuarioService = usuarioService;
     }
 
     @Override
-    public Laboral guardarLaboral(Laboral laboral, Long usr_id, List<Long> herramientaIds) throws Exception {
-        Usuario usuario = usuarioRepository.findById(usr_id).orElse(null);
-        if (usuario == null) {
-            throw new Exception("Usuario no encontrado");
-        }
-        
-        Set<Herramienta> herramientas = new HashSet<>();
-        for (Long herr_usr_id : herramientaIds) {
-            Herramienta herramienta = herramientaRepository.findById(herr_usr_id).orElse(null);
-            if (herramienta == null) {
-                throw new Exception("Herramienta no encontrada");
-            }
-            herramientas.add(herramienta);
-        }
-        
-        laboral.setUsuario(usuario);
-        laboral.setHerramientas(herramientas); // Establecer el conjunto de herramientas en laboral
+    public Boolean guardarLaborales(List<Laboral> laborales, String jwt) throws Exception {
 
-        return laboralRepository.save(laboral);
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+
+        if (!userOptional.isPresent()){
+            return false;
+        }
+
+        laboralRepository.findByUsuario(userOptional.get())
+                .forEach((laboralRepository::delete));
+
+        laborales.forEach(laboral -> {
+            laboral.setUsuario(userOptional.get());
+            laboralRepository.save(laboral);
+        });
+
+
+        return true;
+    }
+
+    @Override
+    public Boolean guardarLaboral(Laboral laboral, String jwt) throws Exception {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+
+        if (!userOptional.isPresent()){
+            return false;
+        }
+        laboral.setUsuario(userOptional.get());
+        laboralRepository.save(laboral);
+        return true;
+    }
+
+    @Override
+    public List<Laboral> obtenerListaLaboral(String jwt) throws Exception{
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        List<Laboral> laborales = laboralRepository.findByUsuario(userOptional.get());
+        if(laborales == null){
+            return Collections.emptyList();
+        }
+
+        return laborales;
     }
 
 

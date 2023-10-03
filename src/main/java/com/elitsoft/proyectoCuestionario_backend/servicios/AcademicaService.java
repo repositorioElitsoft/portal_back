@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface AcademicaService {
     
-    Boolean guardarAcademica(Academica academica, String jwt);
+    Boolean guardarAcademica(List<Academica> academica, String jwt);
 
     List<Academica> obtenerAcademicasPorUsuario(Usuario usuario);
     
