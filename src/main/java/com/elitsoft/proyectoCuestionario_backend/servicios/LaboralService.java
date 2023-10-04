@@ -20,7 +20,9 @@ public interface LaboralService {
     
     List<Laboral> obtenerListaLaboral(String jwt) throws Exception;
 
-   // List<Laboral> obtenerLaboralesConHerramientasYProductosPorUsuario(Long usr_id);
+    Boolean deleteLaboral(Long laboralId, String jwt)throws Exception;
+
+    // List<Laboral> obtenerLaboralesConHerramientasYProductosPorUsuario(Long usr_id);
 
     
     

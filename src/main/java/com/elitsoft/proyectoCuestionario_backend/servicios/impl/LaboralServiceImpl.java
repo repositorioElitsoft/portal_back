@@ -87,7 +87,7 @@ public class LaboralServiceImpl implements LaboralService {
             throw new EntityNotFoundException("No se encontró la entidad laboral");
         }
 
-        if(laboralOld.get().getUsuario().getUsr_id() != userOptional.get().getUsr_id()){
+        if(!laboralOld.get().getUsuario().getUsr_id().equals(userOptional.get().getUsr_id())){
             throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
         }
 
@@ -112,6 +112,26 @@ public class LaboralServiceImpl implements LaboralService {
         }
 
         return laborales;
+    }
+
+    @Override
+    public Boolean deleteLaboral(Long laboralId, String jwt) throws Exception {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<Laboral> laboralOld = laboralRepository.findById(laboralId);
+        if( !laboralOld.isPresent()){
+            throw new EntityNotFoundException("No se encontró la entidad laboral");
+        }
+
+        if(!laboralOld.get().getUsuario().getUsr_id().equals(userOptional.get().getUsr_id())){
+            throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
+        }
+
+        laboralRepository.deleteById(laboralId);
+        return true;
     }
 
 

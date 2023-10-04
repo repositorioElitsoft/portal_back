@@ -24,4 +24,6 @@ public interface AcademicaService {
     Boolean actualizarAcademica(Long academicaId, Academica academica, String jwt) throws Exception;
     
     List<String> obtenerEstadosAcademicosUnicos();
+
+    Boolean deleteAcademica(Long academicaId, String jwt)throws Exception;
 }

@@ -68,8 +68,18 @@ public class LaboralController {
         return new ResponseEntity<>(listaLaboral, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{laboralId}")
+    public ResponseEntity<Boolean> deleteLaboral(
+            @PathVariable Long laboralId,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        return new ResponseEntity<>(laboralService.deleteLaboral(laboralId,jwt), HttpStatus.OK);
+    }
 
-    
+
+
+
+
 //    @GetMapping("/listar-por-usuario/{usuarioId}")
 //    public ResponseEntity<List<Laboral>> obtenerListaLaboralPorUsuario(@PathVariable Long usuarioId) {
 //        Usuario usuario = new Usuario();

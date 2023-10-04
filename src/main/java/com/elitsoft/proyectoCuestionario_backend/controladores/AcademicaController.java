@@ -70,7 +70,7 @@ public class AcademicaController {
     }
 
     @PutMapping("/{academicaId}")
-    public ResponseEntity<?> actualizarLaboral(
+    public ResponseEntity<?> actualizarACademica(
             @PathVariable Long academicaId,
             @RequestBody Academica academica,
             @RequestHeader("Authorization") String jwt
@@ -81,7 +81,15 @@ public class AcademicaController {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
-    
-    
-    
+
+    @DeleteMapping("/{academicaId}")
+    public ResponseEntity<Boolean> deleteAcademica(
+            @PathVariable Long academicaId,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        return new ResponseEntity<>(academicaService.deleteAcademica(academicaId,jwt), HttpStatus.OK);
+    }
+
+
+
 }
