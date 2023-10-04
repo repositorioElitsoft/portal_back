@@ -2,18 +2,22 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 /**
  *
@@ -27,9 +31,13 @@ public class HerramientaServiceImpl implements HerramientaService {
     private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    public HerramientaServiceImpl(HerramientaRepository herramientaRepository, UsuarioRepository usuarioRepository) {
+    private final UsuarioService usuarioService;
+
+    @Autowired
+    public HerramientaServiceImpl(HerramientaRepository herramientaRepository, UsuarioRepository usuarioRepository, UsuarioService usuarioService) {
         this.herramientaRepository = herramientaRepository;
         this.usuarioRepository = usuarioRepository;
+        this.usuarioService = usuarioService;
     }
 
     @Override
@@ -57,14 +65,21 @@ public class HerramientaServiceImpl implements HerramientaService {
         return true;
     }
 
-    @Override
-    public List<Herramienta> obtenerHerramientasPorUsuario(Usuario usr_id) {
-        return herramientaRepository.findByUsuario(usr_id);
-    }
+
 
     @Override
-    public List<Herramienta> obtenerListaHerramientas() {
-        return herramientaRepository.findAll();
+    public List<Herramienta> obtenerListaHerramientasPorUsuario(String jwt) {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        List<Herramienta> herramientas = herramientaRepository.findByUsuario(userOptional.get());
+        if(herramientas == null){
+            return Collections.emptyList();
+        }
+
+        return herramientas;
     }
     
     @Override

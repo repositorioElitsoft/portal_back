@@ -42,17 +42,12 @@ public class HerramientaController {
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
 
-    /*
-    @GetMapping("/listar")
-    public ResponseEntity<List<Herramienta>> obtenerListaHerramientas() {
-        List<Herramienta> herramientas = herramientaService.obtenerListaHerramientas();
+    @GetMapping("/")
+    public ResponseEntity<List<?>> obtenerListaHerramientas(@RequestHeader("Authorization") String jwt) throws Exception {
+        List<Herramienta> herramientas = herramientaService.obtenerListaHerramientasPorUsuario(jwt);
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
-    }*/
-    
-   // @GetMapping("/obtener-herramientas-con-productos/{usuarioId}")
-   // public ResponseEntity<List<Object[]>> obtenerHerramientasConProductosPorUsuario(@PathVariable Long usuarioId) {
-    //    List<Object[]> herramientasConProductos = herramientaService.obtenerHerramientasConProductosPorUsuario(usuarioId);
-   //     return new ResponseEntity<>(herramientasConProductos, HttpStatus.OK);
-   // }
+    }
+
+
 }
 
