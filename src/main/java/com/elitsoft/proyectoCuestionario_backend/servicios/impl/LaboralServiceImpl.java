@@ -12,6 +12,7 @@ import java.util.*;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -73,6 +74,30 @@ public class LaboralServiceImpl implements LaboralService {
         laboralRepository.save(laboral);
         return true;
     }
+
+    @Override
+    public Boolean actualizarLaboral(Long laboralId, Laboral laboral, String jwt) throws Exception{
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<Laboral> laboralOld = laboralRepository.findById(laboralId);
+        if( !laboralOld.isPresent()){
+            throw new EntityNotFoundException("No se encontró la entidad laboral");
+        }
+
+        if(laboralOld.get().getUsuario().getUsr_id() != userOptional.get().getUsr_id()){
+            throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
+        }
+
+        laboral.setInf_lab_id(laboralOld.get().getInf_lab_id());
+        laboral.setUsuario(userOptional.get());
+
+        laboralRepository.save(laboral);
+        return true;
+    }
+
 
     @Override
     public List<Laboral> obtenerListaLaboral(String jwt) throws Exception{

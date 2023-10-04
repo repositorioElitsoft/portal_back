@@ -51,11 +51,12 @@ public class LaboralController {
 
     @PutMapping("/{laborarId}")
     public ResponseEntity<?> actualizarLaboral(
+            @PathVariable Long laborarId,
             @RequestBody Laboral laboral,
             @RequestHeader("Authorization") String jwt
     ) {
         try {
-            return new ResponseEntity<>(laboralService.guardarLaboral(laboral, jwt), HttpStatus.CREATED);
+            return new ResponseEntity<>(laboralService.actualizarLaboral(laborarId, laboral, jwt), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }

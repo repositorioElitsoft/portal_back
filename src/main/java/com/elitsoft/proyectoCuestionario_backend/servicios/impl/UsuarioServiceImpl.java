@@ -11,6 +11,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -70,9 +71,9 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public Boolean verificarUsuario(String code){
+    public Boolean verificarUsuario(Map<String, String> body){
 
-        Optional<Usuario> user = usuarioRepository.findByUsrVerCode(code);
+        Optional<Usuario> user = usuarioRepository.findByUsrVerCode(body.get("code"));
 
         if (!user.isPresent()){
             return false;

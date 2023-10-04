@@ -16,7 +16,7 @@ public interface LaboralService {
 
     Boolean guardarLaboral(Laboral laboral, String jwt) throws Exception;
 
-
+    Boolean actualizarLaboral(Long laboralId, Laboral laboral, String jwt) throws Exception;
     
     List<Laboral> obtenerListaLaboral(String jwt) throws Exception;
 

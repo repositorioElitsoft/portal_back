@@ -9,6 +9,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -17,6 +18,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.EntityResponse;
 
 import javax.mail.MessagingException;
 
@@ -71,9 +73,12 @@ public class UsuarioController {
         emailService.sendSimpleMessage("felipe.diaz@elitsoft-chile.com","test","elitsoftrob@gmail.com");
     }*/
 
-    @GetMapping("/verificar")
-    public Boolean verificarUsuario(@RequestParam("code") String ver_code){
-        return usuarioService.verificarUsuario(ver_code);
+    @PostMapping("/verificar")
+    public ResponseEntity<Boolean> verificarUsuario(@RequestBody Map<String, String> requestData){
+        if(usuarioService.verificarUsuario(requestData)){
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/pedir-restauracion-pass")
     public void pedirRestauracionPassword(@RequestBody Usuario usuario) throws MessagingException, UnsupportedEncodingException {
