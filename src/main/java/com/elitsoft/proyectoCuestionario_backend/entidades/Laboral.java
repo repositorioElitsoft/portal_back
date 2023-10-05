@@ -50,6 +50,12 @@ public class Laboral {
     @JsonIgnore
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     private Usuario usuario;
+
+    @ManyToMany
+    @JoinTable(name = "laboral_herramienta",
+            joinColumns = @JoinColumn(name = "inf_lab_id"),
+            inverseJoinColumns = @JoinColumn(name = "herr_usr_id"))
+    private List<Herramienta> herramientas;
     
 
 
