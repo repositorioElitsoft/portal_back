@@ -41,9 +41,10 @@ public class Laboral {
     private String inf_lab_emp;
     private String inf_lab_act;
 
-    private LocalDateTime inf_lab_fec_ini;
-
-    private LocalDateTime inf_lab_fec_fin;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date inf_lab_fec_ini;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date inf_lab_fec_fin;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
