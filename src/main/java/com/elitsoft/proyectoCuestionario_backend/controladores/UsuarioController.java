@@ -86,9 +86,9 @@ public class UsuarioController {
       usuarioService.pedirRestaurarPassword(usuario);
     }
     @PutMapping("/cambiar-password/{code}")
-    public Boolean cambiarPassword(@PathVariable("code") String rec_code,@RequestBody Usuario usuario){
+    public Boolean cambiarPassword(@PathVariable("code") String rec_code,@RequestBody Map<String,String> password){
 
-        return usuarioService.cambiarPassword(rec_code, usuario.getUsr_pass());
+        return usuarioService.cambiarPassword(rec_code, password.get("pass"));
     }
 
 //    @DeleteMapping("/{usuarioId}")
