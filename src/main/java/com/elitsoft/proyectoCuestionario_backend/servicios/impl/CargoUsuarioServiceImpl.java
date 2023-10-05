@@ -1,16 +1,22 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CargoUsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CargoUsuarioService;
+
+import javax.persistence.EntityNotFoundException;
 
 /**
  *
@@ -59,7 +65,24 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
     public List<CargoUsuario> obtenerListaCargos() {
         return cargoRepository.findAll();
     }
-    
-    
-    
+
+    @Override
+    public CargoUsuario obtenerCargoUsuario(String jwt) throws Exception {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        List<CargoUsuario> cargoUsuario = cargoRepository.findByUsuario(userOptional.get());
+        if(cargoUsuario == null){
+            throw new EntityNotFoundException();
+        }
+        if(cargoUsuario.isEmpty()){
+            return new CargoUsuario();
+        }
+
+        return cargoUsuario.get(0);
+    }
+
+
 }

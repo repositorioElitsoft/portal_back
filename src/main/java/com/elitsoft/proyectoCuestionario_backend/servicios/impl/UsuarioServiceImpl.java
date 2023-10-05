@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.JwtAuthenticationFilter;
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pais;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
@@ -11,9 +12,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
 
 /**
  *
@@ -179,6 +179,21 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         Usuario usuarioActualizado = usuarioRepository.save(usuarioExistente);
         return true;
+    }
+
+    @Override
+    public Usuario obtenerDatosUsuario(String jwt) throws Exception {
+        Optional<Usuario> userOptional = getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        userOptional.get().setUsr_pass("");
+        userOptional.get().setUsr_ver_code("");
+        userOptional.get().setUsr_rec_tkn("");
+        userOptional.get().setHerramientas(new ArrayList<>());
+
+        return userOptional.get();
     }
 
     @Override

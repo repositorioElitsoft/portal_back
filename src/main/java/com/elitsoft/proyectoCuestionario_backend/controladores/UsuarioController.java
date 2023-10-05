@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
 import com.elitsoft.proyectoCuestionario_backend.entidades.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Rol;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
@@ -62,9 +63,9 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("/{usr_id}")
-    public Usuario obtenerUsuario(@PathVariable("usr_id") Long usr_id)throws Exception{
-        return usuarioService.obtenerUsuario(usr_id);
+    @GetMapping("/")
+    public Usuario obtenerUsuario(@RequestHeader("Authorization") String jwt)throws Exception{
+        return usuarioService.obtenerDatosUsuario(jwt);
     }
 
     /*

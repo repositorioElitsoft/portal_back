@@ -15,5 +15,8 @@ public interface CargoUsuarioService {
     List<CargoUsuario> obtenerCargosPorUsuario(Usuario usuario);
     
     List<CargoUsuario> obtenerListaCargos();
+
+    CargoUsuario obtenerCargoUsuario(String jwt) throws Exception;
+
     
 }
