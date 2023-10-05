@@ -55,6 +55,7 @@ public class SecurityConfig {
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/pedir-restauracion-pass","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","PUT")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/cargoselitsoft/**","GET")).permitAll()
