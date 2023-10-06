@@ -8,9 +8,7 @@ import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaReposit
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,15 +52,20 @@ public class HerramientaServiceImpl implements HerramientaService {
 
         List<Herramienta> herramientasAntiguas = herramientaRepository.findByUsuario(usuarioOpt.get());
 
-        for (Herramienta herramienta : herramientasAntiguas){
-            herramientaRepository.delete(herramienta);
-        }
 
-
+        Set<Long> idsNuevos = new HashSet<>();
 
         for (Herramienta herramienta : herramientas){
+            idsNuevos.add(herramienta.getVersionProducto().getVrs_id());
             herramienta.setUsuario(usuarioOpt.get());
             herramientaRepository.save(herramienta);
+        }
+
+        for (Herramienta herramienta : herramientasAntiguas){
+            if (!idsNuevos.contains(herramienta.getVersionProducto().getVrs_id())){
+                herramientaRepository.deleteLaboralHerramientaReferences(herramienta.getHerr_usr_id());
+            }
+            herramientaRepository.delete(herramienta);
         }
         return true;
     }

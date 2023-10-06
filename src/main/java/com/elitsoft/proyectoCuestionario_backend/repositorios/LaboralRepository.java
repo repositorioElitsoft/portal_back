@@ -26,6 +26,7 @@ public interface LaboralRepository extends JpaRepository <Laboral, Long>{
     // Método para listar toda la info laboral
     List<Laboral> findAll();
 
+
     List<Laboral> findByUsuario(Usuario usuario);
 
 }

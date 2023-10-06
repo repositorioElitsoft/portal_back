@@ -37,6 +37,7 @@ public class UsuarioController {
     @Autowired
     private EmailService emailService;
 
+
     @PostMapping("/")
     public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario) throws Exception{
         try{

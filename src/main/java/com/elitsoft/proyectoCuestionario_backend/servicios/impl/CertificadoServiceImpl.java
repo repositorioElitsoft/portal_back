@@ -24,6 +24,7 @@ public class CertificadoServiceImpl implements CertificadoService {
 
     @Override
     public List<Certificado> findAll() {
+
         return certificadoRepository.findAll();
     }
 
