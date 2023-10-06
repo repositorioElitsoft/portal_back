@@ -8,11 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -29,20 +25,61 @@ public class LaboralController {
         this.laboralService = laboralService;
     }
     
-    @PostMapping("/")
-    public ResponseEntity<Laboral> guardarLaboral(
-            @RequestBody Laboral laboral,
-            @RequestParam Long usr_id,
-            @RequestParam List<Long> herramientaIds // Cambio aquí: aceptar una lista de IDs de herramientas
+    @PostMapping("/multiple")
+    public ResponseEntity<?> guardarLaborales(
+            @RequestBody List<Laboral> laborales,
+            @RequestHeader("Authorization") String jwt
     ) {
         try {
-            Laboral laboralGuardada = laboralService.guardarLaboral(laboral, usr_id, herramientaIds);
-            return new ResponseEntity<>(laboralGuardada, HttpStatus.CREATED);
+            return new ResponseEntity<>(laboralService.guardarLaborales(laborales, jwt), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
+    @PostMapping("/")
+    public ResponseEntity<?> guardarLaboral(
+            @RequestBody Laboral laboral,
+            @RequestHeader("Authorization") String jwt
+    ) {
+        try {
+            return new ResponseEntity<>(laboralService.guardarLaboral(laboral, jwt), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{laborarId}")
+    public ResponseEntity<?> actualizarLaboral(
+            @PathVariable Long laborarId,
+            @RequestBody Laboral laboral,
+            @RequestHeader("Authorization") String jwt
+    ) {
+        try {
+            return new ResponseEntity<>(laboralService.actualizarLaboral(laborarId, laboral, jwt), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/")
+   public ResponseEntity<List<?>> obtenerListaLaboral(@RequestHeader("Authorization") String jwt) throws Exception {
+        List<Laboral> listaLaboral = laboralService.obtenerListaLaboral(jwt);
+        return new ResponseEntity<>(listaLaboral, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{laboralId}")
+    public ResponseEntity<Boolean> deleteLaboral(
+            @PathVariable Long laboralId,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        return new ResponseEntity<>(laboralService.deleteLaboral(laboralId,jwt), HttpStatus.OK);
+    }
+
+
+
+
+
 //    @GetMapping("/listar-por-usuario/{usuarioId}")
 //    public ResponseEntity<List<Laboral>> obtenerListaLaboralPorUsuario(@PathVariable Long usuarioId) {
 //        Usuario usuario = new Usuario();

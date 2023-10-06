@@ -3,8 +3,6 @@ package com.elitsoft.proyectoCuestionario_backend.servicios;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import java.util.List;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 
 /**
@@ -13,15 +11,14 @@ import org.springframework.data.repository.query.Param;
  */
 public interface HerramientaService {
     
-    Herramienta guardarHerramienta(Herramienta herramienta, Long usr_id) throws Exception;
+    Boolean guardarHerramientas(List<Herramienta> herramientas, String Jwt) throws Exception;
 
-    List<Herramienta> obtenerHerramientasPorUsuario(Usuario usuario);
+    List<Herramienta> obtenerListaHerramientasPorUsuario(String jwt);
     
-    List<Herramienta> obtenerListaHerramientas();
-    
+
     public Herramienta obtenerHerramienta(Long herr_usr_id)throws Exception ;
     
-    //List<Object[]> obtenerHerramientasConProductosPorUsuario(Long usuarioId);
+    List<Herramienta> obtenerHerramientasConProductosPorUsuario(Long usuarioId);
         
     
 }

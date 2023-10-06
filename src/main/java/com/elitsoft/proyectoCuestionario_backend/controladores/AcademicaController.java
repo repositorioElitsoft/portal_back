@@ -2,11 +2,9 @@ package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
-
-import java.nio.file.Path;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,14 +26,26 @@ public class AcademicaController {
         this.academicaService = academicaService;
     }
     
-    @PostMapping("/")
-    public ResponseEntity<Academica> guardarHerramienta(@RequestBody Academica academica,
-                                                           @RequestParam Long usr_id) {
+    @PostMapping("/multiple")
+    public ResponseEntity<Boolean> guardarListaAcademicas(@RequestBody List<Academica> academicas,
+                                                           @RequestHeader("Authorization") String jwt) {
         try {
-            Academica savedAcademica = academicaService.guardarAcademica(academica, usr_id);
-            return new ResponseEntity<>(savedAcademica, HttpStatus.CREATED);
+            academicaService.guardarListaAcademicas(academicas, jwt);
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<?> guardarAcademica(
+            @RequestBody Academica academica,
+            @RequestHeader("Authorization") String jwt
+    ) {
+        try {
+            return new ResponseEntity<>(academicaService.guardarAcademica(academica, jwt), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -47,10 +57,10 @@ public class AcademicaController {
         return new ResponseEntity<>(academicas, HttpStatus.OK);
     }
 
-    @GetMapping("/listar")
-    public ResponseEntity<List<Academica>> obtenerListaAcademicas() {
-        List<Academica> academicas = academicaService.obtenerListaAcademicas();
-        return new ResponseEntity<>(academicas, HttpStatus.OK);
+    @GetMapping("/")
+    public ResponseEntity<List<?>> obtenerListaAcademicas(@RequestHeader("Authorization") String jwt) throws Exception {
+        List<Academica> listaAcademicas = academicaService.obtenerListaAcademicas(jwt);
+        return new ResponseEntity<>(listaAcademicas, HttpStatus.OK);
     }
     
     @GetMapping("/estados-academicos-unicos")
@@ -59,17 +69,25 @@ public class AcademicaController {
         return new ResponseEntity<>(estadosAcademicos, HttpStatus.OK);
     }
 
-    /*public Boolean guardar_academica (@RequestBody Academica academica )  {
-
-        academicaService.guardar_academica(academica);
-        return  true;
+    @PutMapping("/{academicaId}")
+    public ResponseEntity<?> actualizarACademica(
+            @PathVariable Long academicaId,
+            @RequestBody Academica academica,
+            @RequestHeader("Authorization") String jwt
+    ) {
+        try {
+            return new ResponseEntity<>(academicaService.actualizarAcademica(academicaId, academica, jwt), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
     }
-    */
 
-    @DeleteMapping("/{academica_id}")
-    public Boolean remove_academica(@PathVariable Long academica_id){
-       academicaService.remove_academica(academica_id);
-       return true;
+    @DeleteMapping("/{academicaId}")
+    public ResponseEntity<Boolean> deleteAcademica(
+            @PathVariable Long academicaId,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        return new ResponseEntity<>(academicaService.deleteAcademica(academicaId,jwt), HttpStatus.OK);
     }
 
 

@@ -2,7 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import java.util.List;
 
@@ -11,17 +11,19 @@ import java.util.List;
  * @author Martinez Maeva
  */
 public interface AcademicaService {
-    
-    Academica guardarAcademica(Academica academica, Long usr_id) throws Exception;
+
+    Boolean guardarListaAcademicas(List<Academica> academicas, String jwt) throws Exception;
+    ///List<Laboral> obtenerListaLaboralPorUsuario(Usuario usuario);
+
+    Boolean guardarAcademica(Academica academica, String jwt) throws Exception;
 
     List<Academica> obtenerAcademicasPorUsuario(Usuario usuario);
-    
-    List<Academica> obtenerListaAcademicas();
+
+    List<Academica> obtenerListaAcademicas(String jwt) throws Exception;
+
+    Boolean actualizarAcademica(Long academicaId, Academica academica, String jwt) throws Exception;
     
     List<String> obtenerEstadosAcademicosUnicos();
 
-    public Boolean guardar_academica(Academica academica);
-
-    public Boolean remove_academica(Long academica_id);
-
+    Boolean deleteAcademica(Long academicaId, String jwt)throws Exception;
 }

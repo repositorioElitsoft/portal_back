@@ -22,6 +22,8 @@ public interface HerramientaRepository extends JpaRepository <Herramienta, Long>
     // Método para obtener herramientas por usuario
     List<Herramienta> findByUsuario(Usuario usuario);
 
+
+
     // Método para listar todas las herramientas
     List<Herramienta> findAll();
     
@@ -31,7 +33,6 @@ public interface HerramientaRepository extends JpaRepository <Herramienta, Long>
     
     
     @Query("SELECT h FROM Herramienta h " +
-       "JOIN FETCH h.producto p " +
        "WHERE h.usuario.usr_id = :usuarioId")
     List<Herramienta> obtenerHerramientasConProductosPorUsuario(@Param("usuarioId") Long usuarioId);
     

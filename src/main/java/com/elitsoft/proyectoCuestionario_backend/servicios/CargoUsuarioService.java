@@ -10,10 +10,13 @@ import java.util.List;
  */
 public interface CargoUsuarioService {
     
-    CargoUsuario guardarCargo(CargoUsuario cargo, Long usr_id) throws Exception;
+    Boolean guardarCargo(CargoUsuario cargo, String jwt) throws Exception;
 
     List<CargoUsuario> obtenerCargosPorUsuario(Usuario usuario);
     
     List<CargoUsuario> obtenerListaCargos();
+
+    CargoUsuario obtenerCargoUsuario(String jwt) throws Exception;
+
     
 }

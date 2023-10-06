@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: cuestionarios
 -- ------------------------------------------------------
--- Server version	8.0.31
+-- Server version	8.0.34
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,7 +27,7 @@ CREATE TABLE `categorias` (
   `descripcion` varchar(255) DEFAULT NULL,
   `titulo` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`categoria_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `categorias` (
 
 LOCK TABLES `categorias` WRITE;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
+INSERT INTO `categorias` VALUES (1,NULL,NULL),(2,NULL,NULL),(3,NULL,NULL),(4,NULL,NULL);
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +58,7 @@ CREATE TABLE `examenes` (
   PRIMARY KEY (`examen_id`),
   KEY `FK9e3vkr595xf5ntcw0ih72lifw` (`categoria_categoria_id`),
   CONSTRAINT `FK9e3vkr595xf5ntcw0ih72lifw` FOREIGN KEY (`categoria_categoria_id`) REFERENCES `categorias` (`categoria_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,6 +269,9 @@ CREATE TABLE `tbl_herr_usr` (
   `inf_lab_id` bigint DEFAULT NULL,
   `producto_id` bigint DEFAULT NULL,
   `id_prod` bigint DEFAULT NULL,
+  `vrs_prd_id` bigint DEFAULT NULL,
+  `herr_is_cert` bit(1) DEFAULT NULL,
+  `herr_nvl` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`herr_usr_id`),
   KEY `FK5gqshrxh65vrgpd6wmt86mxfh` (`cert_id`),
   KEY `FKbvvxntumbwanmkkh1jknd0mxs` (`nvl_id`),
@@ -276,14 +280,16 @@ CREATE TABLE `tbl_herr_usr` (
   KEY `FKdt6cwc483xm5xhd9wxq3pa9sj` (`inf_lab_id`),
   KEY `FKmid773lu2moriw0xvcnmkj8u0` (`producto_id`),
   KEY `FKa066y2lo6wnil3e8qcmhtslcd` (`id_prod`),
+  KEY `forkey` (`vrs_prd_id`),
   CONSTRAINT `FK5gqshrxh65vrgpd6wmt86mxfh` FOREIGN KEY (`cert_id`) REFERENCES `tbl_cert` (`cert_id`),
   CONSTRAINT `FKa066y2lo6wnil3e8qcmhtslcd` FOREIGN KEY (`id_prod`) REFERENCES `tbl_prd` (`prd_id`),
   CONSTRAINT `FKbvvxntumbwanmkkh1jknd0mxs` FOREIGN KEY (`nvl_id`) REFERENCES `tbl_nvl` (`nvl_id`),
   CONSTRAINT `FKdt6cwc483xm5xhd9wxq3pa9sj` FOREIGN KEY (`inf_lab_id`) REFERENCES `tbl_inf_lab` (`inf_lab_id`),
   CONSTRAINT `FKg21a10vegm422sgsdvw17pi63` FOREIGN KEY (`prd_id`) REFERENCES `tbl_prd` (`prd_id`),
   CONSTRAINT `FKmid773lu2moriw0xvcnmkj8u0` FOREIGN KEY (`producto_id`) REFERENCES `tbl_prd` (`prd_id`),
-  CONSTRAINT `FKqf6443qstxnce5frcsrb0v5rs` FOREIGN KEY (`usr_id`) REFERENCES `tbl_usr` (`usr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `FKqf6443qstxnce5frcsrb0v5rs` FOREIGN KEY (`usr_id`) REFERENCES `tbl_usr` (`usr_id`),
+  CONSTRAINT `forkey` FOREIGN KEY (`vrs_prd_id`) REFERENCES `tbl_vrs_prd` (`vrs_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +298,7 @@ CREATE TABLE `tbl_herr_usr` (
 
 LOCK TABLES `tbl_herr_usr` WRITE;
 /*!40000 ALTER TABLE `tbl_herr_usr` DISABLE KEYS */;
-INSERT INTO `tbl_herr_usr` VALUES (1,'10 años','V.1.0',1,1,1,2,NULL,NULL,NULL),(7,NULL,'v5.0',NULL,NULL,NULL,4,NULL,NULL,NULL),(8,NULL,'1.0',NULL,NULL,NULL,4,NULL,NULL,NULL),(9,NULL,'1.5',NULL,NULL,NULL,4,NULL,NULL,NULL),(10,NULL,'1.0',NULL,NULL,NULL,4,NULL,NULL,NULL),(11,NULL,'1.0',NULL,NULL,NULL,4,NULL,NULL,NULL),(12,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL),(13,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL),(14,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL),(15,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL),(16,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL),(17,'9 años','1.6',1,1,1,4,NULL,NULL,NULL),(18,'555','1.6',1,2,2,4,NULL,NULL,NULL),(19,'2 años','1.5',1,2,17,4,NULL,NULL,NULL);
+INSERT INTO `tbl_herr_usr` VALUES (1,'10 años','V.1.0',1,1,1,2,NULL,NULL,NULL,NULL,NULL,NULL),(7,NULL,'v5.0',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(8,NULL,'1.0',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(9,NULL,'1.5',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(10,NULL,'1.0',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(11,NULL,'1.0',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(12,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(13,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(14,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(15,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(16,'2 años','1.6',NULL,NULL,NULL,4,NULL,NULL,NULL,NULL,NULL,NULL),(17,'9 años','1.6',1,1,1,4,NULL,NULL,NULL,NULL,NULL,NULL),(18,'555','1.6',1,2,2,4,NULL,NULL,NULL,NULL,NULL,NULL),(19,'2 años','1.5',1,2,17,4,NULL,NULL,NULL,NULL,NULL,NULL),(32,'30 años',NULL,NULL,NULL,NULL,19,NULL,NULL,NULL,2,_binary '','alto'),(33,'40 años',NULL,NULL,NULL,NULL,19,NULL,NULL,NULL,1,_binary '\0','medio');
 /*!40000 ALTER TABLE `tbl_herr_usr` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,7 +402,7 @@ CREATE TABLE `tbl_pais` (
   `pais_id` bigint NOT NULL AUTO_INCREMENT,
   `pais_nom` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pais_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,7 +411,7 @@ CREATE TABLE `tbl_pais` (
 
 LOCK TABLES `tbl_pais` WRITE;
 /*!40000 ALTER TABLE `tbl_pais` DISABLE KEYS */;
-INSERT INTO `tbl_pais` VALUES (1,'Chile'),(2,'Argentina');
+INSERT INTO `tbl_pais` VALUES (1,'Chile'),(2,'Argentina'),(3,'Otro');
 /*!40000 ALTER TABLE `tbl_pais` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -454,10 +460,14 @@ CREATE TABLE `tbl_usr` (
   `usr_rut` varchar(255) DEFAULT NULL,
   `usr_tel` varchar(255) DEFAULT NULL,
   `usr_url_link` varchar(255) DEFAULT NULL,
+  `usr_rol` varchar(255) DEFAULT NULL,
+  `usr_ver_code` varchar(255) DEFAULT NULL,
+  `usr_is_ver` bit(1) DEFAULT NULL,
+  `usr_rec_tkn` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`usr_id`),
   KEY `FK5th0kry3ke63uineev1ssnq33` (`pais_id`),
   CONSTRAINT `FK5th0kry3ke63uineev1ssnq33` FOREIGN KEY (`pais_id`) REFERENCES `tbl_pais` (`pais_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,8 +476,35 @@ CREATE TABLE `tbl_usr` (
 
 LOCK TABLES `tbl_usr` WRITE;
 /*!40000 ALTER TABLE `tbl_usr` DISABLE KEYS */;
-INSERT INTO `tbl_usr` VALUES (1,1,'Rojas','Martinez','maevafrancisca@gmail.com','Maeva Francisca','123','19840596-5','993198793','www.jksd.cl'),(2,2,'Rojas','Martinez','maevofrancisco@gmail.com','Maevo Francisco','3445','19840596-7','993198793','www.jksd.cl'),(4,1,'Soto','Atienzo','','Rebeca','','8996227-7','993198793','www.123.cl'),(5,1,'Bravo','Tapia','','Maria Cecilia','','15.789.654-9','995784512','www.123456.cl');
+INSERT INTO `tbl_usr` VALUES (1,1,'Rojas','Martinez','maevafrancisca@gmail.com','Maeva Francisca','123','19840596-5','993198793','www.jksd.cl',NULL,NULL,NULL,NULL),(2,2,'Rojas','Martinez','maevofrancisco@gmail.com','Maevo Francisco','3445','19840596-7','993198793','www.jksd.cl',NULL,NULL,NULL,NULL),(4,1,'Soto','Atienzo','','Rebeca','','8996227-7','993198793','www.123.cl',NULL,NULL,NULL,NULL),(5,1,'Bravo','Tapia','','Maria Cecilia','','15.789.654-9','995784512','www.123456.cl',NULL,NULL,NULL,NULL),(6,1,'a','L','','Pepe','','19551728-2','235','235',NULL,NULL,NULL,NULL),(7,1,'f','ff','','f','','15','e','re',NULL,'aeerkro223',NULL,NULL),(8,1,'F','F','','F','','19551728-2','465465','asfas',NULL,'aeerkro223',NULL,NULL),(9,1,NULL,NULL,'aaa@aaa.cl',NULL,'$2a$12$cOst1Y0InBY/HSKWXo.2POB9mkMYKQ/gfebjLFC.BeElFb7RfhMDK',NULL,NULL,NULL,'ADMIN','aeerkro223',NULL,NULL),(10,1,NULL,NULL,'aaa@aaa.cl',NULL,'1324',NULL,NULL,NULL,NULL,'aeerkro223',NULL,NULL),(11,1,NULL,NULL,'aaa@aaa.cl',NULL,'$2a$12$Nd7rgVVVres/qxHrzztHVeWZGVJxarl4M/Q1gBiY5Lp2XuNn/0eo2',NULL,NULL,NULL,NULL,'aeerkro223',NULL,NULL),(12,1,NULL,NULL,'aaa@aaa.cl',NULL,'$2a$12$GQGKMUhBYSg7N.QEu8vGH.B/xkCB108rsbkgtQk2cshlrC/QpNAQ2',NULL,NULL,NULL,NULL,'d4c01720-eaf5-40f3-9c80-ef886a1f1e7d',NULL,NULL),(13,1,NULL,NULL,'aaa@aaa.cl',NULL,'$2a$12$qoUcvrlPRJGpi83RmrJx0OlxGD9kqOc0KZuLgbp1s/xrMohEPB7ki',NULL,NULL,NULL,NULL,'143057b2-c443-44af-99a4-30892ad17ca3',NULL,NULL),(14,1,NULL,NULL,'felipe.diaz@elitsoft-chile.com',NULL,'$2a$12$gOHOqvQ8ZH/NuF3i0qu9WO/6on4Pce.bhhl/nqtPv8Li8GgcHtYUq',NULL,NULL,NULL,NULL,'ae6aa285-57f3-4d74-82b9-f880c4b493c4',NULL,NULL),(15,1,NULL,NULL,'felipe.diaz@elitsoft-chile.com',NULL,'$2a$12$.nMsYSp4VZxfrriXogmZB.FeltjGF7gBZcI10sMdaFcARYG9ea5qW',NULL,NULL,NULL,NULL,'31c7e6f3-e41e-4e12-b1ac-7ad1e01ebe41',NULL,NULL),(16,1,NULL,NULL,'felipe.diaz@elitsoft-chile.com',NULL,'$2a$12$SpQPsCSO.eqy9QB.vI3nHORpsQ7AUWYNszFBOQD412BqCrDTseWaC',NULL,NULL,NULL,NULL,'c07a442c-ca4b-4347-aef2-bd75323ba7ae',NULL,NULL),(17,1,NULL,NULL,'felipe.diaz@elitsoft-chile.com',NULL,'$2a$12$yJYNtD.pY9LVY95FyEXZvur2yFqCVpoRg4.GP4VbbL2F81Kg1/yPK',NULL,NULL,NULL,NULL,'a32d1737-d098-4ace-842c-3393f349dc48',NULL,NULL),(18,1,NULL,NULL,'o@gmail.com',NULL,'$2a$12$RKiEGv0IcuqlyDOy8c8lxu6Y4xgrTh3TmliEPVI5KhuwLXUmzDEH2',NULL,NULL,NULL,'ADMIN',NULL,NULL,NULL),(19,1,'Peralte','Piña','owa@gmail.com','Pepe','$2a$12$RKiEGv0IcuqlyDOy8c8lxu6Y4xgrTh3TmliEPVI5KhuwLXUmzDEH2','23521829-1','1516133','','GUEST',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `tbl_usr` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_vrs_prd`
+--
+
+DROP TABLE IF EXISTS `tbl_vrs_prd`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_vrs_prd` (
+  `vrs_id` bigint NOT NULL AUTO_INCREMENT,
+  `vrs_name` varchar(255) NOT NULL,
+  `prd_id` bigint NOT NULL,
+  PRIMARY KEY (`vrs_id`),
+  KEY `prd_id` (`prd_id`),
+  CONSTRAINT `tbl_vrs_prd_ibfk_1` FOREIGN KEY (`prd_id`) REFERENCES `tbl_prd` (`prd_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_vrs_prd`
+--
+
+LOCK TABLES `tbl_vrs_prd` WRITE;
+/*!40000 ALTER TABLE `tbl_vrs_prd` DISABLE KEYS */;
+INSERT INTO `tbl_vrs_prd` VALUES (1,'8',16),(2,'11',16),(3,'16',16),(4,'8',16),(5,'11',16),(6,'16',16);
+/*!40000 ALTER TABLE `tbl_vrs_prd` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -507,4 +544,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-25 11:17:56
+-- Dump completed on 2023-10-02 16:01:50
