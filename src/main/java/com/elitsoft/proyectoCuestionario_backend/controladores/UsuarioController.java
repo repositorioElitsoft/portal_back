@@ -30,7 +30,7 @@ import javax.mail.MessagingException;
 @RestController
 @RequestMapping("/usuarios")
 @CrossOrigin(origins = "http://localhost:4200")
-public class UsuarioController {
+public class    UsuarioController {
     
     @Autowired
     private UsuarioService usuarioService;
