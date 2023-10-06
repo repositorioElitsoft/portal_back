@@ -32,5 +32,8 @@ public interface UsuarioService {
     public Boolean actualizarUsuario(Usuario usuario, String jwt);
 
     Usuario obtenerDatosUsuario(String jwt) throws Exception;
+
+    public  List<Usuario> obtenerUsuario();
+
     
 }

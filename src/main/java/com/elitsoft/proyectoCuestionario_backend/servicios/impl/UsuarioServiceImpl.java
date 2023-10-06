@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.JwtAuthenticationFilter;
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pais;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
@@ -203,6 +204,12 @@ public class UsuarioServiceImpl implements UsuarioService{
             return Optional.empty();
         }
         return usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+    }
+
+    @Override
+    public List<Usuario> obtenerUsuario(){
+        usuarioRepository.findAll();
+        return usuarioRepository.findAll();
     }
 
 }

@@ -154,13 +154,10 @@ public class Usuario  {
         this.pais = pais;
     }
 
-    public List<Herramienta> getHerramientas() {
-        return herramientas;
-    }
-
     public void setHerramientas(List<Herramienta> herramientas) {
         this.herramientas = herramientas;
     }
+
 
     
 }
