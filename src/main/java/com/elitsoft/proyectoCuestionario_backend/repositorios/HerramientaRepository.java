@@ -37,6 +37,12 @@ public interface HerramientaRepository extends JpaRepository <Herramienta, Long>
     @Transactional
     @Query(value = "DELETE FROM laboral_herramienta WHERE herr_usr_id = :id", nativeQuery = true)
     void deleteLaboralHerramientaReferences(@Param("id") Long id);
-    
+
+
+
+    @Query("SELECT h FROM Herramienta h " +
+       "WHERE h.usuario.usr_id = :usuarioId")
+    List<Herramienta> obtenerHerramientasConProductosPorUsuario(@Param("usuarioId") Long usuarioId);
+
     
 }
