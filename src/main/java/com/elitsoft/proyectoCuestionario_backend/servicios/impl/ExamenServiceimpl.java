@@ -33,8 +33,8 @@ public class ExamenServiceimpl implements ExamenService {
     }
 
     @Override
-    public Set<Examen> obtenerExamenes() {
-        return new LinkedHashSet<>(examenRepository.findAll());
+    public List<Examen> obtenerExamenes() {
+        return (examenRepository.findAll());
 
     }
 

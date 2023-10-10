@@ -6,6 +6,7 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,11 +41,11 @@ public class ExamenController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> listarExamenes(){
-        return ResponseEntity.ok(examenService.obtenerExamenes());
+    public ResponseEntity<List<Examen>> listarExamenes(){
+        return new ResponseEntity<>(examenService.obtenerExamenes(), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{examenId}")
+    @GetMapping("/{exam_id}")
     public Examen listarExamen(@PathVariable("exam_id") Long exam_id){
         return examenService.obtenerExamen(exam_id);
     }

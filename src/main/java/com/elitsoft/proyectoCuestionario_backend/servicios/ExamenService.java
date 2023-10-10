@@ -16,7 +16,7 @@ public interface ExamenService {
     
     Examen actualizarExamen (Examen examen);
     
-    Set<Examen> obtenerExamenes();
+    List<Examen> obtenerExamenes();
     
     Examen obtenerExamen(Long exam_id);
     
