@@ -5,6 +5,7 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,8 +28,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     Optional<Usuario> findByUsrEmail(@Param("email") String username);
 
     List<Usuario> findAll();
-    
-    
-    
-    
+
+    @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.herramientas")
+    List<Map<String, String>> findAllWhitHerramientas();
 }

@@ -38,11 +38,9 @@ public class Usuario  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pais_id") // Nombre de la columna que será clave foránea
     private Pais pais;
-    
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Herramienta> herramientas;
-
-
 
     public Usuario(){
 
@@ -157,7 +155,5 @@ public class Usuario  {
     public void setHerramientas(List<Herramienta> herramientas) {
         this.herramientas = herramientas;
     }
-
-
     
 }

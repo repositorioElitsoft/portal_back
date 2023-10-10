@@ -92,8 +92,11 @@ public class UsuarioController {
         return usuarioService.cambiarPassword(rec_code, password.get("pass"));
     }
 
-
-
+    @GetMapping("/usuarios-herramientas")
+    public List<Map<String, String>> listarUsuariosConHerramientas(){
+        List<Map<String, String>> usuariosConHerramientas = usuarioService.listarUsuariosConHerramientas();
+        return usuariosConHerramientas;
+    }
 
 //    @DeleteMapping("/{usuarioId}")
 //    public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId){
