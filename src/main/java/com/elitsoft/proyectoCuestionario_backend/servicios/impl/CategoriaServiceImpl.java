@@ -35,14 +35,14 @@ public class CategoriaServiceImpl  implements CategoriaService {
     }
 
     @Override
-    public Categoria obtenerCategoria(Long categoriaId) {
-        return categoriaRepository.findById(categoriaId).get();
+    public Categoria obtenerCategoria(Long cat_exam_id) {
+        return categoriaRepository.findById(cat_exam_id).get();
     }
 
     @Override
-    public void eliminarCategoria(Long categoriaId) {
+    public void eliminarCategoria(Long cat_exam_id) {
         Categoria categoria = new Categoria();
-        categoria.setCategoriaId(categoriaId);
+        categoria.setCat_exam_id(cat_exam_id);
         categoriaRepository.delete(categoria);
     }
 }

@@ -36,8 +36,8 @@ public class PreguntaServiceImpl implements PreguntaService {
     }
 
     @Override
-    public Pregunta obtenerPregunta(Long preguntaId) {
-        return preguntaRepository.findById(preguntaId).get();
+    public Pregunta obtenerPregunta(Long prg_id) {
+        return preguntaRepository.findById(prg_id).get();
     }
 
     @Override
@@ -46,14 +46,14 @@ public class PreguntaServiceImpl implements PreguntaService {
     }
 
     @Override
-    public void eliminarPregunta(Long preguntaId) {
+    public void eliminarPregunta(Long prg_id) {
         Pregunta pregunta = new Pregunta();
-        pregunta.setPreguntaId(preguntaId);
+        pregunta.setPrg_id(prg_id);
         preguntaRepository.delete(pregunta);
     }
 
     @Override
-    public Pregunta listarPregunta(Long preguntaId) {
-        return this.preguntaRepository.getOne(preguntaId);
+    public Pregunta listarPregunta(Long prg_id) {
+        return this.preguntaRepository.getOne(prg_id);
     }
 }

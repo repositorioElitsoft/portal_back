@@ -19,8 +19,8 @@ public interface CategoriaService {
 
     Set<Categoria> obtenerCategorias();
 
-    Categoria obtenerCategoria(Long categoriaId);
+    Categoria obtenerCategoria(Long cat_exam_id);
 
-    void eliminarCategoria(Long categoriaId);
+    void eliminarCategoria(Long cat_exam_id);
     
 }

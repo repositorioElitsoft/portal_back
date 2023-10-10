@@ -45,31 +45,20 @@ public class ExamenController {
     }
 
     @GetMapping("/{examenId}")
-    public Examen listarExamen(@PathVariable("examenId") Long examenId){
-        return examenService.obtenerExamen(examenId);
+    public Examen listarExamen(@PathVariable("exam_id") Long exam_id){
+        return examenService.obtenerExamen(exam_id);
     }
 
     @DeleteMapping("/{examenId}")
-    public void eliminarExamen(@PathVariable("examenId") Long examenId){
-        examenService.eliminarExamen(examenId);
+    public void eliminarExamen(@PathVariable("exam_id") Long exam_id){
+        examenService.eliminarExamen(exam_id);
     }
 
-    @GetMapping("/categoria/{categoriaId}")
-    public List<Examen> listarExamenesDeUnaCategoria(@PathVariable("categoriaId") Long categoriaId){
+    @GetMapping("/categoria/{cat_exam_id}")
+    public List<Examen> listarExamenesDeUnaCategoria(@PathVariable("cat_exam_id") Long cat_exam_id){
         Categoria categoria = new Categoria();
-        categoria.setCategoriaId(categoriaId);
+        categoria.setCat_exam_id(cat_exam_id);
         return examenService.listarExamenesDeUnaCategoria(categoria);
     }
 
-    @GetMapping("/activo")
-    public List<Examen> listarExamenesActivos(){
-        return examenService.obtenerExamenesActivos();
-    }
-
-    @GetMapping("/categoria/activo/{categoriaId}")
-    public List<Examen> listarExamenesActivosDeUnaCategoria(@PathVariable("categoriaId") Long categoriaId){
-        Categoria categoria = new Categoria();
-        categoria.setCategoriaId(categoriaId);
-        return examenService.obtenerExamenesActivosDeUnaCategoria(categoria);
-    }
 }

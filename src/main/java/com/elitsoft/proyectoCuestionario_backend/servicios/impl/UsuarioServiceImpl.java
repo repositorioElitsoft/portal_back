@@ -10,13 +10,10 @@ import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
-<<<<<<< HEAD
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-=======
 import java.util.*;
->>>>>>> security
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -185,11 +182,10 @@ public class UsuarioServiceImpl implements UsuarioService{
         return true;
     }
 
-<<<<<<< HEAD
     public List<Usuario> listarUsuarios(){
         return usuarioRepository.findAll();
     }
-=======
+
     @Override
     public Usuario obtenerDatosUsuario(String jwt) throws Exception {
         Optional<Usuario> userOptional = getUsuarioByToken(jwt);
@@ -214,5 +210,4 @@ public class UsuarioServiceImpl implements UsuarioService{
         return usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
     }
 
->>>>>>> security
 }
