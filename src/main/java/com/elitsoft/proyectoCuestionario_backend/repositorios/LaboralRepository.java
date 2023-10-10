@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import java.util.List;
@@ -24,7 +25,8 @@ public interface LaboralRepository extends JpaRepository <Laboral, Long>{
 
     // Método para listar toda la info laboral
     List<Laboral> findAll();
-    
-    @Query("SELECT DISTINCT l FROM Laboral l LEFT JOIN FETCH l.herramientas h LEFT JOIN FETCH h.versionProducto WHERE l.usuario = :usuario")
-    List<Laboral> findLaboralesWithHerramientasAndProductosByUsuario(@Param("usuario") Usuario usuario);
+
+
+    List<Laboral> findByUsuario(Usuario usuario);
+
 }
