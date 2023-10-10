@@ -13,10 +13,9 @@ public interface HerramientaService {
     
     Boolean guardarHerramientas(List<Herramienta> herramientas, String Jwt) throws Exception;
 
-    List<Herramienta> obtenerHerramientasPorUsuario(Usuario usuario);
+    List<Herramienta> obtenerListaHerramientasPorUsuario(String jwt);
     
-    List<Herramienta> obtenerListaHerramientas();
-    
+
     public Herramienta obtenerHerramienta(Long herr_usr_id)throws Exception ;
     
     List<Herramienta> obtenerHerramientasConProductosPorUsuario(Long usuarioId);

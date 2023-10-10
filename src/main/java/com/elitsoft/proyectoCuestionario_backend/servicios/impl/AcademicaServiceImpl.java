@@ -1,16 +1,22 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.AcademicaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 /**
  *
@@ -21,27 +27,44 @@ public class AcademicaServiceImpl implements AcademicaService {
     
     private final AcademicaRepository academicaRepository;
     private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private final UsuarioService usuarioService;
 
-    public AcademicaServiceImpl(AcademicaRepository academicaRepository, UsuarioRepository usuarioRepository) {
+    public AcademicaServiceImpl(AcademicaRepository academicaRepository, UsuarioRepository usuarioRepository, UsuarioService usuarioService) {
         this.academicaRepository = academicaRepository;
         this.usuarioRepository = usuarioRepository;
+        this.usuarioService = usuarioService;
+    }
+
+    @Override
+    public Boolean guardarAcademica(Academica academica, String jwt) throws Exception {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+
+        if (!userOptional.isPresent()){
+            return false;
+        }
+        academica.setUsuario(userOptional.get());
+        academicaRepository.save(academica);
+        return true;
     }
     
     @Override
-    public Boolean guardarAcademica(Academica academica, String jwt)  {
-        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
-        if (token == null){
+    public Boolean guardarListaAcademicas(List<Academica> academicas, String jwt)  {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+
+        if (!userOptional.isPresent()){
             return false;
         }
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
-        if (!usuarioOpt.isPresent()){
-            return false;
-        }
+        academicaRepository.findByUsuario(userOptional.get())
+                .forEach((academicaRepository::delete));
 
-        academica.setUsuario(usuarioOpt.get());
+        academicas.forEach(academica -> {
+            academica.setUsuario(userOptional.get());
+            academicaRepository.save(academica);
+        });
 
-        academicaRepository.save(academica);
+
         return true;
     }
     
@@ -51,13 +74,66 @@ public class AcademicaServiceImpl implements AcademicaService {
     }
 
     @Override
-    public List<Academica> obtenerListaAcademicas() {
-        return academicaRepository.findAll();
+    public Boolean actualizarAcademica(Long academicaId, Academica academica, String jwt) throws Exception{
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<Academica> academicaOld = academicaRepository.findById(academicaId);
+        if( !academicaOld.isPresent()){
+            throw new EntityNotFoundException("No se encontró la entidad laboral");
+        }
+
+        if(academicaOld.get().getUsuario().getUsr_id() != userOptional.get().getUsr_id()){
+            throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
+        }
+
+        academica.setInf_acad_id(academicaOld.get().getInf_acad_id());
+        academica.setUsuario(userOptional.get());
+
+        academicaRepository.save(academica);
+        return true;
+    }
+
+    @Override
+    public List<Academica> obtenerListaAcademicas(String jwt) {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        List<Academica> academicas = academicaRepository.findByUsuario(userOptional.get());
+        if(academicas == null){
+            return Collections.emptyList();
+        }
+
+        return academicas;
     }
     
     @Override
     public List<String> obtenerEstadosAcademicosUnicos() {
         return academicaRepository.findAllDistinctInfAcadEst();
     }
-    
+
+    @Override
+    public Boolean deleteAcademica(Long academicaId, String jwt) throws Exception {
+        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<Academica> academicaOld = academicaRepository.findById(academicaId);
+        if( !academicaOld.isPresent()){
+            throw new EntityNotFoundException("No se encontró la entidad laboral");
+        }
+
+        if(!academicaOld.get().getUsuario().getUsr_id().equals(userOptional.get().getUsr_id())){
+            throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
+        }
+
+        academicaRepository.deleteById(academicaId);
+        return true;
+    }
+
 }

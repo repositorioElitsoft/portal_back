@@ -20,8 +20,8 @@ public class EmailServiceImpl implements EmailService {
     //SenderEmail no es el email real, sino el que aparecerá una vez se mande el mensaje.
     //Se puede colocar cualquiera.
     private final String senderEmail = "no-response@elitsoft-chile.com";
-    private String verificationRoute = "http://localhost:8080/usuarios/verificar?code=";
-    private String restaurarRoute = "http://localhost:8080/usuarios/restaurar?code=";
+    private String verificationRoute = "http://localhost:4200/verificar-email?code=";
+    private String restaurarRoute = "http://localhost:4200/restaurar?code=";
 
     @Override
     public void sendSimpleMessage(String to, String subject, String text) {

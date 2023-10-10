@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,5 +16,11 @@ public class VersionProducto {
     private String vrs_name;
     @ManyToOne
     @JoinColumn(name = "prd_id")
+
     private Producto prd;
+
+
+
+
+
 }

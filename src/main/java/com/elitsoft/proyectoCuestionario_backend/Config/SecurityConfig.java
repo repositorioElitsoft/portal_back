@@ -55,19 +55,27 @@ public class SecurityConfig {
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/pedir-restauracion-pass","POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**","PUT")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/cargoselitsoft/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/paises/**","GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**","DELETE")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/**","POST")).hasAnyAuthority(ADMIN,GUEST)
-                .requestMatchers(new AntPathRequestMatcher("/usuarios/**","PUT")).hasAnyAuthority(ADMIN,GUEST)
+                //.requestMatchers(new AntPathRequestMatcher("/usuarios/","PUT")).hasAnyAuthority(ADMIN,GUEST)
+
+                //.requestMatchers(new AntPathRequestMatcher("/laboral/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
                 .anyRequest()
                 .authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                //Filtros
                 .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
