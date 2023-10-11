@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -32,7 +33,8 @@ public class Herramienta {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonBackReference
     private Usuario usuario;
 
 

@@ -2,6 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class Usuario  {
     private Pais pais;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Herramienta> herramientas;
 
     public Usuario(){

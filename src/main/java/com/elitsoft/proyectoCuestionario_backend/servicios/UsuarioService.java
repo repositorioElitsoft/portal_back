@@ -35,5 +35,5 @@ public interface UsuarioService {
 
     public  List<Usuario> obtenerUsuario();
 
-    public List<Map<String, String>> listarUsuariosConHerramientas();
+    public List<Usuario> listarUsuariosConHerramientas();
 }

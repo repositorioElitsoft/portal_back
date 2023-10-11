@@ -15,6 +15,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
+import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -213,7 +214,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Map<String, String>> listarUsuariosConHerramientas() {
+    public List<Usuario> listarUsuariosConHerramientas() {
         return usuarioRepository.findAllWhitHerramientas();
     }
 }

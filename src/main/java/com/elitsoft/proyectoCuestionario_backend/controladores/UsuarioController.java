@@ -9,6 +9,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -93,8 +94,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuarios-herramientas")
-    public List<Map<String, String>> listarUsuariosConHerramientas(){
-        List<Map<String, String>> usuariosConHerramientas = usuarioService.listarUsuariosConHerramientas();
+    public List<Usuario> listarUsuariosConHerramientas(){
+        List<Usuario> usuariosConHerramientas = usuarioService.listarUsuariosConHerramientas();
         return usuariosConHerramientas;
     }
 

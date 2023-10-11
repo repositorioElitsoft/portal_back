@@ -30,5 +30,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     List<Usuario> findAll();
 
     @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.herramientas")
-    List<Map<String, String>> findAllWhitHerramientas();
+    List<Usuario> findAllWhitHerramientas();
 }
