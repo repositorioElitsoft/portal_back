@@ -3,6 +3,8 @@ package com.elitsoft.proyectoCuestionario_backend.servicios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pregunta;
+
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,7 +21,7 @@ public interface PreguntaService {
 
     Pregunta obtenerPregunta(Long prg_id);
 
-    Set<Pregunta> obtenerPreguntasDelExamen(Examen examen);
+    List<Pregunta> obtenerPreguntasDelExamen(Examen examen);
 
     void eliminarPregunta(Long prg_id);
 

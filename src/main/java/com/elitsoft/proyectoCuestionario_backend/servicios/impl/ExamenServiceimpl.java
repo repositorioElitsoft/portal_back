@@ -48,7 +48,7 @@ public class ExamenServiceimpl implements ExamenService {
         
         Examen examen = new Examen();
         
-        examen.setExam_id(exam_id);
+        examen.setExamenId(exam_id);
         
         examenRepository.delete(examen);
 

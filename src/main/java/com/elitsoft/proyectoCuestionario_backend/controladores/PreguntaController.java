@@ -42,8 +42,8 @@ public class PreguntaController {
         Set<Pregunta> preguntas = examen.getPreguntas();
 
         List examenes = new ArrayList(preguntas);
-        if(examenes.size() > Integer.parseInt(examen.getExam_n_preg())){
-            examenes = examenes.subList(0,Integer.parseInt(examen.getExam_n_preg() + 1));
+        if(examenes.size() > Integer.parseInt(examen.getNumeroDePreguntas())){
+            examenes = examenes.subList(0,Integer.parseInt(examen.getNumeroDePreguntas() + 1));
         }
 
         Collections.shuffle(examenes);
@@ -74,10 +74,10 @@ public class PreguntaController {
     }
 
     @GetMapping("/examen/todos/{exam_id}")
-    public ResponseEntity<?> listarPreguntaDelExamenComoAdministrador(@PathVariable("exam_id") Long exam_id){
+    public ResponseEntity<List<Pregunta>> listarPreguntaDelExamenComoAdministrador(@PathVariable("exam_id") Long exam_id){
         Examen examen = new Examen();
-        examen.setExam_id(exam_id);
-        Set<Pregunta> preguntas = preguntaService.obtenerPreguntasDelExamen(examen);
+        examen.setExamenId(exam_id);
+        List<Pregunta> preguntas = preguntaService.obtenerPreguntasDelExamen(examen);
         return ResponseEntity.ok(preguntas);
     }
 
@@ -89,13 +89,13 @@ public class PreguntaController {
         Integer intentosTotales = 0;
 
         for(Pregunta p : preguntas){
-            Pregunta pregunta = this.preguntaService.listarPregunta(p.getPrg_id());
-            if(pregunta.getPrg_resp().equals(p.getPrg_resp())){
+            Pregunta pregunta = this.preguntaService.listarPregunta(p.getPreguntaId());
+            if(pregunta.getRespuesta().equals(p.getRespuesta())){
                 respuestasCorrectas ++;
-                double puntos = Double.parseDouble(preguntas.get(0).getExamen().getExam_ptos_max())/preguntas.size();
+                double puntos = Double.parseDouble(preguntas.get(0).getExamen().getPuntosMaximos())/preguntas.size();
                 puntosMaximos += puntos;
             }
-            if(p.getPrg_resp() != null){
+            if(p.getRespuesta() != null){
                 intentos++;
             }
             intentosTotales++;

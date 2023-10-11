@@ -58,7 +58,7 @@ public class ExamenController {
     @GetMapping("/categoria/{cat_exam_id}")
     public List<Examen> listarExamenesDeUnaCategoria(@PathVariable("cat_exam_id") Long cat_exam_id){
         Categoria categoria = new Categoria();
-        categoria.setCat_exam_id(cat_exam_id);
+        categoria.setCategoriaId(cat_exam_id);
         return examenService.listarExamenesDeUnaCategoria(categoria);
     }
 

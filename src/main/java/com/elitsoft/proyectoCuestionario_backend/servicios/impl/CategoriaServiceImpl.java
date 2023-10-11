@@ -5,6 +5,7 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaService;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class CategoriaServiceImpl  implements CategoriaService {
     }
 
     @Override
-    public Set<Categoria> obtenerCategorias() {
-        return new LinkedHashSet<>(categoriaRepository.findAll());
+    public List<Categoria> obtenerCategorias() {
+        return categoriaRepository.findAll();
     }
 
     @Override
@@ -42,7 +43,7 @@ public class CategoriaServiceImpl  implements CategoriaService {
     @Override
     public void eliminarCategoria(Long cat_exam_id) {
         Categoria categoria = new Categoria();
-        categoria.setCat_exam_id(cat_exam_id);
+        categoria.setCategoriaId(cat_exam_id);
         categoriaRepository.delete(categoria);
     }
 }
