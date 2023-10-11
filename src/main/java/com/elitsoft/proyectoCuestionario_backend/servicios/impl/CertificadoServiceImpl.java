@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Certificado;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CertificadoRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CertificadoService;
@@ -33,5 +34,19 @@ public class CertificadoServiceImpl implements CertificadoService {
         return certificadoRepository.findByNombre(nombre);
     }
 
-    
+
+    @Override
+    public Boolean guardar_certificado(Certificado certificado){
+        certificadoRepository.save(certificado);
+        return true;
+    }
+
+    @Override
+    public Boolean remove_certificado(Long certificado) {
+        certificadoRepository.deleteById(certificado);
+        return true;
+
+    }
+
+
 }

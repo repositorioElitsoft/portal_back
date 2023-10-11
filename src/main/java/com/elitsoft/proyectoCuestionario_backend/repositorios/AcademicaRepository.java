@@ -25,5 +25,10 @@ public interface AcademicaRepository extends JpaRepository <Academica, Long> {
     //metodo para traer todos los estados de la tabla academica
     @Query("SELECT DISTINCT a.inf_acad_est FROM Academica a")
     List<String> findAllDistinctInfAcadEst();
-    
+
+    // para retornar un boolean
+    //Boolean save(Academica academica);
+
+    void deleteById(Long academica_id);
+
 }

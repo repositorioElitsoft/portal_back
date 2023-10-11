@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Nivel;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,10 @@ public interface NivelRepository extends JpaRepository <Nivel, Long>{
     List<Nivel> findAll();
     
     Optional<Nivel> findById(Long id); // Método para buscar por ID
-    
-    
-    
+
+
+    // para retornar un boolean
+    Nivel save(Nivel nivel);
+
+    void deleteById(Long nivel);
 }
