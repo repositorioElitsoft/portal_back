@@ -1,10 +1,13 @@
 
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.lang.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 
@@ -38,6 +41,9 @@ public class Usuario  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pais_id") // Nombre de la columna que será clave foránea
     private Pais pais;
+
+    @OneToMany(mappedBy="resultados", fetch = FetchType.LAZY)
+    private List<Resultados> resultados;
     
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Herramienta> herramientas;
