@@ -35,8 +35,8 @@ public class CategoriaController {
     }
     //Petición para enlistar las categorias por ID
     @GetMapping("/{categoriaId}")
-    public Categoria listarCategoriaPorId(@PathVariable("categoriaId") Long categoriaId){
-        return categoriaService.obtenerCategoria(categoriaId);
+    public Categoria listarCategoriaPorId(@PathVariable("categoriaId") Long cat_exam_id){
+        return categoriaService.obtenerCategoria(cat_exam_id);
     }
 
     @GetMapping("/")
@@ -51,7 +51,7 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/{categoriaId}")
-    public void eliminarCategoria(@PathVariable("categoriaId") Long categoriaId){
-        categoriaService.eliminarCategoria(categoriaId);
+    public void eliminarCategoria(@PathVariable("categoriaId") Long cat_exam_id){
+        categoriaService.eliminarCategoria(cat_exam_id);
     }
 }

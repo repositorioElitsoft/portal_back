@@ -33,22 +33,22 @@ public class ExamenServiceimpl implements ExamenService {
     }
 
     @Override
-    public Set<Examen> obtenerExamenes() {
-        return new LinkedHashSet<>(examenRepository.findAll());
+    public List<Examen> obtenerExamenes() {
+        return (examenRepository.findAll());
 
     }
 
     @Override
-    public Examen obtenerExamen(Long examenId) {
-        return examenRepository.findById(examenId).get();
+    public Examen obtenerExamen(Long exam_id) {
+        return examenRepository.findById(exam_id).get();
     }
 
     @Override
-    public void eliminarExamen(Long examenId) {
+    public void eliminarExamen(Long exam_id) {
         
         Examen examen = new Examen();
         
-        examen.setExamenId(examenId);
+        examen.setExam_id(exam_id);
         
         examenRepository.delete(examen);
 
@@ -59,14 +59,5 @@ public class ExamenServiceimpl implements ExamenService {
         return this.examenRepository.findByCategoria(categoria);
     }
 
-    @Override
-    public List<Examen> obtenerExamenesActivos() {
-        return examenRepository.findByActivo(true);
-    }
-
-    @Override
-    public List<Examen> obtenerExamenesActivosDeUnaCategoria(Categoria categoria) {
-        return examenRepository.findByCategoriaAndActivo(categoria,true);
-    }
     
 }

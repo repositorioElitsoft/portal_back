@@ -16,19 +16,13 @@ public interface ExamenService {
     
     Examen actualizarExamen (Examen examen);
     
-    Set<Examen> obtenerExamenes();
+    List<Examen> obtenerExamenes();
     
-    Examen obtenerExamen(Long examenId);
+    Examen obtenerExamen(Long exam_id);
     
-    void eliminarExamen(Long examenId);
+    void eliminarExamen(Long exam_id);
     
     List<Examen> listarExamenesDeUnaCategoria(Categoria categoria);
 
-    List<Examen> obtenerExamenesActivos();
-
-    List<Examen> obtenerExamenesActivosDeUnaCategoria(Categoria categoria);
-   
-    
-  
     
 }

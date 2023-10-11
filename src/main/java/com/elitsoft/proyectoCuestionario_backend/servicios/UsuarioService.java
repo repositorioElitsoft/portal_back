@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
+
 /**
  *
  * @author Maeva Martínez
@@ -30,6 +31,8 @@ public interface UsuarioService {
     public Boolean cambiarPassword(String code, String password);
 
     public Boolean actualizarUsuario(Usuario usuario, String jwt);
+
+    public List<Usuario> listarUsuarios();
 
     Usuario obtenerDatosUsuario(String jwt) throws Exception;
     

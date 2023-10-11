@@ -2,6 +2,8 @@
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +25,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     @Query("SELECT u FROM Usuario u WHERE u.usr_email = :email")
     Optional<Usuario> findByUsrEmail(@Param("email") String username);
     
-    
+    List<Usuario> findAll();
     
     
 }

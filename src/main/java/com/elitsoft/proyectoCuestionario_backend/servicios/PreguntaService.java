@@ -17,13 +17,12 @@ public interface PreguntaService {
 
     Set<Pregunta> obtenerPreguntas();
 
-    Pregunta obtenerPregunta(Long preguntaId);
+    Pregunta obtenerPregunta(Long prg_id);
 
     Set<Pregunta> obtenerPreguntasDelExamen(Examen examen);
 
-    void eliminarPregunta(Long preguntaId);
+    void eliminarPregunta(Long prg_id);
 
-    Pregunta listarPregunta(Long preguntaId);
+    Pregunta listarPregunta(Long prg_id);
 
-    
 }
