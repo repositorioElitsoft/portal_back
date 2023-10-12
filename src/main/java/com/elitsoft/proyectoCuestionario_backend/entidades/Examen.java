@@ -2,9 +2,11 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -37,6 +39,10 @@ public class Examen {
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Pregunta> preguntas = new HashSet<>();
+
+    @OneToMany(mappedBy="examen", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Resultados> resultados;
 
 
     

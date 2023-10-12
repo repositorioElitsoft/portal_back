@@ -43,7 +43,8 @@ public class Usuario  {
     @JoinColumn(name = "pais_id") // Nombre de la columna que será clave foránea
     private Pais pais;
 
-    @OneToMany(mappedBy="resultados", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Resultados> resultados;
     
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)

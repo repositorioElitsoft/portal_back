@@ -31,7 +31,7 @@ public class ResultadosController {
     public Boolean guardarResultados (@RequestBody Resultados resultados,
                                       @RequestHeader("Authorization") String jwt)  {
         resultadosService.guardarResultados(resultados, jwt);
-        return  true;
+        return true;
     }
 
 
