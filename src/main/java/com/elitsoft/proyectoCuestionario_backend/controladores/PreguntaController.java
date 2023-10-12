@@ -3,11 +3,14 @@ package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pregunta;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.PreguntaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.transaction.Transactional;
 import java.util.*;
 
 
@@ -36,32 +39,12 @@ public class PreguntaController {
         return ResponseEntity.ok(preguntaService.actualizarPregunta(pregunta));
     }
 
-    @GetMapping("/examen/{examenId}")
-    public ResponseEntity<?> listarPreguntasDelExamen(@PathVariable("examenId") Long exam_id){
-        Examen examen = examenService.obtenerExamen(exam_id);
-        Set<Pregunta> preguntas = examen.getPreguntas();
-
-        List examenes = new ArrayList(preguntas);
-        if(examenes.size() > Integer.parseInt(examen.getExam_n_preg())){
-            examenes = examenes.subList(0,Integer.parseInt(examen.getExam_n_preg() + 1));
-        }
-
-        Collections.shuffle(examenes);
-        return ResponseEntity.ok(examenes); 
-    /*  Examen examen = examenService.obtenerExamen(examenId);
-    Set<Pregunta> preguntas = examen.getPreguntas();
-
-    // Crear una lista aleatoria de preguntas
-    List<Pregunta> preguntasAleatorias = new ArrayList<>(preguntas);
-    Collections.shuffle(preguntasAleatorias);
-
-    // Limitar el número de preguntas
-    int numPreguntas = Math.min(preguntasAleatorias.size(), 5);
-    preguntasAleatorias = preguntasAleatorias.subList(0, numPreguntas);
-
-    return ResponseEntity.ok(preguntasAleatorias);
-      */
+    @GetMapping("/examen/{exam_id}")
+    public ResponseEntity<List<Pregunta>> listarPreguntasDelExamen(@PathVariable("exam_id") Long exam_id){
+        List<Pregunta> preguntas = preguntaService.findByExamenId(exam_id);
+        return ResponseEntity.ok(preguntas);
     }
+
 
     @GetMapping("/{prg_id}")
     public Pregunta listarPreguntaPorId(@PathVariable("prg_id") Long prg_id){
@@ -73,15 +56,15 @@ public class PreguntaController {
         preguntaService.eliminarPregunta(prg_id);
     }
 
-    @GetMapping("/examen/todos/{exam_id}")
+    /*@GetMapping("/examen/todos/{exam_id}")
     public ResponseEntity<?> listarPreguntaDelExamenComoAdministrador(@PathVariable("exam_id") Long exam_id){
         Examen examen = new Examen();
         examen.setExam_id(exam_id);
         Set<Pregunta> preguntas = preguntaService.obtenerPreguntasDelExamen(examen);
         return ResponseEntity.ok(preguntas);
-    }
+    }*/
 
-    @PostMapping("/evaluar-examen")
+    /*@PostMapping("/evaluar-examen")
     public ResponseEntity<?> evaluarExamen(@RequestBody List<Pregunta> preguntas){
         double puntosMaximos = 0;
         Integer respuestasCorrectas = 0;
@@ -107,5 +90,5 @@ public class PreguntaController {
         respuestas.put("intentos",intentos);
         respuestas.put("intentosTotales",intentosTotales);
         return ResponseEntity.ok(respuestas);
-    }
+    }*/
 }

@@ -50,7 +50,7 @@ public class ExamenController {
         return examenService.obtenerExamen(exam_id);
     }
 
-    @DeleteMapping("/{examenId}")
+    @DeleteMapping("/{exam_id}")
     public void eliminarExamen(@PathVariable("exam_id") Long exam_id){
         examenService.eliminarExamen(exam_id);
     }

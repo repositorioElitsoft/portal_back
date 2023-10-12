@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -30,16 +31,7 @@ public class Examen {
     
     @ManyToOne(fetch = FetchType.EAGER)
     private Categoria categoria;
-    
-    @OneToMany(mappedBy="examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Pregunta> preguntas = new HashSet<>();
 
 
-    
-    
-    
-    
-    
-    
+
 }
