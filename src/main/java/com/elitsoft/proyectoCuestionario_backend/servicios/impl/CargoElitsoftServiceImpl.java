@@ -26,7 +26,18 @@ public class CargoElitsoftServiceImpl implements CargoElitsoftService{
     public List<CargoElitsoft> obtenerListaCargosElitsoft() {
         return cargoElitsoftRepository.findAll();
     }
-    
-    
-    
+
+    @Override
+    public Boolean guardar_cargos(CargoElitsoft cargo){
+        cargoElitsoftRepository.save(cargo);
+        return true;
+    }
+
+    @Override
+    public Boolean remove_cargo(Long cargo) {
+        cargoElitsoftRepository.deleteById(cargo);
+        return true;
+
+    }
+
 }

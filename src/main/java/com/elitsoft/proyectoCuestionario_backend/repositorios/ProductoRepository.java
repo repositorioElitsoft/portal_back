@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import java.util.List;
@@ -26,5 +27,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
     // Método para obtener el nombre del producto por su ID
     @Query("SELECT p.prd_nom FROM Producto p WHERE p.prd_id = :prdId")
     String findNombreProductoById(@Param("prdId") Long prdId);
-    
+
+
+    // para retornar un boolean
+    Producto save(Producto producto);
+    void deleteById(Long producto);
+
 }

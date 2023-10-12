@@ -1,16 +1,13 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ProductoService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -51,5 +48,17 @@ public class ProductoController {
         String nombreProducto = productoService.obtenerNombreProducto(productoId);
         return ResponseEntity.ok(nombreProducto);
     }
-    
+
+
+    @PostMapping("/")
+    public Boolean guardar_producto (@RequestBody Producto producto )  {
+        productoService.guardar_producto(producto);
+        return  true;
+    }
+
+    @DeleteMapping("/{producto}")
+    public Boolean remove_producto(@PathVariable Long producto){
+        productoService.remove_producto(producto);
+        return true;
+    }
 }

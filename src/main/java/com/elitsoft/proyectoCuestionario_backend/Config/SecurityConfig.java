@@ -62,7 +62,8 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/paises/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","DELETE")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
-                .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
+             //   .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","POST")).hasAnyAuthority(ADMIN,GUEST)
                 //.requestMatchers(new AntPathRequestMatcher("/usuarios/","PUT")).hasAnyAuthority(ADMIN,GUEST)
 

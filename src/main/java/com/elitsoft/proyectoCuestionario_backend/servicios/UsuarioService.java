@@ -35,5 +35,8 @@ public interface UsuarioService {
     public List<Usuario> listarUsuarios();
 
     Usuario obtenerDatosUsuario(String jwt) throws Exception;
-    
+
+    public  List<Usuario> obtenerUsuario();
+
+    public List<Usuario> listarUsuariosConHerramientas();
 }

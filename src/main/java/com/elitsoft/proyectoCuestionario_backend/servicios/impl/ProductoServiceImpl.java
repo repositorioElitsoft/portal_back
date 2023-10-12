@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaProductoRepository;
@@ -46,5 +47,20 @@ public class ProductoServiceImpl implements ProductoService {
     public String obtenerNombreProducto(Long prdId) {
         return productoRepository.findNombreProductoById(prdId);
     }
-    
+
+
+    @Override
+    public Boolean guardar_producto(Producto producto){
+        productoRepository.save(producto);
+        return true;
+    }
+
+    @Override
+    public Boolean remove_producto(Long producto) {
+        productoRepository.deleteById(producto);
+        return true;
+
+    }
+
+
 }

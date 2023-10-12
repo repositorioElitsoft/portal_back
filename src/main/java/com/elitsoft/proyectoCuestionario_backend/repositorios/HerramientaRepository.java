@@ -25,8 +25,6 @@ public interface HerramientaRepository extends JpaRepository <Herramienta, Long>
     // Método para obtener herramientas por usuario
     List<Herramienta> findByUsuario(Usuario usuario);
 
-
-
     // Método para listar todas las herramientas
     List<Herramienta> findAll();
     
@@ -37,6 +35,7 @@ public interface HerramientaRepository extends JpaRepository <Herramienta, Long>
     @Transactional
     @Query(value = "DELETE FROM laboral_herramienta WHERE herr_usr_id = :id", nativeQuery = true)
     void deleteLaboralHerramientaReferences(@Param("id") Long id);
+
 
 
 
