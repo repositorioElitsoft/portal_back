@@ -39,7 +39,7 @@ public class PreguntaController {
     @GetMapping("/examen/{examenId}")
     public ResponseEntity<?> listarPreguntasDelExamen(@PathVariable("examenId") Long exam_id){
         Examen examen = examenService.obtenerExamen(exam_id);
-        Set<Pregunta> preguntas = examen.getPreguntas();
+        List<Pregunta> preguntas = examen.getPreguntas();
 
         List examenes = new ArrayList(preguntas);
         if(examenes.size() > Integer.parseInt(examen.getNumeroDePreguntas())){

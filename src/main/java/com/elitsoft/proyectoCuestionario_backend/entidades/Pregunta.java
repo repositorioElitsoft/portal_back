@@ -1,6 +1,8 @@
 
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -43,6 +45,7 @@ public class Pregunta {
     private int prg_ptje_prg ;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
     private Examen examen;
 
 

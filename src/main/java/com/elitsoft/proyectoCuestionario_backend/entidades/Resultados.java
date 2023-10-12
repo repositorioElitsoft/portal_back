@@ -26,11 +26,9 @@ public class Resultados {
     private Integer resultadosExamen;
     private Integer tiempo;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exam_id")
     private Examen examen;
-
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
