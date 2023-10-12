@@ -26,6 +26,13 @@ public class ResultadosServiceImpl implements ResultadosService {
     }
 
     @Override
+    public List<Resultados> obtenerResultadosByUser(Long userId) {
+        Usuario usuario = new Usuario();
+        usuario.setUsr_id(userId);
+        return resultadosRepository.findByUsuario(usuario);
+    }
+
+    @Override
     public Boolean guardarResultados(Resultados resultados, String jwt){
         Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
 

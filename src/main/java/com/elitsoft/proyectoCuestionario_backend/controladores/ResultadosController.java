@@ -27,6 +27,13 @@ public class ResultadosController {
 
     }
 
+    @GetMapping("/{idUser}")
+    public ResponseEntity<List<?>> obtenerResultadosByUser(@PathVariable Long idUser){
+        List<Resultados> resultados = resultadosService.obtenerResultadosByUser(idUser);
+        return new ResponseEntity<>(resultados, HttpStatus.OK);
+
+    }
+
     @PostMapping("/")
     public Boolean guardarResultados (@RequestBody Resultados resultados,
                                       @RequestHeader("Authorization") String jwt)  {
