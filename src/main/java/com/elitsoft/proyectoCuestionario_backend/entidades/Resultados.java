@@ -2,8 +2,12 @@ package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
+
 @Data
 @Entity
 @Table(name = "tbl_res")
@@ -18,13 +22,25 @@ public class Resultados {
     @JsonBackReference
     private Usuario usuario;
 
-    private Integer resultados_examen;
+    @Column(name = "resultados_examen")
+    private Integer resultadosExamen;
     private Integer tiempo;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exam_id")
-    @JsonBackReference
     private Examen examen;
+
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
 
 

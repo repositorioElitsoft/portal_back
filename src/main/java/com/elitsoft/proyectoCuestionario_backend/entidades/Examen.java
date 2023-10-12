@@ -41,14 +41,6 @@ public class Examen {
     private Set<Pregunta> preguntas = new HashSet<>();
 
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY)
-    @JsonIgnore
     private List<Resultados> resultados;
 
-
-    
-    
-    
-    
-    
-    
 }
