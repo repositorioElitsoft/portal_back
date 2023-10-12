@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  *
  * @author Maeva Martínez
@@ -40,7 +42,7 @@ public class CategoriaController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> listarCategorias(){
+    public ResponseEntity<List<Categoria>> listarCategorias(){
         return ResponseEntity.ok(categoriaService.obtenerCategorias());
     }
     //petición para actualizar categoria

@@ -16,16 +16,21 @@ public class Pregunta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long prg_id;
+    @Column(name = "prg_id")
+    private Long preguntaId;
 
-    @Column(length = 5000)
-    private String prg; // antes era contenido
-
-    private String prg_opc1;
-    private String prg_opc2;
-    private String prg_opc3;
-    private String prg_opc4;
-    private String prg_resp;
+    @Column(length = 5000, name = "prg")
+    private String contenido; // antes era contenido
+    @Column(name = "prg_opc1")
+    private String opcion1;
+    @Column(name = "prg_opc2")
+    private String opcion2;
+    @Column(name = "prg_opc3")
+    private String opcion3;
+    @Column(name = "prg_opc4")
+    private String opcion4;
+    @Column(name = "prg_resp")
+    private String respuesta;
 
     private int prg_ptje_prg ;
 
