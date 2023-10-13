@@ -52,10 +52,6 @@ public class HerramientaServiceImpl implements HerramientaService {
         }
 
 
-        herramientas.forEach(e ->{
-            System.out.println(e.getHerr_usr_id());
-        });
-
 
         List<Herramienta> herramientasAntiguas = herramientaRepository.findByUsuario(usuarioOpt.get());
 

@@ -31,6 +31,9 @@ public class Examen {
     private String puntosMaximos;
     @Column (name = "exam_n_preg")
     private String numeroDePreguntas;
+
+
+
     
     @ManyToOne(fetch = FetchType.EAGER)
 
