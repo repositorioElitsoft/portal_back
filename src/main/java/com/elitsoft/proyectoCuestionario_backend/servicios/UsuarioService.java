@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +31,8 @@ public interface UsuarioService {
 
     public Boolean actualizarUsuario(Usuario usuario, String jwt);
 
+    Usuario actualizarUsuarioId(Long usr_id, Usuario usuario);
+
     public List<Usuario> listarUsuarios();
 
     Usuario obtenerDatosUsuario(String jwt) throws Exception;
@@ -39,4 +40,6 @@ public interface UsuarioService {
     public  List<Usuario> obtenerUsuario();
 
     public List<Usuario> listarUsuariosConHerramientas();
+
+    void eliminarUsuarioId (Long usr_id);
 }

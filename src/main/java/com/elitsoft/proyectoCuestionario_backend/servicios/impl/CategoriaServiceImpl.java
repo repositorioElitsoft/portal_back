@@ -2,11 +2,13 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaService;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,15 @@ public class CategoriaServiceImpl  implements CategoriaService {
     }
 
     @Override
-    public Categoria actualizarCategoria(Categoria categoria) {
-        return categoriaRepository.save(categoria);
+    public Categoria actualizarCategoria(Long categoriaId, Categoria categoria) {
+        Categoria categoriaExistente = categoriaRepository.findById(categoriaId).orElseThrow(
+                () -> new NoSuchElementException("La categoria con ID " + categoriaId + " no se encontro.")
+        );
+
+        categoriaExistente.setDescripcion(categoria.getDescripcion());
+        categoriaExistente.setTitulo(categoria.getTitulo());
+
+        return categoriaRepository.save(categoriaExistente);
     }
 
     @Override
@@ -36,14 +45,14 @@ public class CategoriaServiceImpl  implements CategoriaService {
     }
 
     @Override
-    public Categoria obtenerCategoria(Long cat_exam_id) {
-        return categoriaRepository.findById(cat_exam_id).get();
+    public Categoria obtenerCategoria(Long categoriaId) {
+        return categoriaRepository.findById(categoriaId).get();
     }
 
     @Override
-    public void eliminarCategoria(Long cat_exam_id) {
+    public void eliminarCategoria(Long categoriaId) {
         Categoria categoria = new Categoria();
-        categoria.setCategoriaId(cat_exam_id);
+        categoria.setCategoriaId(categoriaId);
         categoriaRepository.delete(categoria);
     }
 }

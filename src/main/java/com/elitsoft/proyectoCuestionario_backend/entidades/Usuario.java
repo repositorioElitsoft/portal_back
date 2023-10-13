@@ -44,7 +44,7 @@ public class Usuario  {
     private Pais pais;
 
     @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Resultados> resultados;
     
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)

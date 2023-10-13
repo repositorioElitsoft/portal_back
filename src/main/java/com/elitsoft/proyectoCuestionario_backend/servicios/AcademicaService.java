@@ -29,4 +29,6 @@ public interface AcademicaService {
     List<String> obtenerEstadosAcademicosUnicos();
 
     Boolean deleteAcademica(Long academicaId, String jwt)throws Exception;
+
+    void eliminarAcademicasPorUsuario(Long usuarioId);
 }

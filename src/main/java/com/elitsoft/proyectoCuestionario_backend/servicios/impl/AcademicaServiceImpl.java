@@ -136,4 +136,14 @@ public class AcademicaServiceImpl implements AcademicaService {
         return true;
     }
 
+    @Override
+    public void eliminarAcademicasPorUsuario(Long usuarioId) {
+        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        if (usuario.isPresent()) {
+            List<Academica> academicas = academicaRepository.findByUsuario(usuario.get());
+            academicaRepository.deleteAll(academicas);
+        }
+    }
+
+
 }

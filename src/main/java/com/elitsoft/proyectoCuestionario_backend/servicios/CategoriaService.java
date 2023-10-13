@@ -17,12 +17,12 @@ public interface CategoriaService {
     
     Categoria agregarCategoria(Categoria categoria);
 
-    Categoria actualizarCategoria(Categoria categoria);
+    Categoria actualizarCategoria(Long categoriaId, Categoria categoria);
 
     List<Categoria> obtenerCategorias();
 
-    Categoria obtenerCategoria(Long cat_exam_id);
+    Categoria obtenerCategoria(Long categoriaId);
 
-    void eliminarCategoria(Long cat_exam_id);
+    void eliminarCategoria(Long categoriaId);
     
 }

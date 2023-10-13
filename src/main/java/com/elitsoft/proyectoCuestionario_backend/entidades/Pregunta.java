@@ -35,8 +35,8 @@ public class Pregunta {
     private int prg_ptje_prg ;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "exam_id") // Nombre de la columna que será clave foránea hacia la tabla de examenes
-    private Examen exam_id;
+    @JoinColumn(name = "examen_exam_id") // Nombre de la columna que será clave foránea hacia la tabla de examenes
+    private Examen examen;
 
 
 }
