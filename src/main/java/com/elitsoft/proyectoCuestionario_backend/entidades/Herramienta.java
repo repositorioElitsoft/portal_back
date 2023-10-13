@@ -21,6 +21,7 @@ public class Herramienta {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "herr_usr_id")
     private Long herr_usr_id;
 
 
@@ -49,34 +50,6 @@ public class Herramienta {
     @ManyToMany
     @JsonIgnore
     private List<Laboral> laborals;
-
-    public Herramienta() {
-    }
-
-    public Long getHerr_usr_id() {
-        return herr_usr_id;
-    }
-
-    public void setHerr_usr_id(Long herr_usr_id) {
-        this.herr_usr_id = herr_usr_id;
-    }
-
-    public String getHerr_usr_anos_exp() {
-        return herr_usr_anos_exp;
-    }
-
-    public void setHerr_usr_anos_exp(String herr_usr_anos_exp) {
-        this.herr_usr_anos_exp = herr_usr_anos_exp;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
 
 
 

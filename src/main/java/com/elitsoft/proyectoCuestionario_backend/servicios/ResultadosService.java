@@ -9,8 +9,10 @@ import java.util.List;
 public interface ResultadosService {
 
     List<Resultados> obtenerResultados();
+    List<Resultados> obtenerResultadosByUser(Long userId);
 
     public Boolean guardarResultados(Resultados resultados, String jwt);
+
 
 
 }

@@ -46,27 +46,37 @@ public class HerramientaServiceImpl implements HerramientaService {
         }
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+
         if (!usuarioOpt.isPresent()){
             return false;
         }
 
+
+        herramientas.forEach(e ->{
+            System.out.println(e.getHerr_usr_id());
+        });
+
+
         List<Herramienta> herramientasAntiguas = herramientaRepository.findByUsuario(usuarioOpt.get());
 
-
-        Set<Long> idsNuevos = new HashSet<>();
+        Set<Long> idsEncontradas = new HashSet<>();
 
         for (Herramienta herramienta : herramientas){
-            idsNuevos.add(herramienta.getVersionProducto().getVrs_id());
             herramienta.setUsuario(usuarioOpt.get());
             herramientaRepository.save(herramienta);
+            idsEncontradas.add(herramienta.getHerr_usr_id());
         }
 
-        for (Herramienta herramienta : herramientasAntiguas){
-            if (!idsNuevos.contains(herramienta.getVersionProducto().getVrs_id())){
-                herramientaRepository.deleteLaboralHerramientaReferences(herramienta.getHerr_usr_id());
-            }
-            herramientaRepository.delete(herramienta);
+        for (Herramienta herramientaAntigua : herramientasAntiguas){
+                if(!idsEncontradas.contains(herramientaAntigua.getHerr_usr_id())){
+                    herramientaRepository.deleteLaboralHerramientaReferences(herramientaAntigua.getHerr_usr_id());
+                    herramientaRepository.delete(herramientaAntigua);
+                }
         }
+
+
+
+
         return true;
     }
 

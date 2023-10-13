@@ -37,18 +37,11 @@ public class Examen {
     private Categoria categoria;
     
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Pregunta> preguntas = new HashSet<>();
+    @JsonManagedReference
+    private List<Pregunta> preguntas;
 
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Resultados> resultados;
 
-
-    
-    
-    
-    
-    
-    
 }
