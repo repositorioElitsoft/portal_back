@@ -43,5 +43,4 @@ public class Resultados {
     private Date updatedAt;
 
 
-
 }
