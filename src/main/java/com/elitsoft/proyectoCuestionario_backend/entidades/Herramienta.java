@@ -29,7 +29,7 @@ public class Herramienta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long herr_usr_id;
     
-    private String herr_usr_anos_exp;
+    private Integer herr_usr_anos_exp;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
@@ -61,11 +61,11 @@ public class Herramienta {
         this.herr_usr_id = herr_usr_id;
     }
 
-    public String getHerr_usr_anos_exp() {
+    public Integer getHerr_usr_anos_exp() {
         return herr_usr_anos_exp;
     }
 
-    public void setHerr_usr_anos_exp(String herr_usr_anos_exp) {
+    public void setHerr_usr_anos_exp(Integer herr_usr_anos_exp) {
         this.herr_usr_anos_exp = herr_usr_anos_exp;
     }
 
