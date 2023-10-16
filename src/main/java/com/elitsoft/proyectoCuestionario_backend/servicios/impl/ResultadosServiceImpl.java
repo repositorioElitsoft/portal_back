@@ -1,7 +1,9 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.ExamenUserCount;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Resultados;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.ExamenUserCountRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ResultadosRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ResultadosService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
@@ -15,6 +17,8 @@ import java.util.Optional;
 public class ResultadosServiceImpl implements ResultadosService {
     @Autowired
     private ResultadosRepository resultadosRepository;
+    @Autowired
+    private ExamenUserCountRepository examenUserCountRepository;
     @Autowired
     private UsuarioService usuarioService;
 
@@ -40,9 +44,20 @@ public class ResultadosServiceImpl implements ResultadosService {
             return false;
         }
         resultados.setUsuario(userOptional.get());
-        resultadosRepository.save(resultados);
+        Resultados createdResultados = resultadosRepository.save(resultados);
+
+        Optional<ExamenUserCount> examenUserCountOptional = examenUserCountRepository.findByUsuarioAndExamen(userOptional.get(), resultados.getExamen());
+        ExamenUserCount examenUserCount = new ExamenUserCount();
+        if(examenUserCountOptional.isPresent()) {
+            examenUserCount = examenUserCountOptional.get();
+            examenUserCount.setCount(examenUserCount.getCount() + 1);
+        } else{
+            examenUserCount.setExamen(resultados.getExamen());
+            examenUserCount.setUsuario(userOptional.get());
+            examenUserCount.setCount(1);
+        }
+        examenUserCountRepository.save(examenUserCount);
         return true;
     }
-
 
 }

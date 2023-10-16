@@ -24,6 +24,7 @@ public interface UsuarioService {
     public Usuario obtenerUsuarioId(Long usr_id, Usuario usuario)throws Exception ;
 
     public Boolean verificarUsuario(Map<String,String> body);
+    public Usuario getUsuarioByEmail(String email);
 
     public Optional<Usuario> getUsuarioByToken(String jwt);
     public void pedirRestaurarPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException;

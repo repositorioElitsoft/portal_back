@@ -128,6 +128,14 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
+
+    @GetMapping("/email/{userEmail}")
+    public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable String userEmail){
+        Usuario user = usuarioService.getUsuarioByEmail(userEmail);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+
     @GetMapping("/{usuarioId}")
     public Usuario obtenerUsuarioId(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws Exception{
         return usuarioService.obtenerUsuarioId(usuarioId, usuario);

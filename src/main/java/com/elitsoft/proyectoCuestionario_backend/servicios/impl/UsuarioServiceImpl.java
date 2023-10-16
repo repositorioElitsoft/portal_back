@@ -84,6 +84,18 @@ public class UsuarioServiceImpl implements UsuarioService {
         return savedUser.getUsr_is_ver();
     }
 
+    @Override
+    public Usuario getUsuarioByEmail(String email) {
+        Usuario user = usuarioRepository.findByUsrEmail(email).orElseGet(Usuario::new);
+        user.setUsr_pass("");
+        user.setUsr_rec_tkn("");
+        user.setUsr_ver_code("");
+        user.setCreatedAt(new Date());
+        user.setUpdatedAt(new Date());
+        return user;
+    }
+
+
     @Override //aqui
     public Usuario obtenerUsuarioId(Long usr_id, Usuario usuario) {
         return usuarioRepository.findById(usr_id).orElse(null);
