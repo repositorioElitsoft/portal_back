@@ -57,9 +57,7 @@ public class ResultadosServiceImpl implements ResultadosService {
             examenUserCount.setCount(1);
         }
         examenUserCountRepository.save(examenUserCount);
-
         return true;
     }
-
 
 }

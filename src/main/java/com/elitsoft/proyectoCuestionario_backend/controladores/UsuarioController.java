@@ -113,4 +113,6 @@ public class UsuarioController {
         System.out.println(usuarios);
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
+
+    
 }
