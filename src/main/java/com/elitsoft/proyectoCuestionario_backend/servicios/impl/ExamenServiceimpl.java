@@ -63,9 +63,7 @@ public class ExamenServiceimpl implements ExamenService {
     public void eliminarExamen(Long examenId) {
         
         Examen examen = new Examen();
-        
         examen.setExamenId(examenId);
-        
         examenRepository.delete(examen);
 
     }

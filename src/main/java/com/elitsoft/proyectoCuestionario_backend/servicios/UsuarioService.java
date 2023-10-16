@@ -21,7 +21,7 @@ public interface UsuarioService {
     
     public Usuario guardarUsuario(Usuario usuario) throws Exception;
 
-    public Usuario obtenerUsuario(Long usr_id)throws Exception ;
+    public Usuario obtenerUsuarioId(Long usr_id, Usuario usuario)throws Exception ;
 
     public Boolean verificarUsuario(Map<String,String> body);
 
@@ -42,4 +42,9 @@ public interface UsuarioService {
     public List<Usuario> listarUsuariosConHerramientas();
 
     void eliminarUsuarioId (Long usr_id);
+
+    public Usuario guardarAdmin(Usuario usuario) throws Exception;
+
+    public Usuario guardarRec(Usuario usuario) throws Exception;
+
 }
