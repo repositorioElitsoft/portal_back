@@ -1,19 +1,19 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.Config.JWT.JwtAuthenticationFilter;
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Pais;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
-import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.*;
 
+import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,18 +27,15 @@ import javax.persistence.EntityNotFoundException;
  * @author Maeva Martínez
  */
 @Service
-public class UsuarioServiceImpl implements UsuarioService{
+public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private EmailServiceImpl emailService;
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
+
     @Autowired
     private PaisRepository paisRepository;
-    
-//    @Autowired
-//    private RolRepository rolRepository;
 
     @Override
     public Usuario guardarUsuario(Usuario usuario) throws Exception {
@@ -71,11 +68,11 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public Boolean verificarUsuario(Map<String, String> body){
+    public Boolean verificarUsuario(Map<String, String> body) {
 
         Optional<Usuario> user = usuarioRepository.findByUsrVerCode(body.get("code"));
 
-        if (!user.isPresent()){
+        if (!user.isPresent()) {
             return false;
         }
 
@@ -86,21 +83,32 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         return savedUser.getUsr_is_ver();
     }
-    
+
+    @Override
+    public Usuario getUsuarioByEmail(String email) {
+        Usuario user = usuarioRepository.findByUsrEmail(email).orElseGet(Usuario::new);
+        user.setUsr_pass("");
+        user.setUsr_rec_tkn("");
+        user.setUsr_ver_code("");
+        user.setCreatedAt(new Date());
+        user.setUpdatedAt(new Date());
+        return user;
+    }
+
     @Override
     public Usuario obtenerUsuario(Long usr_id) {
         return usuarioRepository.findById(usr_id).orElse(null);
     }
 
     @Override
-    public Boolean cambiarPassword(String code, String password){
+    public Boolean cambiarPassword(String code, String password) {
 
-        if(code.isEmpty()){
+        if (code.isEmpty()) {
             return false;
         }
 
         Optional<Usuario> usuario = usuarioRepository.findByUsrRecPassCode(code);
-        if (!usuario.isPresent()){
+        if (!usuario.isPresent()) {
             return false;
         }
 
@@ -111,68 +119,69 @@ public class UsuarioServiceImpl implements UsuarioService{
         Usuario savedUser = usuarioRepository.save(usuario.get());
         return true;
     }
+
     @Override
     public void pedirRestaurarPassword(Usuario usuarioEntrante) throws MessagingException, UnsupportedEncodingException {
 
         String email = usuarioEntrante.getUsr_email();
 
         Optional<Usuario> usuario = usuarioRepository.findByUsrEmail(email);
-        if (!usuario.isPresent()){
+        if (!usuario.isPresent()) {
             return;
         }
         usuario.get().setUsr_rec_tkn(UUID.randomUUID().toString());
 
         Usuario usuarioActualizado = usuarioRepository.save(usuario.get());
 
-        if (!usuarioActualizado.getUsr_email().equals(email)){
+        if (!usuarioActualizado.getUsr_email().equals(email)) {
             return;
         }
         emailService.sendRecoverPassword(usuarioActualizado);
     }
 
 
-    public Boolean actualizarUsuario(Usuario usuario,String jwt){
+    public Boolean actualizarUsuario(Usuario usuario, String jwt) {
 
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
-        if (token == null){
+        if (token == null) {
             return false;
         }
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
-        if (!usuarioOpt.isPresent()){
+        if (!usuarioOpt.isPresent()) {
             return false;
         }
 
         Usuario usuarioExistente = usuarioOpt.get();
 
-        if(usuario.getPais() != null){
-            if(usuario.getPais().getPais_id() != null){
+        if (usuario.getPais() != null) {
+            if (usuario.getPais().getPais_id() != null) {
                 Pais pais = new Pais();
                 pais.setPais_id(usuario.getPais().getPais_id());
                 usuarioExistente.setPais(pais);
             }
         }
 
-        if(usuario.getUsr_ap_mat() != null){
+        if (usuario.getUsr_ap_mat() != null) {
             usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
         }
 
-        if(usuario.getUsr_ap_pat()!= null){
+        if (usuario.getUsr_ap_pat() != null) {
             usuarioExistente.setUsr_ap_pat(usuario.getUsr_ap_pat());
         }
 
-        if(usuario.getUsr_nom()!= null){
+        if (usuario.getUsr_nom() != null) {
             usuarioExistente.setUsr_nom(usuario.getUsr_nom());
         }
 
-        if(usuario.getUsr_rut()!= null){
+        if (usuario.getUsr_rut() != null) {
             usuarioExistente.setUsr_rut(usuario.getUsr_rut());
         }
 
-        if(usuario.getUsr_tel()!= null){
+        if (usuario.getUsr_tel() != null) {
             usuarioExistente.setUsr_tel(usuario.getUsr_tel());
         }
-        if(usuario.getUsr_url_link()!= null){
+        if (usuario.getUsr_url_link() != null) {
             usuarioExistente.setUsr_url_link(usuario.getUsr_url_link());
         }
 
@@ -181,10 +190,33 @@ public class UsuarioServiceImpl implements UsuarioService{
         return true;
     }
 
+    public Usuario actualizarUsuarioId(Long usuarioId, Usuario usuario){
+        Usuario usuarioExistente = usuarioRepository.findById(usuarioId).orElseThrow(
+                () -> new NoSuchElementException("El user con ID " + usuarioId + " no se encontro.")
+        );
+
+        usuarioExistente.setPais(usuario.getPais());
+        usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
+        usuarioExistente.setUsr_ap_pat(usuario.getUsr_ap_pat());
+        usuarioExistente.setUsr_email(usuario.getUsr_email());
+        usuarioExistente.setUsr_nom(usuario.getUsr_nom());
+        usuarioExistente.setUsr_pass(usuario.getUsr_pass());
+        usuarioExistente.setUsr_rut(usuario.getUsr_rut());
+        usuarioExistente.setUsr_tel(usuario.getUsr_tel());
+        usuarioExistente.setUsr_url_link(usuario.getUsr_url_link());
+        usuarioExistente.setUsr_rol(usuario.getUsr_rol());
+
+        return usuarioRepository.save(usuarioExistente);
+    }
+
+    public List<Usuario> listarUsuarios(){
+        return usuarioRepository.findAll();
+    }
+
     @Override
     public Usuario obtenerDatosUsuario(String jwt) throws Exception {
         Optional<Usuario> userOptional = getUsuarioByToken(jwt);
-        if (!userOptional.isPresent()){
+        if (!userOptional.isPresent()) {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
@@ -197,12 +229,31 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public Optional<Usuario> getUsuarioByToken(String jwt){
+    public Optional<Usuario> getUsuarioByToken(String jwt) {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
-        if (token == null){
+        if (token == null) {
             return Optional.empty();
         }
         return usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
     }
 
+    @Override
+    public List<Usuario> obtenerUsuario() {
+        return usuarioRepository.findAll();
+    }
+
+    @Override
+    public List<Usuario> listarUsuariosConHerramientas() {
+        return usuarioRepository.findAllWhitHerramientas();
+    }
+
+
+    @Override
+    public void eliminarUsuarioId(Long usuarioId) {
+
+        Usuario usuario = new Usuario();
+        usuario.setUsr_id(usuarioId);
+        usuarioRepository.delete(usuario);
+
+    }
 }

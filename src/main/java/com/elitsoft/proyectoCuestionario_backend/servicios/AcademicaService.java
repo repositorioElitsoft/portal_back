@@ -4,6 +4,8 @@ package com.elitsoft.proyectoCuestionario_backend.servicios;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 /**
@@ -21,9 +23,12 @@ public interface AcademicaService {
 
     List<Academica> obtenerListaAcademicas(String jwt) throws Exception;
 
+
     Boolean actualizarAcademica(Long academicaId, Academica academica, String jwt) throws Exception;
     
     List<String> obtenerEstadosAcademicosUnicos();
 
     Boolean deleteAcademica(Long academicaId, String jwt)throws Exception;
+
+    void eliminarAcademicasPorUsuario(Long usuarioId);
 }

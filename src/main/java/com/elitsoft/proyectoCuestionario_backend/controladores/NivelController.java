@@ -1,17 +1,14 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Nivel;
 import com.elitsoft.proyectoCuestionario_backend.servicios.NivelService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -45,6 +42,16 @@ public class NivelController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PostMapping("/")
+    public Boolean guardar_nivel(@RequestBody Nivel nivel)  {
+        nivelService.guardar_nivel(nivel);
+        return  true;
+    }
 
-    
+    @DeleteMapping("/{nivel}")
+    public Boolean remove_nivel(@PathVariable Long nivel){
+        nivelService.remove_nivel(nivel);
+        return true;
+    }
+
 }

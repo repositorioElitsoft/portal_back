@@ -37,9 +37,9 @@ public class PreguntaController {
     }
 
     @GetMapping("/examen/{examenId}")
-    public ResponseEntity<?> listarPreguntasDelExamen(@PathVariable("examenId") Long examenId){
-        Examen examen = examenService.obtenerExamen(examenId);
-        Set<Pregunta> preguntas = examen.getPreguntas();
+    public ResponseEntity<?> listarPreguntasDelExamen(@PathVariable("examenId") Long exam_id){
+        Examen examen = examenService.obtenerExamen(exam_id);
+        List<Pregunta> preguntas = examen.getPreguntas();
 
         List examenes = new ArrayList(preguntas);
         if(examenes.size() > Integer.parseInt(examen.getNumeroDePreguntas())){
@@ -63,25 +63,25 @@ public class PreguntaController {
       */
     }
 
-    @GetMapping("/{preguntaId}")
-    public Pregunta listarPreguntaPorId(@PathVariable("preguntaId") Long preguntaId){
-        return preguntaService.obtenerPregunta(preguntaId);
+    @GetMapping("/{prg_id}")
+    public Pregunta listarPreguntaPorId(@PathVariable("prg_id") Long prg_id){
+        return preguntaService.obtenerPregunta(prg_id);
     }
 
-    @DeleteMapping("/{preguntaId}")
-    public void eliminarPregunta(@PathVariable("preguntaId") Long preguntaId){
-        preguntaService.eliminarPregunta(preguntaId);
+    @DeleteMapping("/{prg_id}")
+    public void eliminarPregunta(@PathVariable("prg_id") Long prg_id){
+        preguntaService.eliminarPregunta(prg_id);
     }
 
-    @GetMapping("/examen/todos/{examenId}")
-    public ResponseEntity<?> listarPreguntaDelExamenComoAdministrador(@PathVariable("examenId") Long examenId){
+    @GetMapping("/examen/todos/{exam_id}")
+    public ResponseEntity<List<Pregunta>> listarPreguntaDelExamenComoAdministrador(@PathVariable("exam_id") Long exam_id){
         Examen examen = new Examen();
-        examen.setExamenId(examenId);
-        Set<Pregunta> preguntas = preguntaService.obtenerPreguntasDelExamen(examen);
+        examen.setExamenId(exam_id);
+        List<Pregunta> preguntas = preguntaService.obtenerPreguntasDelExamen(examen);
         return ResponseEntity.ok(preguntas);
     }
 
-    @PostMapping("/evaluar-examen")
+    /*@PostMapping("/evaluar-examen")
     public ResponseEntity<?> evaluarExamen(@RequestBody List<Pregunta> preguntas){
         double puntosMaximos = 0;
         Integer respuestasCorrectas = 0;
@@ -90,12 +90,12 @@ public class PreguntaController {
 
         for(Pregunta p : preguntas){
             Pregunta pregunta = this.preguntaService.listarPregunta(p.getPreguntaId());
-            if(pregunta.getRespuesta().equals(p.getRespuestaDada())){
+            if(pregunta.getRespuesta().equals(p.getRespuesta())){
                 respuestasCorrectas ++;
                 double puntos = Double.parseDouble(preguntas.get(0).getExamen().getPuntosMaximos())/preguntas.size();
                 puntosMaximos += puntos;
             }
-            if(p.getRespuestaDada() != null){
+            if(p.getRespuesta() != null){
                 intentos++;
             }
             intentosTotales++;
@@ -107,5 +107,5 @@ public class PreguntaController {
         respuestas.put("intentos",intentos);
         respuestas.put("intentosTotales",intentosTotales);
         return ResponseEntity.ok(respuestas);
-    }
+    }*/
 }

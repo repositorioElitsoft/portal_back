@@ -43,9 +43,11 @@ public class LaboralController {
             @RequestHeader("Authorization") String jwt
     ) {
         try {
-            return new ResponseEntity<>(laboralService.guardarLaboral(laboral, jwt), HttpStatus.CREATED);
+            laboralService.guardarLaboral(laboral, jwt);
+            return new ResponseEntity<>( true ,HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 

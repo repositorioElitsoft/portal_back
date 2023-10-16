@@ -4,6 +4,8 @@ package com.elitsoft.proyectoCuestionario_backend.repositorios;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -25,5 +27,12 @@ public interface AcademicaRepository extends JpaRepository <Academica, Long> {
     //metodo para traer todos los estados de la tabla academica
     @Query("SELECT DISTINCT a.inf_acad_est FROM Academica a")
     List<String> findAllDistinctInfAcadEst();
-    
+
+    // para retornar un boolean
+    //Boolean save(Academica academica);
+
+    void deleteById(Long academica_id);
+
+    Optional<Academica> findById(Long usr_id);
+
 }
