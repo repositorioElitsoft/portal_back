@@ -4,7 +4,6 @@ package com.elitsoft.proyectoCuestionario_backend.servicios;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -14,13 +13,13 @@ public interface ExamenService {
     
     Examen agregarExamen(Examen examen);
     
-    Examen actualizarExamen (Examen examen);
+    Examen actualizarExamen (Long examenId, Examen examen );
     
     List<Examen> obtenerExamenes();
     
     Examen obtenerExamen(Long exam_id);
     
-    void eliminarExamen(Long exam_id);
+    void eliminarExamen(Long examenId);
     
     List<Examen> listarExamenesDeUnaCategoria(Categoria categoria);
 

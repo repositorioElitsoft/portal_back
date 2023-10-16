@@ -2,6 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,31 +30,33 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    //Peticion para guardar una categoria
+
     @PostMapping("/")
     public ResponseEntity<Categoria> guardarCategoria(@RequestBody Categoria categoria){
         Categoria categoriaGuardada = categoriaService.agregarCategoria(categoria);
         return ResponseEntity.ok(categoriaGuardada);
     }
+
     //Petición para enlistar las categorias por ID
     @GetMapping("/{categoriaId}")
-    public Categoria listarCategoriaPorId(@PathVariable("categoriaId") Long cat_exam_id){
-        return categoriaService.obtenerCategoria(cat_exam_id);
+    public Categoria listarCategoriaPorId(@PathVariable("categoriaId") Long categoriaId){
+        return categoriaService.obtenerCategoria(categoriaId);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<Categoria>> listarCategorias(){
         return ResponseEntity.ok(categoriaService.obtenerCategorias());
     }
-    //petición para actualizar categoria
-    //TODO: Pedir id de categoria para actualizar
-    @PutMapping("/")
-    public Categoria actualizarCategoria(@RequestBody Categoria categoria){
-        return categoriaService.actualizarCategoria(categoria);
+
+
+    @PutMapping("/actualizar/{categoriaId}")
+    public ResponseEntity <Categoria> actualizarCategoria(@PathVariable Long categoriaId, @RequestBody Categoria categoria){
+        Categoria categoriaActualizada = categoriaService.actualizarCategoria(categoriaId, categoria);
+        return ResponseEntity.ok(categoriaActualizada);
     }
 
-    @DeleteMapping("/{categoriaId}")
-    public void eliminarCategoria(@PathVariable("categoriaId") Long cat_exam_id){
-        categoriaService.eliminarCategoria(cat_exam_id);
+    @DeleteMapping("/eliminar/{categoriaId}")
+    public void eliminarCategoria(@PathVariable("categoriaId") Long categoriaId){
+        categoriaService.eliminarCategoria(categoriaId);
     }
 }

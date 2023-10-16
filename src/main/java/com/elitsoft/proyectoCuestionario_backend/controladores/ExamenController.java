@@ -27,9 +27,10 @@ public class ExamenController {
         return ResponseEntity.ok(examenService.agregarExamen(examen));
     }
 
-    @PutMapping("/")
-    public ResponseEntity<Examen> actualizarExamen(@RequestBody Examen examen){
-        return ResponseEntity.ok(examenService.actualizarExamen(examen));
+    @PutMapping("/actualizar/{examenId}")
+    public ResponseEntity<Examen> actualizarExamen(@PathVariable Long examenId, @RequestBody Examen examen){
+        Examen examenActualizado = examenService.actualizarExamen(examenId, examen);
+        return ResponseEntity.ok(examenActualizado);
     }
 
     @GetMapping("/")
@@ -42,9 +43,9 @@ public class ExamenController {
         return examenService.obtenerExamen(exam_id);
     }
 
-    @DeleteMapping("/{examenId}")
-    public void eliminarExamen(@PathVariable("exam_id") Long exam_id){
-        examenService.eliminarExamen(exam_id);
+    @DeleteMapping("/eliminar/{examenId}")
+    public void eliminarExamen(@PathVariable("examenId") Long examenId){
+        examenService.eliminarExamen(examenId);
     }
 
     @GetMapping("/categoria/{cat_exam_id}")

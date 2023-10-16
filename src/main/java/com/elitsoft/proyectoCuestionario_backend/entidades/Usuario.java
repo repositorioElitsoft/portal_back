@@ -67,4 +67,16 @@ public class Usuario  {
     private List<Herramienta> herramientas;
 
 
+
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Laboral> laborales;
+
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Academica> academicas;
+
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<CargoUsuario> cargoUsuario;
 }

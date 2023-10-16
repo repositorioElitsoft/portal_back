@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +24,15 @@ public interface UsuarioService {
     public Usuario obtenerUsuario(Long usr_id)throws Exception ;
 
     public Boolean verificarUsuario(Map<String,String> body);
+    public Usuario getUsuarioByEmail(String email);
 
     public Optional<Usuario> getUsuarioByToken(String jwt);
     public void pedirRestaurarPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException;
     public Boolean cambiarPassword(String code, String password);
 
     public Boolean actualizarUsuario(Usuario usuario, String jwt);
+
+    Usuario actualizarUsuarioId(Long usr_id, Usuario usuario);
 
     public List<Usuario> listarUsuarios();
 
@@ -39,4 +41,6 @@ public interface UsuarioService {
     public  List<Usuario> obtenerUsuario();
 
     public List<Usuario> listarUsuariosConHerramientas();
+
+    void eliminarUsuarioId (Long usr_id);
 }

@@ -81,7 +81,7 @@ public class PreguntaController {
         return ResponseEntity.ok(preguntas);
     }
 
-    @PostMapping("/evaluar-examen")
+    /*@PostMapping("/evaluar-examen")
     public ResponseEntity<?> evaluarExamen(@RequestBody List<Pregunta> preguntas){
         double puntosMaximos = 0;
         Integer respuestasCorrectas = 0;
@@ -107,5 +107,5 @@ public class PreguntaController {
         respuestas.put("intentos",intentos);
         respuestas.put("intentosTotales",intentosTotales);
         return ResponseEntity.ok(respuestas);
-    }
+    }*/
 }
