@@ -8,6 +8,7 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,10 @@ public class HerramientaController {
         catch (ConstraintViolationException exception){
             return new ResponseEntity<>(exception.getMessage(),HttpStatus.CONFLICT);
         }
+        catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
 

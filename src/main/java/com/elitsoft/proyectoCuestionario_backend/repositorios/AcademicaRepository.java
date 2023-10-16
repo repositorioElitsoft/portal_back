@@ -4,6 +4,8 @@ package com.elitsoft.proyectoCuestionario_backend.repositorios;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,5 +32,7 @@ public interface AcademicaRepository extends JpaRepository <Academica, Long> {
     //Boolean save(Academica academica);
 
     void deleteById(Long academica_id);
+
+    Optional<Academica> findById(Long usr_id);
 
 }

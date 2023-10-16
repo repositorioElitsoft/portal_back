@@ -8,9 +8,7 @@ import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaReposit
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,22 +46,33 @@ public class HerramientaServiceImpl implements HerramientaService {
         }
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+
         if (!usuarioOpt.isPresent()){
             return false;
         }
 
+
+
         List<Herramienta> herramientasAntiguas = herramientaRepository.findByUsuario(usuarioOpt.get());
 
-        for (Herramienta herramienta : herramientasAntiguas){
-            herramientaRepository.delete(herramienta);
-        }
-
-
+        Set<Long> idsEncontradas = new HashSet<>();
 
         for (Herramienta herramienta : herramientas){
             herramienta.setUsuario(usuarioOpt.get());
             herramientaRepository.save(herramienta);
+            idsEncontradas.add(herramienta.getHerr_usr_id());
         }
+
+        for (Herramienta herramientaAntigua : herramientasAntiguas){
+                if(!idsEncontradas.contains(herramientaAntigua.getHerr_usr_id())){
+                    herramientaRepository.deleteLaboralHerramientaReferences(herramientaAntigua.getHerr_usr_id());
+                    herramientaRepository.delete(herramientaAntigua);
+                }
+        }
+
+
+
+
         return true;
     }
 

@@ -2,10 +2,13 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaService;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +28,20 @@ public class CategoriaServiceImpl  implements CategoriaService {
     }
 
     @Override
-    public Categoria actualizarCategoria(Categoria categoria) {
-        return categoriaRepository.save(categoria);
+    public Categoria actualizarCategoria(Long categoriaId, Categoria categoria) {
+        Categoria categoriaExistente = categoriaRepository.findById(categoriaId).orElseThrow(
+                () -> new NoSuchElementException("La categoria con ID " + categoriaId + " no se encontro.")
+        );
+
+        categoriaExistente.setDescripcion(categoria.getDescripcion());
+        categoriaExistente.setTitulo(categoria.getTitulo());
+
+        return categoriaRepository.save(categoriaExistente);
     }
 
     @Override
-    public Set<Categoria> obtenerCategorias() {
-        return new LinkedHashSet<>(categoriaRepository.findAll());
+    public List<Categoria> obtenerCategorias() {
+        return categoriaRepository.findAll();
     }
 
     @Override

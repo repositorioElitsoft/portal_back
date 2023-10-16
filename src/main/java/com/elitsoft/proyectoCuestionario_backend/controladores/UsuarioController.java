@@ -3,22 +3,24 @@ package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
 
 /**
  *
@@ -27,17 +29,21 @@ import javax.mail.MessagingException;
 @RestController
 @RequestMapping("/usuarios")
 @CrossOrigin(origins = "http://localhost:4200")
-public class UsuarioController {
+public class    UsuarioController {
     
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private AcademicaService academicaService;
+
     @GetMapping("/usuarios")
     public List<Usuario> obtenerUsuarios(){
         return usuarioService.obtenerUsuario();
     }
+
 
     @PostMapping("/")
     public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario) throws Exception{
@@ -63,7 +69,6 @@ public class UsuarioController {
 
         return new ResponseEntity<>(true ,HttpStatus.OK);
     }
-
 
     @GetMapping("/")
     public Usuario obtenerUsuario(@RequestHeader("Authorization") String jwt)throws Exception{
@@ -99,8 +104,41 @@ public class UsuarioController {
         return usuariosConHerramientas;
     }
 
-//    @DeleteMapping("/{usuarioId}")
-//    public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId){
-//        usuarioService.eliminarUsuario(usuarioId);
-//    }
+    @DeleteMapping("/eliminar/{usuarioId}")
+    public ResponseEntity<String> eliminarUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
+        try {
+            // Eliminar registros académicos del usuario
+            academicaService.eliminarAcademicasPorUsuario(usuarioId);
+
+            // Eliminar el usuario
+            usuarioService.eliminarUsuarioId(usuarioId);
+
+            return ResponseEntity.ok("Usuario y registros académicos eliminados con éxito.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/actualizar/{usuarioId}") //help
+    public ResponseEntity<Usuario> actualizarUsuarioId(@PathVariable Long usuarioId, @RequestBody Usuario usuario){
+        Usuario usuarioActualizado = usuarioService.actualizarUsuarioId(usuarioId, usuario);
+        return ResponseEntity.ok(usuarioActualizado);
+    }
+
+
+    @GetMapping("/lista-usuarios")
+    public ResponseEntity<List<Usuario>> listarUsuarios(){
+        List<Usuario> usuarios = usuarioService.listarUsuarios();
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/email/{userEmail}")
+    public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable String userEmail){
+        Usuario user = usuarioService.getUsuarioByEmail(userEmail);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
 }

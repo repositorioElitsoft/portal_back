@@ -6,6 +6,8 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 
 import java.util.List;
 import java.util.Map;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,4 +33,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
     @Query("SELECT DISTINCT u FROM Usuario u LEFT JOIN FETCH u.herramientas")
     List<Usuario> findAllWhitHerramientas();
+
+
 }

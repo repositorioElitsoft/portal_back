@@ -5,6 +5,8 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Pregunta;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PreguntaRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.PreguntaService;
+
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,24 +38,24 @@ public class PreguntaServiceImpl implements PreguntaService {
     }
 
     @Override
-    public Pregunta obtenerPregunta(Long preguntaId) {
-        return preguntaRepository.findById(preguntaId).get();
+    public Pregunta obtenerPregunta(Long prg_id) {
+        return preguntaRepository.findById(prg_id).get();
     }
 
     @Override
-    public Set<Pregunta> obtenerPreguntasDelExamen(Examen examen) {
+    public List<Pregunta> obtenerPreguntasDelExamen(Examen examen) {
         return preguntaRepository.findByExamen(examen);
     }
 
     @Override
-    public void eliminarPregunta(Long preguntaId) {
+    public void eliminarPregunta(Long prg_id) {
         Pregunta pregunta = new Pregunta();
-        pregunta.setPreguntaId(preguntaId);
+        pregunta.setPreguntaId(prg_id);
         preguntaRepository.delete(pregunta);
     }
 
     @Override
-    public Pregunta listarPregunta(Long preguntaId) {
-        return this.preguntaRepository.getOne(preguntaId);
+    public Pregunta listarPregunta(Long prg_id) {
+        return this.preguntaRepository.getOne(prg_id);
     }
 }
