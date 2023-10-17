@@ -95,8 +95,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return user;
     }
 
-    @Override
-    public Usuario obtenerUsuario(Long usr_id) {
+
+    @Override //aqui
+    public Usuario obtenerUsuarioId(Long usr_id, Usuario usuario) {
         return usuarioRepository.findById(usr_id).orElse(null);
     }
 
@@ -256,4 +257,64 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.delete(usuario);
 
     }
+
+    @Override
+    public Usuario guardarAdmin(Usuario usuario) throws Exception {
+        Long usrId = usuario.getUsr_id();
+
+        if (usrId != null) {
+            Optional<Usuario> usuarioLocal = usuarioRepository.findById(usrId);
+            if (usuarioLocal.isPresent()) {
+                throw new Exception("El usuario ya está presente");
+            }
+        }
+        Pais pais = usuario.getPais();
+
+        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
+        usuario.setPais(pais);
+
+        // para usuarios con rol "ADMIN"
+        usuario.setUsr_rol("ADMIN");
+        usuario.setUsr_ver_code(UUID.randomUUID().toString());
+        usuario.setUsr_is_ver(false);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+        usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
+
+        Usuario nuevoUsuario = usuarioRepository.save(usuario);
+        emailService.sendVerificationEmail(nuevoUsuario);
+
+        return nuevoUsuario;
+    }
+
+    @Override
+    public Usuario guardarRec(Usuario usuario) throws Exception {
+        Long usrId = usuario.getUsr_id();
+
+        if (usrId != null) {
+            Optional<Usuario> usuarioLocal = usuarioRepository.findById(usrId);
+            if (usuarioLocal.isPresent()) {
+                throw new Exception("El usuario ya está presente");
+            }
+        }
+        Pais pais = usuario.getPais();
+
+        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
+        usuario.setPais(pais);
+
+        //para usuarios con rol "REC"
+        usuario.setUsr_rol("REC");
+        usuario.setUsr_ver_code(UUID.randomUUID().toString());
+        usuario.setUsr_is_ver(false);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+        usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
+
+        Usuario nuevoUsuario = usuarioRepository.save(usuario);
+        emailService.sendVerificationEmail(nuevoUsuario);
+
+        return nuevoUsuario;
+    }
+
+
 }

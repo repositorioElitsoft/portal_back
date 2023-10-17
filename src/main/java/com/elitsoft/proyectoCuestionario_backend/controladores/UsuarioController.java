@@ -75,12 +75,6 @@ public class    UsuarioController {
         return usuarioService.obtenerDatosUsuario(jwt);
     }
 
-    /*
-    @GetMapping("/sendTest")
-    public void sendTestEmail(){
-        emailService.sendSimpleMessage("felipe.diaz@elitsoft-chile.com","test","elitsoftrob@gmail.com");
-    }*/
-
     @PostMapping("/verificar")
     public ResponseEntity<Boolean> verificarUsuario(@RequestBody Map<String, String> requestData){
         if(usuarioService.verificarUsuario(requestData)){
@@ -121,7 +115,7 @@ public class    UsuarioController {
         }
     }
 
-    @PutMapping("/actualizar/{usuarioId}") //help
+    @PutMapping("/actualizar/{usuarioId}")
     public ResponseEntity<Usuario> actualizarUsuarioId(@PathVariable Long usuarioId, @RequestBody Usuario usuario){
         Usuario usuarioActualizado = usuarioService.actualizarUsuarioId(usuarioId, usuario);
         return ResponseEntity.ok(usuarioActualizado);
@@ -141,4 +135,33 @@ public class    UsuarioController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+
+    @GetMapping("/{usuarioId}")
+    public Usuario obtenerUsuarioId(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws Exception{
+        return usuarioService.obtenerUsuarioId(usuarioId, usuario);
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<?> guardarAdmin(@RequestBody Usuario usuario) throws Exception {
+        try {
+            Usuario nuevoUsuario = usuarioService.guardarAdmin(usuario);
+            return new ResponseEntity<Usuario>(nuevoUsuario, HttpStatus.CREATED);
+        } catch (DataAccessException ex) {
+            CustomError error = new CustomError();
+            error.setError("El usuario ya existe.");
+            return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/rec")
+    public ResponseEntity<?> guardarRec(@RequestBody Usuario usuario) throws Exception {
+        try {
+            Usuario nuevoUsuario = usuarioService.guardarRec(usuario);
+            return new ResponseEntity<Usuario>(nuevoUsuario, HttpStatus.CREATED);
+        } catch (DataAccessException ex) {
+            CustomError error = new CustomError();
+            error.setError("El usuario ya existe.");
+            return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
+        }
+    }
 }

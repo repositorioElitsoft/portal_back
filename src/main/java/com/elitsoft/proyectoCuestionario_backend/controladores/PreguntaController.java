@@ -31,10 +31,12 @@ public class PreguntaController {
         return ResponseEntity.ok(preguntaService.agregarPregunta(pregunta));
     }
 
-    @PutMapping("/")
-    public ResponseEntity<Pregunta> actualizarPregunta(@RequestBody Pregunta pregunta){
-        return ResponseEntity.ok(preguntaService.actualizarPregunta(pregunta));
+    @PutMapping("/actualizar/{preguntaId}")
+    public ResponseEntity<Pregunta> actualizarPregunta(@PathVariable Long preguntaId, @RequestBody Pregunta pregunta){
+        Pregunta preguntaActualizada = preguntaService.actualizarPreguntaId(preguntaId, pregunta);
+        return ResponseEntity.ok(preguntaActualizada);
     }
+
 
     @GetMapping("/examen/{examenId}")
     public ResponseEntity<?> listarPreguntasDelExamen(@PathVariable("examenId") Long exam_id){
@@ -63,20 +65,20 @@ public class PreguntaController {
       */
     }
 
-    @GetMapping("/{prg_id}")
-    public Pregunta listarPreguntaPorId(@PathVariable("prg_id") Long prg_id){
-        return preguntaService.obtenerPregunta(prg_id);
+    @GetMapping("/{preguntaId}")
+    public Pregunta listarPreguntaPorId(@PathVariable("preguntaId") Long preguntaId){
+        return preguntaService.obtenerPregunta(preguntaId);
     }
 
-    @DeleteMapping("/{prg_id}")
-    public void eliminarPregunta(@PathVariable("prg_id") Long prg_id){
-        preguntaService.eliminarPregunta(prg_id);
+    @DeleteMapping("/eliminar/{preguntaId}")
+    public void eliminarPregunta(@PathVariable("preguntaId") Long preguntaId){
+        preguntaService.eliminarPregunta(preguntaId);
     }
 
-    @GetMapping("/examen/todos/{exam_id}")
-    public ResponseEntity<List<Pregunta>> listarPreguntaDelExamenComoAdministrador(@PathVariable("exam_id") Long exam_id){
+    @GetMapping("/examen/todos/{examenId}")
+    public ResponseEntity<List<Pregunta>> listarPreguntaDelExamenComoAdministrador(@PathVariable("examenId") Long examenId){
         Examen examen = new Examen();
-        examen.setExamenId(exam_id);
+        examen.setExamenId(examenId);
         List<Pregunta> preguntas = preguntaService.obtenerPreguntasDelExamen(examen);
         return ResponseEntity.ok(preguntas);
     }
