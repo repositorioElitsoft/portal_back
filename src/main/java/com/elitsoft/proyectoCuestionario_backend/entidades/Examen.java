@@ -33,8 +33,6 @@ public class Examen {
     private String numeroDePreguntas;
 
 
-
-    
     @ManyToOne(fetch = FetchType.EAGER)
 
     private Categoria categoria;
