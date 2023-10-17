@@ -62,12 +62,12 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/paises/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","DELETE")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
-                .requestMatchers(new AntPathRequestMatcher("/categoria/","POST")).hasAnyAuthority(ADMIN)
-                .requestMatchers(new AntPathRequestMatcher("/categoria/**","GET")).hasAnyAuthority(ADMIN)
-                .requestMatchers(new AntPathRequestMatcher("/categoria/actualizar/**","PUT")).hasAnyAuthority(ADMIN)
-                .requestMatchers(new AntPathRequestMatcher("/categoria/eliminar/**","DELETE")).hasAnyAuthority(ADMIN)
-                .requestMatchers(new AntPathRequestMatcher("/examen/","POST")).hasAnyAuthority(ADMIN)
-                .requestMatchers(new AntPathRequestMatcher("/examen/**","GET")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/categoria/","POST")).hasAnyAuthority(ADMIN,GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/categoria/**","GET")).hasAnyAuthority(ADMIN,GUEST)//Todo: Cambiar
+                .requestMatchers(new AntPathRequestMatcher("/categoria/actualizar/**","PUT")).hasAnyAuthority(ADMIN,GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/categoria/eliminar/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/examen/","POST")).hasAnyAuthority(ADMIN,GUEST)//Todo: Cambiar
+                .requestMatchers(new AntPathRequestMatcher("/examen/**","GET")).hasAnyAuthority(ADMIN,GUEST)//Todo: Cambiar
                 .requestMatchers(new AntPathRequestMatcher("/examen/actualizar/**","PUT")).hasAnyAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/examen/eliminar/**","DELETE")).hasAnyAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).hasAnyAuthority(ADMIN)

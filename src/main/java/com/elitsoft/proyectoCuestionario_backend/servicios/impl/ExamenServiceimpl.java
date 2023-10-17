@@ -61,13 +61,11 @@ public class ExamenServiceimpl implements ExamenService {
 
     @Override
     public void eliminarExamen(Long examenId) {
-        
-        Examen examen = new Examen();
-        
-        examen.setExamenId(examenId);
-        
-        examenRepository.delete(examen);
-
+        Optional<Examen> examen = examenRepository.findById(examenId);
+        if (!examen.isPresent()){
+            return;
+        }
+        examenRepository.delete(examen.get());
     }
     
     @Override

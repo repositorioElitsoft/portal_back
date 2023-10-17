@@ -5,6 +5,8 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 import java.util.List;
+
+import com.elitsoft.proyectoCuestionario_backend.servicios.PreguntaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ public class ExamenController {
 
     @Autowired
     private ExamenService examenService;
+    private PreguntaService preguntaService;
 
     @PostMapping("/")
     public ResponseEntity<Examen> guardarExamen(@RequestBody Examen examen){
