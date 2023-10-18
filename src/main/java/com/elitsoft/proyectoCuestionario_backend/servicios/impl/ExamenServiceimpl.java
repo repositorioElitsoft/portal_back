@@ -4,13 +4,14 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Pregunta;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ExamenRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.PreguntaRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
+import com.elitsoft.proyectoCuestionario_backend.servicios.PreguntaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class ExamenServiceimpl implements ExamenService {
     
     @Autowired
     private ExamenRepository examenRepository;
+    @Autowired
+    private PreguntaRepository preguntaRepository;
 
     @Override
     public Examen agregarExamen(Examen examen) {
@@ -42,6 +45,25 @@ public class ExamenServiceimpl implements ExamenService {
         examenExistente.setPuntosMaximos(examen.getPuntosMaximos());
         examenExistente.setNumeroDePreguntas(examen.getNumeroDePreguntas());
         examenExistente.setCategoria(examen.getCategoria());
+        examenExistente.setPreguntas(examen.getPreguntas());
+
+
+        Set<Long> remainingIds = new HashSet<>();
+        examen.getPreguntas().forEach(pregunta -> {
+            if(pregunta.getPreguntaId() != null){
+                remainingIds.add(pregunta.getPreguntaId());
+            }
+        });
+
+
+        examenExistente.getPreguntas().forEach(preguntaVieja -> {
+            if(!remainingIds.contains(preguntaVieja.getPreguntaId())){
+                preguntaRepository.eliminarPregunta(preguntaVieja.getPreguntaId());
+            }
+        });
+
+
+
         examenExistente.setPreguntas(examen.getPreguntas());
 
         return examenRepository.save(examenExistente);
