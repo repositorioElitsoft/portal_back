@@ -42,11 +42,10 @@ public class ExamenServiceimpl implements ExamenService {
         examenExistente.setPuntosMaximos(examen.getPuntosMaximos());
         examenExistente.setNumeroDePreguntas(examen.getNumeroDePreguntas());
         examenExistente.setCategoria(examen.getCategoria());
+        examenExistente.setPreguntas(examen.getPreguntas());
 
         return examenRepository.save(examenExistente);
     }
-
-
 
     @Override
     public List<Examen> obtenerExamenes() {

@@ -47,7 +47,4 @@ public class Pregunta {
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     private Examen examen;
-
-
-
 }
