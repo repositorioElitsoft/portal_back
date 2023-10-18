@@ -21,7 +21,7 @@ public interface UsuarioService {
     
     public Usuario guardarUsuario(Usuario usuario) throws Exception;
 
-    public Usuario obtenerUsuarioId(Long usr_id, Usuario usuario)throws Exception ;
+    public Usuario obtenerUsuarioId(Long usr_id)throws Exception ;
 
     public Boolean verificarUsuario(Map<String,String> body);
     public Usuario getUsuarioByEmail(String email);

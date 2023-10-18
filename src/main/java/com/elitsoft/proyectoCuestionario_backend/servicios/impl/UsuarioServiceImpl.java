@@ -97,7 +97,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override //aqui
-    public Usuario obtenerUsuarioId(Long usr_id, Usuario usuario) {
+    public Usuario obtenerUsuarioId(Long usr_id) {
         return usuarioRepository.findById(usr_id).orElse(null);
     }
 

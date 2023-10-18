@@ -155,8 +155,8 @@ public class UsuarioController {
 
 
     @GetMapping("/{usuarioId}")
-    public Usuario obtenerUsuarioId(@PathVariable Long usuarioId, @RequestBody Usuario usuario) throws Exception{
-        return usuarioService.obtenerUsuarioId(usuarioId, usuario);
+    public Usuario obtenerUsuarioId(@PathVariable Long usuarioId) throws Exception{
+        return usuarioService.obtenerUsuarioId(usuarioId);
     }
 
     @PostMapping("/admin")
