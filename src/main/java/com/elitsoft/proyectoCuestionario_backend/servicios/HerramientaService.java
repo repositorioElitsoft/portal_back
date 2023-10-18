@@ -14,11 +14,12 @@ public interface HerramientaService {
     Boolean guardarHerramientas(List<Herramienta> herramientas, String Jwt) throws Exception;
 
     List<Herramienta> obtenerListaHerramientasPorUsuario(String jwt);
-    
 
     public Herramienta obtenerHerramienta(Long herr_usr_id)throws Exception ;
     
     List<Herramienta> obtenerHerramientasConProductosPorUsuario(Long usuarioId);
+
+    void eliminarHerramientaPorUsuario(Long usuarioId);
         
     
 }

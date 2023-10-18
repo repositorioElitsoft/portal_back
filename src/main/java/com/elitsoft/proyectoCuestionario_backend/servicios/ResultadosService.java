@@ -13,6 +13,7 @@ public interface ResultadosService {
 
     public Boolean guardarResultados(Resultados resultados, String jwt);
 
+    void eliminarResultadosPorUsuario(Long usuarioId);
 
 
 }

@@ -3,11 +3,10 @@ package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
-import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
-import com.elitsoft.proyectoCuestionario_backend.servicios.EmailService;
-import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
+import com.elitsoft.proyectoCuestionario_backend.servicios.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +37,18 @@ public class UsuarioController {
 
     @Autowired
     private AcademicaService academicaService;
+
+    @Autowired
+    private ResultadosService resultadosService;
+
+    @Autowired
+    private CargoUsuarioService cargoUsuarioService;
+
+    @Autowired
+    private LaboralService laboralService;
+
+    @Autowired
+    private HerramientaService herramientaService;
 
     @GetMapping("/usuarios")
     public List<Usuario> obtenerUsuarios(){
@@ -99,21 +110,28 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/eliminar/{usuarioId}")
-    public ResponseEntity<String> eliminarUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
-        try {
-            // Eliminar registros académicos del usuario
-            academicaService.eliminarAcademicasPorUsuario(usuarioId);
+    public ResponseEntity<Map<String, String>> eliminarUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
+        Map<String, String> response = new HashMap<>();
 
-            // Eliminar el usuario
+        try {
+            resultadosService.eliminarResultadosPorUsuario(usuarioId);
+            cargoUsuarioService.eliminarCargoPorUsuario(usuarioId);
+            laboralService.eliminarLaboralPorUsuario(usuarioId);
+            herramientaService.eliminarHerramientaPorUsuario(usuarioId);
+            academicaService.eliminarAcademicasPorUsuario(usuarioId);
             usuarioService.eliminarUsuarioId(usuarioId);
 
-            return ResponseEntity.ok("Usuario y registros académicos eliminados con éxito.");
+            response.put("message", "Usuario eliminado con éxito.");
+            return ResponseEntity.ok(response);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
     }
+
 
     @PutMapping("/actualizar/{usuarioId}")
     public ResponseEntity<Usuario> actualizarUsuarioId(@PathVariable Long usuarioId, @RequestBody Usuario usuario){

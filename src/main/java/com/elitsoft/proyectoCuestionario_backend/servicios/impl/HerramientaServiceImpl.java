@@ -104,6 +104,15 @@ public class HerramientaServiceImpl implements HerramientaService {
         return herramientaRepository.obtenerHerramientasConProductosPorUsuario(usuarioId);
     }
 
+    @Override
+    public void eliminarHerramientaPorUsuario(Long usuarioId) {
+        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        if (usuario.isPresent()) {
+            List<Herramienta> herramientas = herramientaRepository.findByUsuario(usuario.get());
+            herramientaRepository.deleteAll(herramientas);
+        }
+    }
+
    
 }
 
