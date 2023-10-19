@@ -51,8 +51,13 @@ public class SecurityConfig {
                 csrf().disable()
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
+                .requestMatchers(new AntPathRequestMatcher("/**/","GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**/","POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**/","PUT")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**/","DELETE")).permitAll()
                 //Permitir solamente métodos GETs autorizados con el rol de ADMIN
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
+                /*
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","POST")).permitAll()
@@ -87,6 +92,9 @@ public class SecurityConfig {
                 //.requestMatchers(new AntPathRequestMatcher("/usuarios/","PUT")).hasAnyAuthority(ADMIN,GUEST)
 
                 //.requestMatchers(new AntPathRequestMatcher("/laboral/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
+
+                */
+
                 .anyRequest()
                 .authenticated()
                 .and()
