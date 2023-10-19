@@ -18,5 +18,7 @@ public interface CargoUsuarioService {
 
     CargoUsuario obtenerCargoUsuario(String jwt) throws Exception;
 
+    void eliminarCargoPorUsuario(Long usuarioId);
+
     
 }

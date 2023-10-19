@@ -62,21 +62,20 @@ public class Usuario  {
     @JsonIgnore
     private List<Resultados> resultados;
     
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Herramienta> herramientas;
 
 
-
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Laboral> laborales;
 
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Academica> academicas;
 
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<CargoUsuario> cargoUsuario;
 }

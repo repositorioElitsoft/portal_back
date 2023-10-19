@@ -30,7 +30,7 @@ public class Pregunta {
     private Long preguntaId;
 
     @Column(length = 5000, name = "prg")
-    private String contenido; // antes era contenido
+    private String contenido;
     @Column(name = "prg_opc1")
     private String opcion1;
     @Column(name = "prg_opc2")
