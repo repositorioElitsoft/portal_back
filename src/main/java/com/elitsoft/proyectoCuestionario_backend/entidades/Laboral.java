@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -38,7 +39,7 @@ public class Laboral {
     private Date inf_lab_fec_fin;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonBackReference
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     private Usuario usuario;
 
