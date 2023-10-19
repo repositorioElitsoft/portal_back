@@ -22,7 +22,7 @@ public class ProyectoCuestionarioBackendApplication implements CommandLineRunner
     @PostConstruct
     public void init(){
         // Setting Spring Boot SetTimeZone
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        //TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
     @Override
     public void run(String... args) throws Exception {
