@@ -93,10 +93,10 @@ public class    UsuarioController {
             Resource cv = usuarioService.getCVByUser(userId);
             return new ResponseEntity<Resource>(cv, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<Exception>(e, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         catch (IOException e){
-            return new ResponseEntity<Exception>(e, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
