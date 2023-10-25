@@ -87,13 +87,16 @@ public class    UsuarioController {
         return new ResponseEntity<>(true ,HttpStatus.OK);
     }
 
-    @GetMapping("/file")
-    public ResponseEntity<?> getUserFile(@RequestHeader("Authorization") String jwt){
+    @GetMapping("/file/{userId}")
+    public ResponseEntity<?> getUserFile(@PathVariable("userId") Long userId){
         try{
-            Resource cv = usuarioService.getCVByUser(jwt);
+            Resource cv = usuarioService.getCVByUser(userId);
             return new ResponseEntity<Resource>(cv, HttpStatus.OK);
-        } catch (IOException | MissingJwtException | EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity<Exception>(e, HttpStatus.BAD_REQUEST);
+        }
+        catch (IOException e){
+            return new ResponseEntity<Exception>(e, HttpStatus.NOT_FOUND);
         }
     }
 

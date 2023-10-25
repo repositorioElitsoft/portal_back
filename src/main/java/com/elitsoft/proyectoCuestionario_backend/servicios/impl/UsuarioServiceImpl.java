@@ -219,22 +219,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
-    public Resource getCVByUser(String jwt) throws IOException,
-            EntityNotFoundException, MissingJwtException {
+    public Resource getCVByUser(Long userId) throws IOException,
+            EntityNotFoundException {
 
-        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
-        if (token == null) {
-            throw new MissingJwtException("There is no jwt");
+
+        Optional<Usuario> usuario = usuarioRepository.findById(userId);
+        if (!usuario.isPresent()){
+            throw  new EntityNotFoundException("No user with that id");
         }
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
-        if (!usuarioOpt.isPresent()) {
-            throw new EntityNotFoundException("User is not present");
-        }
-
-        Usuario usuarioExistente = usuarioOpt.get();
-
-        return fileService.getCV(usuarioExistente.getCvPath());
+        return fileService.getCV(usuario.get().getCvPath());
 
     }
 

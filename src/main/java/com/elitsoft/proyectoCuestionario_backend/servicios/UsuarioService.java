@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -38,7 +39,7 @@ public interface UsuarioService {
     void uploadUserCv(String jwt, MultipartFile cv) throws IOException;
     public Boolean actualizarUsuario(Usuario usuario, String jwt);
 
-    public Resource getCVByUser(String jwt) throws IOException;
+    public Resource getCVByUser(Long userId) throws IOException, EntityNotFoundException;
 
     Usuario actualizarUsuarioId(Long usr_id, Usuario usuario);
 
