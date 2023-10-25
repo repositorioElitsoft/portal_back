@@ -1,21 +1,26 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
+import com.elitsoft.proyectoCuestionario_backend.Exceptions.MissingJwtException;
 import com.elitsoft.proyectoCuestionario_backend.entidades.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.mail.MessagingException;
@@ -70,12 +75,36 @@ public class    UsuarioController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario, @RequestHeader("Authorization") String Jwt){
+    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario,
+                                               @RequestHeader("Authorization") String Jwt){
         try {
             usuarioService.actualizarUsuario(usuario,Jwt);
         }
         catch (DataAccessException ex){
-            return new ResponseEntity<>(false ,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(true ,HttpStatus.OK);
+    }
+
+    @GetMapping("/file")
+    public ResponseEntity<?> getUserFile(@RequestHeader("Authorization") String jwt){
+        try{
+            Resource cv = usuarioService.getCVByUser(jwt);
+            return new ResponseEntity<Resource>(cv, HttpStatus.OK);
+        } catch (IOException | MissingJwtException | EntityNotFoundException e) {
+            return new ResponseEntity<Exception>(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/file")
+    public ResponseEntity<?> actualizarUsuarioFile(@RequestParam("file") MultipartFile file,
+                                               @RequestHeader("Authorization") String jwt){
+        try {
+            usuarioService.uploadUserCv(jwt,file);
+        }
+        catch (DataAccessException | IOException ex){
+            return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(true ,HttpStatus.OK);
@@ -134,7 +163,8 @@ public class    UsuarioController {
 
 
     @PutMapping("/actualizar/{usuarioId}")
-    public ResponseEntity<Usuario> actualizarUsuarioId(@PathVariable Long usuarioId, @RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> actualizarUsuarioId(@PathVariable Long usuarioId,
+                                                       @RequestBody Usuario usuario){
         Usuario usuarioActualizado = usuarioService.actualizarUsuarioId(usuarioId, usuario);
         return ResponseEntity.ok(usuarioActualizado);
     }

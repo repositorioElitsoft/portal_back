@@ -2,9 +2,13 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +34,11 @@ public interface UsuarioService {
     public void pedirRestaurarPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException;
     public Boolean cambiarPassword(String code, String password);
 
+
+    void uploadUserCv(String jwt, MultipartFile cv) throws IOException;
     public Boolean actualizarUsuario(Usuario usuario, String jwt);
+
+    public Resource getCVByUser(String jwt) throws IOException;
 
     Usuario actualizarUsuarioId(Long usr_id, Usuario usuario);
 

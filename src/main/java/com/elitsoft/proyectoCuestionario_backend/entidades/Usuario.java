@@ -67,6 +67,9 @@ public class Usuario  {
     @JsonManagedReference
     private List<Herramienta> herramientas;
 
+    @Column(name = "usr_cv_pth")
+    private String cvPath;
+
 
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
     @JsonManagedReference

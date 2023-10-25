@@ -2,11 +2,15 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
+import com.elitsoft.proyectoCuestionario_backend.Exceptions.MissingJwtException;
 import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
+import com.elitsoft.proyectoCuestionario_backend.servicios.FileService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +19,11 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
@@ -36,6 +42,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private PaisRepository paisRepository;
+    @Autowired
+    private FileService fileService;
 
     @Override
     public Usuario guardarUsuario(Usuario usuario) throws Exception {
@@ -122,6 +130,24 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public void uploadUserCv(String jwt, MultipartFile cv) throws IOException {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null) {
+            return;
+        }
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+        if (!usuarioOpt.isPresent()) {
+            return;
+        }
+        String filePath = fileService.saveFile(cv);
+        Usuario usuario = usuarioOpt.get();
+        usuario.setCvPath(filePath);
+        usuarioRepository.save(usuario);
+
+    }
+
+    @Override
     public void pedirRestaurarPassword(Usuario usuarioEntrante) throws MessagingException, UnsupportedEncodingException {
 
         String email = usuarioEntrante.getUsr_email();
@@ -141,6 +167,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
 
+    @Override
     public Boolean actualizarUsuario(Usuario usuario, String jwt) {
 
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
@@ -186,9 +213,29 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuarioExistente.setUsr_url_link(usuario.getUsr_url_link());
         }
 
-
         Usuario usuarioActualizado = usuarioRepository.save(usuarioExistente);
         return true;
+    }
+
+
+    @Override
+    public Resource getCVByUser(String jwt) throws IOException,
+            EntityNotFoundException, MissingJwtException {
+
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null) {
+            throw new MissingJwtException("There is no jwt");
+        }
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+        if (!usuarioOpt.isPresent()) {
+            throw new EntityNotFoundException("User is not present");
+        }
+
+        Usuario usuarioExistente = usuarioOpt.get();
+
+        return fileService.getCV(usuarioExistente.getCvPath());
+
     }
 
     public Usuario actualizarUsuarioId(Long usuarioId, Usuario usuario){
