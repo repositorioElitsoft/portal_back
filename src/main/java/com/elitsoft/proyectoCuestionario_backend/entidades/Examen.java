@@ -31,6 +31,11 @@ public class Examen {
     @Column (name = "exam_n_preg")
     private String numeroDePreguntas;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "exm_prd",
+            joinColumns = @JoinColumn(name = "exam_id"),
+            inverseJoinColumns = @JoinColumn(name = "prd_id"))
+    private List<Producto> productos;
 
     @ManyToOne(fetch = FetchType.EAGER)
 

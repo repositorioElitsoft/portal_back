@@ -2,17 +2,18 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Pregunta;
+import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ExamenRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PreguntaRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.PreguntaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,6 +28,8 @@ public class ExamenServiceimpl implements ExamenService {
     private ExamenRepository examenRepository;
     @Autowired
     private PreguntaRepository preguntaRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public Examen agregarExamen(Examen examen) {
@@ -46,6 +49,7 @@ public class ExamenServiceimpl implements ExamenService {
         examenExistente.setNumeroDePreguntas(examen.getNumeroDePreguntas());
         examenExistente.setCategoria(examen.getCategoria());
         examenExistente.setPreguntas(examen.getPreguntas());
+        examenExistente.setProductos(examen.getProductos());
 
 
         Set<Long> remainingIds = new HashSet<>();
@@ -94,5 +98,36 @@ public class ExamenServiceimpl implements ExamenService {
         return this.examenRepository.findByCategoria(categoria);
     }
 
-    
+    @Override
+    public List<Examen> obtenerExamenesByUser(String jwt) {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return Collections.emptyList();
+        }
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+
+        if (!usuarioOpt.isPresent()){
+            return Collections.emptyList();
+        }
+        ArrayList<Examen> examenes = new ArrayList<>();
+
+
+        Set<Producto> productsUsed = new HashSet<>();
+
+        usuarioOpt.get().getLaborales().forEach(laboral -> {
+            laboral.getHerramientas().forEach(herramienta -> {
+                productsUsed.add(herramienta.getVersionProducto().getPrd());
+            });
+        });
+
+        productsUsed.forEach(producto -> {
+            List<Examen> examsByProduct = examenRepository.findByProductos(producto);
+            examenes.addAll(examsByProduct);
+        });
+
+        return new ArrayList<>(examenes);
+    }
+
+
 }
