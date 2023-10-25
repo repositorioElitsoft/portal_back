@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
@@ -135,28 +136,13 @@ public class LaboralServiceImpl implements LaboralService {
     }
 
 
-//    @Override
-//    public List<Laboral> obtenerListaLaboralPorUsuario(Usuario usuario) {
-//        return laboralRepository.findByUsuario(usuario);
-//    }
-//
-//    @Override
-//    public List<Laboral> obtenerListaLaboral() {
-//        return laboralRepository.findAll();
-//    }
+    @Override
+    public void eliminarLaboralPorUsuario(Long usuarioId) {
+        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        if (usuario.isPresent()) {
+            List<Laboral> laborales = laboralRepository.findByUsuario(usuario.get());
+            laboralRepository.deleteAll(laborales);
+        }
+    }
 
-//    @Override
-//    public List<Laboral> obtenerLaboralesConHerramientasYProductosPorUsuario(Long usr_id) {
-//        Usuario usuario = usuarioRepository.findById(usr_id).orElse(null);
-//        if (usuario == null) {
-//            throw new IllegalArgumentException("Usuario no encontrado");
-//        }
-//
-//        return laboralRepository.findLaboralesWithHerramientasAndProductosByUsuario(usuario);
-//    }
-
-  
-
-    
-    
 }

@@ -33,6 +33,5 @@ public interface AcademicaRepository extends JpaRepository <Academica, Long> {
 
     void deleteById(Long academica_id);
 
-    Optional<Academica> findById(Long usr_id);
 
 }

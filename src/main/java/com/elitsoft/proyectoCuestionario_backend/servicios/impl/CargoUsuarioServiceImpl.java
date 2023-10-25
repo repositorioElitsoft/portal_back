@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
@@ -84,5 +85,13 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         return cargoUsuario.get(0);
     }
 
+    @Override
+    public void eliminarCargoPorUsuario(Long usuarioId) {
+        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        if (usuario.isPresent()) {
+            List<CargoUsuario> cargos = cargoRepository.findByUsuario(usuario.get());
+            cargoRepository.deleteAll(cargos);
+        }
+    }
 
 }

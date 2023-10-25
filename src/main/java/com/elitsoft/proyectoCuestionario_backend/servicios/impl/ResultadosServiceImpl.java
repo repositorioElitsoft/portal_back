@@ -1,10 +1,12 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.ExamenUserCount;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Resultados;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ExamenUserCountRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ResultadosRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ResultadosService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ import java.util.Optional;
 public class ResultadosServiceImpl implements ResultadosService {
     @Autowired
     private ResultadosRepository resultadosRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
     @Autowired
     private ExamenUserCountRepository examenUserCountRepository;
     @Autowired
@@ -60,4 +65,12 @@ public class ResultadosServiceImpl implements ResultadosService {
         return true;
     }
 
+    @Override
+    public void eliminarResultadosPorUsuario(Long usuarioId) {
+        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        if (usuario.isPresent()) {
+            List<Resultados> resultados = resultadosRepository.findByUsuario(usuario.get());
+            resultadosRepository.deleteAll(resultados);
+        }
+    }
 }

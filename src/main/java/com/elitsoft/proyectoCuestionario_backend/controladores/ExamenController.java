@@ -41,6 +41,11 @@ public class ExamenController {
         return new ResponseEntity<>(examenService.obtenerExamenes(), HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/usuario")
+    public ResponseEntity<List<Examen>> listarExamenesUsuario(@RequestHeader("Authorization") String jwt){
+        return new ResponseEntity<>(examenService.obtenerExamenesByUser(jwt), HttpStatus.ACCEPTED);
+    }
+
     @GetMapping("/{exam_id}")
     public Examen listarExamen(@PathVariable("exam_id") Long exam_id){
         return examenService.obtenerExamen(exam_id);

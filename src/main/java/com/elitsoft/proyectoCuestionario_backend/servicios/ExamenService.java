@@ -23,5 +23,6 @@ public interface ExamenService {
     
     List<Examen> listarExamenesDeUnaCategoria(Categoria categoria);
 
-    
+
+    List<Examen> obtenerExamenesByUser(String jwt);
 }

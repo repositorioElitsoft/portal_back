@@ -1,4 +1,3 @@
-
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +17,7 @@ import javax.persistence.*;
 @Table ( name = "tbl_exam")
 @Data
 public class Examen {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exam_id")
@@ -32,11 +31,16 @@ public class Examen {
     @Column (name = "exam_n_preg")
     private String numeroDePreguntas;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "exm_prd",
+            joinColumns = @JoinColumn(name = "exam_id"),
+            inverseJoinColumns = @JoinColumn(name = "prd_id"))
+    private List<Producto> productos;
 
     @ManyToOne(fetch = FetchType.EAGER)
 
     private Categoria categoria;
-    
+
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Pregunta> preguntas;

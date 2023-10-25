@@ -51,8 +51,13 @@ public class SecurityConfig {
                 csrf().disable()
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
+                .requestMatchers(new AntPathRequestMatcher("/**/","GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**/","POST")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**/","PUT")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**/","DELETE")).permitAll()
                 //Permitir solamente métodos GETs autorizados con el rol de ADMIN
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
+                /*
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/verificar/**","POST")).permitAll()
@@ -70,15 +75,26 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/examen/**","GET")).hasAnyAuthority(ADMIN,GUEST)//Todo: Cambiar
                 .requestMatchers(new AntPathRequestMatcher("/examen/actualizar/**","PUT")).hasAnyAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/examen/eliminar/**","DELETE")).hasAnyAuthority(ADMIN)
-                .requestMatchers(new AntPathRequestMatcher("/usuarios/","POST")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/pregunta/**","GET")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/pregunta/","POST")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/pregunta/actualizar/**","PUT")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/pregunta/eliminar/**","DELETE")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/**","POST")).hasAnyAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/actualizar/**","PUT")).hasAnyAuthority(ADMIN)
                 .requestMatchers(new AntPathRequestMatcher("/usuarios/eliminar/**","DELETE")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/**","GET")).hasAnyAuthority(ADMIN)
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/","GET")).hasAnyAuthority(GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/**","GET")).hasAnyAuthority(GUEST)
+                .requestMatchers(new AntPathRequestMatcher("/usuarios/","PUT")).hasAnyAuthority(GUEST)
              //   .requestMatchers(new AntPathRequestMatcher("/**","GET")).hasAnyAuthority(ADMIN,GUEST)
                 .requestMatchers(new AntPathRequestMatcher("/**","GET")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**","POST")).hasAnyAuthority(ADMIN,GUEST)
                 //.requestMatchers(new AntPathRequestMatcher("/usuarios/","PUT")).hasAnyAuthority(ADMIN,GUEST)
 
                 //.requestMatchers(new AntPathRequestMatcher("/laboral/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
+
+                */
+
                 .anyRequest()
                 .authenticated()
                 .and()

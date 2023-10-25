@@ -22,8 +22,6 @@ public interface LaboralService {
 
     Boolean deleteLaboral(Long laboralId, String jwt)throws Exception;
 
-    // List<Laboral> obtenerLaboralesConHerramientasYProductosPorUsuario(Long usr_id);
-
-    
+    void eliminarLaboralPorUsuario(Long usuarioId);
     
 }

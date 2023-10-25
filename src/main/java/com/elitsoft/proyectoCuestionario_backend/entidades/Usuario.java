@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.lang.Nullable;
 
 import java.util.Date;
@@ -62,10 +63,12 @@ public class Usuario  {
     @JsonIgnore
     private List<Resultados> resultados;
     
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Herramienta> herramientas;
 
+    @Column(name = "usr_cv_pth")
+    private String cvPath;
 
 
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)

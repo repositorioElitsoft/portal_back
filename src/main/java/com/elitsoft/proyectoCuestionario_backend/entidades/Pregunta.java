@@ -1,4 +1,3 @@
-
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -30,7 +29,7 @@ public class Pregunta {
     private Long preguntaId;
 
     @Column(length = 5000, name = "prg")
-    private String contenido; // antes era contenido
+    private String contenido;
     @Column(name = "prg_opc1")
     private String opcion1;
     @Column(name = "prg_opc2")
@@ -47,7 +46,4 @@ public class Pregunta {
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     private Examen examen;
-
-
-
 }

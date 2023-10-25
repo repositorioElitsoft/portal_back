@@ -23,10 +23,8 @@ public class Herramienta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "herr_usr_id")
     private Long herr_usr_id;
-
-
     
-    private String herr_usr_anos_exp;
+    private Integer herr_usr_anos_exp;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user

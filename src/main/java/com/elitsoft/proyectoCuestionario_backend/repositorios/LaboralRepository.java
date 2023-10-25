@@ -20,12 +20,8 @@ public interface LaboralRepository extends JpaRepository <Laboral, Long>{
     // Método para guardar inf. laboral asociado a un usuario
     Laboral save(Laboral laboral);
 
-//    @Query("SELECT l FROM Laboral l LEFT JOIN FETCH l.herramientas WHERE l.usuario = :usuario")
-//    List<Laboral> findByUsuario(@Param("usuario") Usuario usuario);
-
     // Método para listar toda la info laboral
     List<Laboral> findAll();
-
 
     List<Laboral> findByUsuario(Usuario usuario);
 
