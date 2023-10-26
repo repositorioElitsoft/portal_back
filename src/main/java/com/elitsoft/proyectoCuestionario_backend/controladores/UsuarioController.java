@@ -16,7 +16,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
@@ -91,7 +93,9 @@ public class    UsuarioController {
     public ResponseEntity<?> getUserFile(@PathVariable("userId") Long userId){
         try{
             Resource cv = usuarioService.getCVByUser(userId);
-            return new ResponseEntity<Resource>(cv, HttpStatus.OK);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/pdf"));
+            return new ResponseEntity<Resource>(cv, headers, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
