@@ -29,10 +29,11 @@ public class CargoUsuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long crg_usr_id;
     
-    private Integer crg_usr_pret;
-
+    private String crg_usr_pret;
     private String crg_prf;
-    
+    private String disponibilidad;
+    private String tiempo_incorporacion;
+    private String otro_tiempo_incorporacion;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     @JsonBackReference

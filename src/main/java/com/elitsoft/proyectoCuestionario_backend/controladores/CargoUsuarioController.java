@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CargoUsuarioService;
+import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  *
@@ -56,5 +58,16 @@ public class CargoUsuarioController {
         List<CargoUsuario> herramientas = cargoService.obtenerListaCargos();
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
     }
-    
+
+    @PutMapping("/disponibilidad-laboral")
+    public ResponseEntity<?> actualizarDisponibilidadLaboral(@RequestBody Map<String, String> request,
+                                                             @RequestHeader("Authorization") String jwt) {
+        try {
+            String disponibilidadLaboral = request.get("disponibilidadLaboral");
+            Boolean result = cargoService.actualizarDisponibilidadLaboral(disponibilidadLaboral, jwt);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
