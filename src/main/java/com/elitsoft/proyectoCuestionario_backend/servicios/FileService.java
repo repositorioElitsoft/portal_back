@@ -17,4 +17,9 @@ public interface FileService {
 
     String saveFile(MultipartFile file) throws IOException;
     Resource getCV(String fileName) throws IOException;
+
+    void deleteFile(String cvPath);
+
+
+    void eliminarCVByUserId(Long userId);
 }

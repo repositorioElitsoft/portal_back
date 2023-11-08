@@ -3,8 +3,6 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 import com.elitsoft.proyectoCuestionario_backend.servicios.FileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -57,7 +54,18 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
+    public void deleteFile(String cvPath) {
+
+    }
+
+    @Override
+    public void eliminarCVByUserId(Long userId) {
+
+    }
+
     private boolean isPDF(MultipartFile file) {
         return Objects.requireNonNull(file.getContentType()).equalsIgnoreCase("application/pdf");
     }
+
 }
