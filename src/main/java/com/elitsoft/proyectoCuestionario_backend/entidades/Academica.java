@@ -42,6 +42,7 @@ public class Academica {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate inf_acad_fec_fin;
     private String inf_acad_est;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
