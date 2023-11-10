@@ -20,20 +20,19 @@ public interface FileService {
     public void init();
     public void save(MultipartFile file) throws IOException;
     public Resource load(String filename) throws IOException;
-
     public void deleteall();
     public Stream<Path> loadAll();
     public String deletefile(String filename);
 
 
-
+    public void deleteFile(String filePath) throws IOException;
 
 
     String saveFile(MultipartFile file) throws IOException;
     Resource getCV(String fileName) throws IOException;
 
-    void deleteFile(String cvPath);
 
 
-    void eliminarCVByUserId(Long userId);
+
+
 }

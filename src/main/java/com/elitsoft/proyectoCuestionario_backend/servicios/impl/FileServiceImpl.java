@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.message.FileMessage;
 import com.elitsoft.proyectoCuestionario_backend.servicios.FileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -37,13 +38,22 @@ public class FileServiceImpl implements FileService {
     @Override
     public void save(MultipartFile file) {
         try {
-            Files.copy(file.getInputStream(),
-                    this.root.resolve(file.getOriginalFilename()));
-        } catch (IOException e) {
-            throw new RuntimeException("no se puede guardar el archivo");
-        }
 
+            String fileName = file.getOriginalFilename();
+            Path filePath = this.root.resolve(file.getOriginalFilename());
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+                String mensajeSobrescritura = "El archivo '" + fileName + "' se ha sobrescrito.";
+                System.out.println(mensajeSobrescritura);
+            }
+
+            Files.copy(file.getInputStream(), filePath);
+
+        } catch (IOException e) {
+            throw new RuntimeException("No se puede guardar el archivo", e);
+        }
     }
+
 
     @Override
     public Resource load(String filename) {
@@ -94,6 +104,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public void deleteFile(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        Files.deleteIfExists(path);
+    }
+
+
+    @Override
     public String saveFile(MultipartFile file) throws IOException {
 
         if (!isPDF(file)){
@@ -130,15 +147,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    @Override
-    public void deleteFile(String cvPath) {
 
-    }
-
-    @Override
-    public void eliminarCVByUserId(Long userId) {
-
-    }
 
     private boolean isPDF(MultipartFile file) {
         return Objects.requireNonNull(file.getContentType()).equalsIgnoreCase("application/pdf");
