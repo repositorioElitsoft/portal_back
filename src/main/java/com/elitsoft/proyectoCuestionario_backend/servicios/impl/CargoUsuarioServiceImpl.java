@@ -93,5 +93,20 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
             cargoRepository.deleteAll(cargos);
         }
     }
+    @Override
+    public Boolean actualizarDisponibilidadLaboral(String disponibilidadLaboral, String jwt) throws Exception {
+        Optional<Usuario> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
+        if (!usuarioOptional.isPresent()) {
+            return false;
+        }
+
+        CargoUsuario cargoUsuario = cargoRepository.findByUsuario(usuarioOptional.get()).stream()
+                .findFirst()
+                .orElse(new CargoUsuario());
+
+        cargoUsuario.setDisponibilidad(disponibilidadLaboral);
+        cargoRepository.save(cargoUsuario);
+        return true;
+    }
 
 }

@@ -2,14 +2,12 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
-import com.elitsoft.proyectoCuestionario_backend.Exceptions.MissingJwtException;
 import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.FileService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.*;
 
-import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -357,5 +354,29 @@ public class UsuarioServiceImpl implements UsuarioService {
         return nuevoUsuario;
     }
 
+
+    @Override
+    public void eliminarCVByUserId(Long userId) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(userId);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            String cvPath = usuario.getCvPath();
+            if (cvPath != null && !cvPath.isEmpty()) {
+                fileService.deleteFile(cvPath); // Agregar lógica para eliminar el archivo
+                usuario.setCvPath(null); // Establecer el campo del CV en null
+                usuarioRepository.save(usuario);
+            }
+        }
+    }
+    @Override
+    public void deleteFile(String filePath) {
+        // Agrega la lógica para eliminar el archivo en el sistema de archivos
+        // Esto dependerá de cómo almacenas tus archivos, por ejemplo, usando java.io.File o algún otro enfoque.
+    }
+
+    @Override
+    public void eliminarCVByUser(Long userId) {
+
+    }
 
 }
