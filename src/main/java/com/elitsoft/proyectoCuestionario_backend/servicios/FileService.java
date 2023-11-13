@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,28 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public interface FileService {
 
 
+    public void init();
+    public void save(MultipartFile file) throws IOException;
+    public Resource load(String filename) throws IOException;
+
+    public void deleteall();
+    public Stream<Path> loadAll();
+    public String deletefile(String filename);
+
+
+
+
+
     String saveFile(MultipartFile file) throws IOException;
     Resource getCV(String fileName) throws IOException;
+
+    void deleteFile(String cvPath);
+
+
+    void eliminarCVByUserId(Long userId);
 }

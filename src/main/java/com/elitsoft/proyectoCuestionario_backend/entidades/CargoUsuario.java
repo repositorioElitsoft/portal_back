@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  *
@@ -29,10 +30,12 @@ public class CargoUsuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long crg_usr_id;
     
-    private Integer crg_usr_pret;
-
+    private String crg_usr_pret;
     private String crg_prf;
-    
+    private Date crg_fecha_postulacion;
+    private String disponibilidad;
+    private String tiempo_incorporacion;
+    private String otro_tiempo_incorporacion;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     @JsonBackReference

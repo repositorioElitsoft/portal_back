@@ -396,4 +396,28 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
 
+    @Override
+    public void eliminarCVByUserId(Long userId) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(userId);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            String cvPath = usuario.getCvPath();
+            if (cvPath != null && !cvPath.isEmpty()) {
+                fileService.deleteFile(cvPath); // Agregar lógica para eliminar el archivo
+                usuario.setCvPath(null); // Establecer el campo del CV en null
+                usuarioRepository.save(usuario);
+            }
+        }
+    }
+    @Override
+    public void deleteFile(String filePath) {
+        // Agrega la lógica para eliminar el archivo en el sistema de archivos
+        // Esto dependerá de cómo almacenas tus archivos, por ejemplo, usando java.io.File o algún otro enfoque.
+    }
+
+    @Override
+    public void eliminarCVByUser(Long userId) {
+
+    }
+
 }

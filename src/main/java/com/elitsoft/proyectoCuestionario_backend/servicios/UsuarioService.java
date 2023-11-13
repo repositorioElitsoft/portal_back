@@ -1,6 +1,5 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
-
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -56,4 +55,10 @@ public interface UsuarioService {
 
     public Usuario guardarRec(Usuario usuario) throws Exception;
 
+
+    void eliminarCVByUserId(Long userId);
+
+    void deleteFile(String filePath);
+
+    void eliminarCVByUser(Long userId);
 }
