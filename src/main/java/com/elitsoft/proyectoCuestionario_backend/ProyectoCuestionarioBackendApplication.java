@@ -26,29 +26,7 @@ public class ProyectoCuestionarioBackendApplication implements CommandLineRunner
     }
     @Override
     public void run(String... args) throws Exception {
-        
-       /*  Usuario usuario = new Usuario();
-        
-        usuario.setUsername("admin");
-        usuario.setPassword("123");
-        
-        Rol r = new Rol ();
-        r.setRolId(1L);
-        r.setrolNombre("ADMIN");
-        
-        Set<UsuarioRol> usuarioRoles = new HashSet<>(); 
-        
-        UsuarioRol usuarioRol = new UsuarioRol();
-        
-        usuarioRol.setRol(r);
-        usuarioRol.setUsuario(usuario);
-        
-        usuarioRoles.add(usuarioRol);
-        
-        Usuario usuarioGuardado = usuarioService.guardarUsuario(usuario, usuarioRoles);
-        System.out.println(usuarioGuardado.getUsername()); */
-        
-        
+
     }
 
 

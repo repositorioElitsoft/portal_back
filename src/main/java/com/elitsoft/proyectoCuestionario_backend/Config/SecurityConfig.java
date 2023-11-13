@@ -37,6 +37,7 @@ public class SecurityConfig {
     private final static String ADMIN = "ROLE_ADMIN";
     private final static String GUEST = "ROLE_GUEST";
     private final static String REC = "ROLE_REC";
+    private final static String ENTR = "ROLE_ENTR";
 
 
     @Bean

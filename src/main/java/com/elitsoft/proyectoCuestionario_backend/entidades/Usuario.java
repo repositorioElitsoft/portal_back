@@ -1,20 +1,16 @@
 
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.jmx.export.annotation.ManagedResource;
-import org.springframework.lang.Nullable;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 
 
@@ -25,6 +21,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TBL_USR")
 @Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "usr_id")
 public class Usuario  {
     
     @Id
@@ -34,10 +31,14 @@ public class Usuario  {
     private String usr_nom;
     private String usr_ap_pat;
     private String usr_ap_mat;
+    @Column(name="usr_direcc")
+    private String usr_direcc;
     @Column(unique = true)
     private String usr_email;
     private String usr_pass;
     private String usr_tel;
+    @Column(name = "usr_gen")
+    private String usr_gen;
     private String usr_url_link;
     private String usr_rol;
     private String usr_ver_code;
@@ -55,12 +56,13 @@ public class Usuario  {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pais_id") // Nombre de la columna que será clave foránea
-    private Pais pais;
+    @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private City city;
+
 
     @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Resultados> resultados;
     
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
@@ -82,4 +84,9 @@ public class Usuario  {
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<CargoUsuario> cargoUsuario;
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Observacion> observaciones;
+
 }

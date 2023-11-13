@@ -77,10 +77,10 @@ public class    UsuarioController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario,
-                                               @RequestHeader("Authorization") String Jwt){
+    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario, @RequestHeader("Authorization") String Jwt){
         try {
             usuarioService.actualizarUsuario(usuario,Jwt);
+            System.out.println(usuario);
         }
         catch (DataAccessException ex){
             return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);

@@ -28,7 +28,6 @@ public class Herramienta {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
-    //@JsonIgnore
     @JsonBackReference
     private Usuario usuario;
 

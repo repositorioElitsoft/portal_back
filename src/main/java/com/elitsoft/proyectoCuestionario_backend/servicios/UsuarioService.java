@@ -5,10 +5,8 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -37,6 +35,7 @@ public interface UsuarioService {
 
 
     void uploadUserCv(String jwt, MultipartFile cv) throws IOException;
+
     public Boolean actualizarUsuario(Usuario usuario, String jwt);
 
     public Resource getCVByUser(Long userId) throws IOException, EntityNotFoundException;
