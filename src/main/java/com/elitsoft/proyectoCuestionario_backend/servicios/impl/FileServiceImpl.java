@@ -80,14 +80,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAll(Long usr_id) {
         try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root))
-                    .map(this.root::relativize);
-        } catch (RuntimeException | IOException e) {
-            throw new RuntimeException("No se pueden cargar los archivos");
+            Path userFolder = this.root.resolve(usr_id.toString());
+            return Files.walk(userFolder, 1)
+                    .filter(path -> !path.equals(userFolder))
+                    .map(userFolder::relativize);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read stored files", e);
         }
-
     }
 
     @Override

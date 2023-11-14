@@ -21,7 +21,7 @@ public interface FileService {
     public void save(MultipartFile file) throws IOException;
     public Resource load(String filename) throws IOException;
     public void deleteall();
-    public Stream<Path> loadAll();
+    public Stream<Path> loadAll(Long usr_id);
     public String deletefile(String filename);
 
 
