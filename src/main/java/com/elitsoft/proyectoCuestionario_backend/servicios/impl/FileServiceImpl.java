@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.message.FileMessage;
 import com.elitsoft.proyectoCuestionario_backend.servicios.FileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -41,11 +42,9 @@ public class FileServiceImpl implements FileService {
             String fileName = file.getOriginalFilename();
             Path filePath = this.root.resolve(file.getOriginalFilename());
             if (Files.exists(filePath)) {
-
                 Files.delete(filePath);
                 String mensajeSobrescritura = "El archivo '" + fileName + "' se ha sobrescrito.";
                 System.out.println(mensajeSobrescritura);
-
             }
 
             Files.copy(file.getInputStream(), filePath);
@@ -54,6 +53,7 @@ public class FileServiceImpl implements FileService {
             throw new RuntimeException("No se puede guardar el archivo", e);
         }
     }
+
 
     @Override
     public Resource load(String filename) {
@@ -80,14 +80,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAll(Long usr_id) {
         try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root))
-                    .map(this.root::relativize);
-        } catch (RuntimeException | IOException e) {
-            throw new RuntimeException("No se pueden cargar los archivos");
+            Path userFolder = this.root.resolve(usr_id.toString());
+            return Files.walk(userFolder, 1)
+                    .filter(path -> !path.equals(userFolder))
+                    .map(userFolder::relativize);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read stored files", e);
         }
-
     }
 
     @Override
@@ -102,6 +103,13 @@ public class FileServiceImpl implements FileService {
         }
 
     }
+
+    @Override
+    public void deleteFile(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        Files.deleteIfExists(path);
+    }
+
 
     @Override
     public String saveFile(MultipartFile file) throws IOException {
@@ -140,15 +148,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    @Override
-    public void deleteFile(String cvPath) {
 
-    }
-
-    @Override
-    public void eliminarCVByUserId(Long userId) {
-
-    }
 
     private boolean isPDF(MultipartFile file) {
         return Objects.requireNonNull(file.getContentType()).equalsIgnoreCase("application/pdf");
