@@ -36,7 +36,7 @@ import javax.persistence.EntityNotFoundException;
 @RequestMapping("/usuarios")
 @CrossOrigin(origins = "http://localhost:4200")
 public class    UsuarioController {
-    
+
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
