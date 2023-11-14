@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;
@@ -69,6 +70,18 @@ public class LaboralController {
         List<Laboral> listaLaboral = laboralService.obtenerListaLaboral(jwt);
         return new ResponseEntity<>(listaLaboral, HttpStatus.OK);
     }
+
+    @GetMapping("/obtener/{laboralId}")
+    public ResponseEntity<Laboral> obtenerLaboral(@PathVariable Long laboralId, @RequestHeader("Authorization") String jwt) throws Exception {
+        // Asumiendo que el método en tu servicio espera un ID y devuelve una instancia de Laboral
+        Laboral laboral = laboralService.obtenerLaboralPorId(laboralId, jwt);
+        if (laboral != null) {
+            return new ResponseEntity<>(laboral, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @DeleteMapping("/{laboralId}")
     public ResponseEntity<Boolean> deleteLaboral(

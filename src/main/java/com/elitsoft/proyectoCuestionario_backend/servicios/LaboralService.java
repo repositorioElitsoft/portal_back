@@ -23,5 +23,9 @@ public interface LaboralService {
     Boolean deleteLaboral(Long laboralId, String jwt)throws Exception;
 
     void eliminarLaboralPorUsuario(Long usuarioId);
-    
+
+
+    Laboral obtenerLaboralPorId(Long laboralId, String jwt) throws Exception;
+
+
 }

@@ -145,4 +145,26 @@ public class LaboralServiceImpl implements LaboralService {
         }
     }
 
+
+
+    @Override
+    public Laboral obtenerLaboralPorId(Long laboralId, String jwt) throws Exception {
+        // Aquí verificas el JWT y luego obtienes el objeto Laboral
+        Optional<Usuario> usuario = usuarioService.getUsuarioByToken(jwt);
+        if (!usuario.isPresent()) {
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<Laboral> laboral = laboralRepository.findById(laboralId);
+        if (!laboral.isPresent()) {
+            throw new EntityNotFoundException("No se encontró la información laboral con el ID proporcionado");
+        }
+
+        // Puedes agregar lógica adicional aquí para verificar si el usuario tiene permiso para acceder a este Laboral
+        // ...
+
+        return laboral.get();
+    }
+
+
 }
