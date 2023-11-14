@@ -37,12 +37,22 @@ public class FileServiceImpl implements FileService {
     @Override
     public void save(MultipartFile file) {
         try {
-            Files.copy(file.getInputStream(),
-                    this.root.resolve(file.getOriginalFilename()));
-        } catch (IOException e) {
-            throw new RuntimeException("no se puede guardar el archivo");
-        }
 
+            String fileName = file.getOriginalFilename();
+            Path filePath = this.root.resolve(file.getOriginalFilename());
+            if (Files.exists(filePath)) {
+
+                Files.delete(filePath);
+                String mensajeSobrescritura = "El archivo '" + fileName + "' se ha sobrescrito.";
+                System.out.println(mensajeSobrescritura);
+
+            }
+
+            Files.copy(file.getInputStream(), filePath);
+
+        } catch (IOException e) {
+            throw new RuntimeException("No se puede guardar el archivo", e);
+        }
     }
 
     @Override

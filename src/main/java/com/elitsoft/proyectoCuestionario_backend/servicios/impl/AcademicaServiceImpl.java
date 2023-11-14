@@ -65,6 +65,7 @@ public class AcademicaServiceImpl implements AcademicaService {
         });
 
 
+
         return true;
     }
     
@@ -144,6 +145,18 @@ public class AcademicaServiceImpl implements AcademicaService {
             academicaRepository.deleteAll(academicas);
         }
     }
+
+
+    @Override
+    public Academica obtenerAcademica(Long academicaId) {
+        Optional<Academica> academicaOptional = academicaRepository.findById(academicaId);
+        if (academicaOptional.isPresent()) {
+            return academicaOptional.get();
+        } else {
+            throw new EntityNotFoundException("No se encontró la entidad con el ID: " + academicaId);
+        }
+    }
+
 
 
 }
