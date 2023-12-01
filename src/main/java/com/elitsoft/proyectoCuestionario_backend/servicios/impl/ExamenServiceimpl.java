@@ -1,4 +1,3 @@
-
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
@@ -9,6 +8,7 @@ import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.PreguntaService;
@@ -17,13 +17,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author Maeva Martínez
  */
 
 @Service
 public class ExamenServiceimpl implements ExamenService {
-    
+
     @Autowired
     private ExamenRepository examenRepository;
     @Autowired
@@ -38,88 +37,88 @@ public class ExamenServiceimpl implements ExamenService {
 
     @Override
     public Examen actualizarExamen(Long examenId, Examen examen) {
+        Examen examenExistente = examenRepository.findById(examenId)
+                .orElseThrow(() -> new NoSuchElementException("El examen con ID " + examenId + " no se encontró."));
 
-        Examen examenExistente = examenRepository.findById(examenId).orElseThrow(
-                () -> new NoSuchElementException("El examen con ID " + examenId + " no se encontro.")
-        );
-
-        examenExistente.setTitulo(examen.getTitulo());
-        examenExistente.setDescripcion(examen.getDescripcion());
-        examenExistente.setPuntosMaximos(examen.getPuntosMaximos());
-        examenExistente.setNumeroDePreguntas(examen.getNumeroDePreguntas());
-        examenExistente.setCategoria(examen.getCategoria());
-        examenExistente.setPreguntas(examen.getPreguntas());
-        examenExistente.setProductos(examen.getProductos());
+        actualizarCampoSiNoNulo(examenExistente::setTitulo, examen.getTitulo());
+        actualizarCampoSiNoNulo(examenExistente::setDescripcion, examen.getDescripcion());
+        actualizarCampoSiNoNulo(examenExistente::setPuntosMaximos, examen.getPuntosMaximos());
+        actualizarCampoSiNoNulo(examenExistente::setNumeroDePreguntas, examen.getNumeroDePreguntas());
+        actualizarCampoSiNoNulo(examenExistente::setCategoria, examen.getCategoria());
+        actualizarCampoSiNoNulo(examenExistente::setProductos, examen.getProductos());
 
 
-        Set<Long> remainingIds = new HashSet<>();
-        examen.getPreguntas().forEach(pregunta -> {
-            if(pregunta.getPreguntaId() != null){
-                remainingIds.add(pregunta.getPreguntaId());
+        if (examen.getPreguntas() != null) {
+            Set<Long> remainingIds = new HashSet<>();
+            examen.getPreguntas().forEach(pregunta -> {
+                if (pregunta.getPreguntaId() != null) {
+                    remainingIds.add(pregunta.getPreguntaId());
+                }
+            });
+
+            if (examenExistente.getPreguntas() != null) {
+                examenExistente.getPreguntas().removeIf(preguntaVieja ->
+                        preguntaVieja != null && preguntaVieja.getPreguntaId() != null &&
+                                !remainingIds.contains(preguntaVieja.getPreguntaId()));
             }
-        });
-
-
-        examenExistente.getPreguntas().forEach(preguntaVieja -> {
-            if(!remainingIds.contains(preguntaVieja.getPreguntaId())){
-                preguntaRepository.eliminarPregunta(preguntaVieja.getPreguntaId());
-            }
-        });
-
-
-
-        examenExistente.setPreguntas(examen.getPreguntas());
+            actualizarCampoSiNoNulo(examenExistente::setPreguntas, examen.getPreguntas());
+        }
 
         return examenRepository.save(examenExistente);
     }
 
+    private <T> void actualizarCampoSiNoNulo(Consumer<T> setter, T valor) {
+        if (valor != null) {
+            setter.accept(valor);
+        }
+    }
+
+
     @Override
     public List<Examen> obtenerExamenes() {
-        return (examenRepository.findAll());
-
+        return examenRepository.findAll();
     }
 
     @Override
     public Examen obtenerExamen(Long exam_id) {
-        return examenRepository.findById(exam_id).get();
+        return examenRepository.findById(exam_id).orElse(null);
     }
 
     @Override
     public void eliminarExamen(Long examenId) {
-        Optional<Examen> examen = examenRepository.findById(examenId);
-        if (!examen.isPresent()){
-            return;
-        }
-        examenRepository.delete(examen.get());
+        examenRepository.deleteById(examenId);
     }
-    
+
     @Override
     public List<Examen> listarExamenesDeUnaCategoria(Categoria categoria) {
-        return this.examenRepository.findByCategoria(categoria);
+        return examenRepository.findByCategoria(categoria);
     }
 
     @Override
     public List<Examen> obtenerExamenesByUser(String jwt) {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
-        if (token == null){
+        if (token == null) {
             return Collections.emptyList();
         }
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
 
-        if (!usuarioOpt.isPresent()){
+        if (!usuarioOpt.isPresent()) {
             return Collections.emptyList();
         }
         ArrayList<Examen> examenes = new ArrayList<>();
 
-
         Set<Producto> productsUsed = new HashSet<>();
 
-        usuarioOpt.get().getLaborales().forEach(laboral -> {
-            laboral.getHerramientas().forEach(herramienta -> {
-                productsUsed.add(herramienta.getVersionProducto().getPrd());
+        if (usuarioOpt.get().getLaborales() != null) {
+            usuarioOpt.get().getLaborales().forEach(laboral -> {
+                if (laboral.getHerramientas() != null) {
+                    laboral.getHerramientas().forEach(herramienta -> {
+                        productsUsed.add(herramienta.getVersionProducto().getPrd());
+                    });
+                }
             });
-        });
+        }
 
         productsUsed.forEach(producto -> {
             List<Examen> examsByProduct = examenRepository.findByProductos(producto);
@@ -128,6 +127,4 @@ public class ExamenServiceimpl implements ExamenService {
 
         return new ArrayList<>(examenes);
     }
-
-
 }

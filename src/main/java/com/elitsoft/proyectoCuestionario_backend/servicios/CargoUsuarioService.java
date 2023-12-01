@@ -2,6 +2,8 @@ package com.elitsoft.proyectoCuestionario_backend.servicios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,5 +23,6 @@ public interface CargoUsuarioService {
     void eliminarCargoPorUsuario(Long usuarioId);
 
     Boolean actualizarDisponibilidadLaboral(String disponibilidadLaboral, String jwt) throws  Exception;
-    
+
+    Boolean postularCargo(Long usuarioId, Date fechaPostulacion) throws Exception;
 }

@@ -45,6 +45,7 @@ public class Usuario  {
     private Boolean usr_is_ver;
     private String usr_rec_tkn;
 
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -62,10 +63,12 @@ public class Usuario  {
     @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Resultados> resultados;
-    
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
+
+
+    @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Herramienta> herramientas;
+
 
     @Column(name = "usr_cv_pth")
     private String cvPath;
@@ -82,4 +85,6 @@ public class Usuario  {
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<CargoUsuario> cargoUsuario;
+
+
 }

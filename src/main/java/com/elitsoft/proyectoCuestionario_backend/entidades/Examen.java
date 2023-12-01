@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -18,16 +16,21 @@ import javax.persistence.*;
 @Data
 public class Examen {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exam_id")
     private Long examenId;
+
     @Column(name = "exam_titl")
     private String titulo;
-    @Column (name = "exam_desc")
+
+    @Column (name = "exam_desc", nullable = true)
     private String descripcion;
+
     @Column (name = "exam_ptos_max")
     private String puntosMaximos;
+
     @Column (name = "exam_n_preg")
     private String numeroDePreguntas;
 
@@ -38,7 +41,6 @@ public class Examen {
     private List<Producto> productos;
 
     @ManyToOne(fetch = FetchType.EAGER)
-
     private Categoria categoria;
 
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -48,5 +50,18 @@ public class Examen {
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Resultados> resultados;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nvl_id")
+    private Nivel nivel;
+
+    public Long getnvl() {
+        if (nivel != null) {
+            return nivel.getNvl_id();
+        }
+        return null;
+    }
+
+
 
 }

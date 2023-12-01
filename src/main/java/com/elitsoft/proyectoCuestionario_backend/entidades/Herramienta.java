@@ -27,15 +27,14 @@ public class Herramienta {
     private Integer herr_usr_anos_exp;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
-    //@JsonIgnore
+    @JoinColumn(name = "usr_id")
     @JsonBackReference
     private Usuario usuario;
 
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vrs_prd_id", referencedColumnName = "vrs_id") // Nombre de la columna que será clave foránea para la tabla de Producto
+    @JoinColumn(name = "vrs_prd_id", referencedColumnName = "vrs_id")
     private VersionProducto versionProducto;
 
     private Boolean herr_is_cert;
@@ -48,6 +47,7 @@ public class Herramienta {
     @ManyToMany
     @JsonIgnore
     private List<Laboral> laborals;
+
 
 
 

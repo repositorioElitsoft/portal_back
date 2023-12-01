@@ -27,6 +27,8 @@ public class ResultadosController {
 
     }
 
+
+
     @GetMapping("/{idUser}")
     public ResponseEntity<List<?>> obtenerResultadosByUser(@PathVariable Long idUser){
         List<Resultados> resultados = resultadosService.obtenerResultadosByUser(idUser);

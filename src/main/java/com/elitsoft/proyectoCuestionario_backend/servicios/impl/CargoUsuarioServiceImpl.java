@@ -7,6 +7,7 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,6 +106,21 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
                 .orElse(new CargoUsuario());
 
         cargoUsuario.setDisponibilidad(disponibilidadLaboral);
+        cargoRepository.save(cargoUsuario);
+        return true;
+    }
+
+    @Override
+    public Boolean postularCargo(Long usuarioId, Date fechaPostulacion) throws Exception {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioId);
+        if (!usuarioOptional.isPresent()) {
+            return false;
+        }
+
+        CargoUsuario cargoUsuario = new CargoUsuario();
+        cargoUsuario.setUsuario(usuarioOptional.get());
+        cargoUsuario.setFechaPostulacion(fechaPostulacion);
+
         cargoRepository.save(cargoUsuario);
         return true;
     }
