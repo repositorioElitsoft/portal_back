@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,8 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "countries")
 @Data
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class Country {
 
     @Id
@@ -31,20 +30,7 @@ public class Country {
     public Country() {
     }
 
-
-    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     @JsonIgnore
-    @Column(name = "name")
-    private List<State> states;
-
-
-    @Override
-    public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-
+    private List<State> states = new ArrayList<>();
 }

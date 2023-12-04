@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 public interface UsuarioService {
     
-    public Usuario guardarUsuario(Usuario usuario) throws Exception;
+    public Usuario guardarUsuario(Usuario usuario, Long Id) throws Exception;
 
     public Usuario obtenerUsuarioId(Long usr_id)throws Exception ;
 
@@ -32,10 +32,9 @@ public interface UsuarioService {
     public void pedirRestaurarPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException;
     public Boolean cambiarPassword(String code, String password);
 
-
     void uploadUserCv(String jwt, MultipartFile cv) throws IOException;
 
-    public Boolean actualizarUsuario(Usuario usuario, String jwt);
+    public Boolean actualizarUsuario(Usuario usuario, String jwt, Long cityId);
 
     public Resource getCVByUser(Long userId) throws IOException, EntityNotFoundException;
 

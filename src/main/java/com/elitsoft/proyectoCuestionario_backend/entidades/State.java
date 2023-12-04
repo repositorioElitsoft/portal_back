@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -15,7 +16,6 @@ import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "states")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 public class State {
     @Id
@@ -26,30 +26,15 @@ public class State {
     @Column(name = "name")
     private String name;
 
-    public State() {
-    }
-
     @ManyToOne
-    @JsonIgnoreProperties("country")
     @JoinColumn(name = "country_id")
-    @Fetch(FetchMode.JOIN)
     private Country country;
 
+    @OneToMany(mappedBy = "state", cascade = CascadeType.ALL)
+    private List<City> cities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "state", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<City> cities;
-
-    @Override
-    public String toString() {
-        return "State{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+    public State() {
     }
-
-
-
 
 
 }

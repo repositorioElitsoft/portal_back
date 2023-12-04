@@ -16,6 +16,8 @@ public interface CountryService {
     
     public Country obtenerPaisId(Long id);
     List<Country> obtenerPaises();
-    List<State> obtenerEstadosPorPais(Long countryId);
+    //List<State> obtenerEstadosPorPais(Long countryId);
+
+    List<State> getStatesByCountry(Long countryId);
     
 }

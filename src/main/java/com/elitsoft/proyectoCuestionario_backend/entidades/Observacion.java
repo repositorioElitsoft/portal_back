@@ -1,8 +1,9 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,21 +17,45 @@ public class Observacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long obs_id;
 
-    @Column(name = "obs_texto")
-    private String obs_texto;
+    @Column(name = "obs_des")
+    private String obs_desc;
 
-    @Column(name = "obs_categoria")
-    private String obs_categoria;
-
-    @Column(name = "obs_fecha_creacion")
+    @Column(name = "obs_fec_cre")
     @CreationTimestamp
-    private Date obs_fecha_creacion;
+    private Date obs_fec_cre;
 
-    @Column(name = "obs_final")
-    private String obs_final;
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "obs_fec_mod")
+    private Date obs_fec_mod;
+
+    @Column(name = "apr_oper")
+    private String apr_oper;
+
+    @Column(name = "apr_tec")
+    private String apr_tec;
+
+    @Column(name = "apr_ger")
+    private String apr_ger;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usr_id")
-    @JsonIgnore
+    @JsonBackReference
+    @Getter
     private Usuario usuario;
+
+    @Column(name = "usr_id_obs")
+    private Long usr_id_obs;
+
+    @Column(name = "usr_id_obs_mod")
+    private Long usr_id_obs_mod;
+
+    @ManyToOne
+    @JoinColumn(name = "cat_obs_id")
+    private CategoriaObservacion categoriaObservacion;
+
+
+
+
+
 }

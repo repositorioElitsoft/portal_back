@@ -46,7 +46,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private FileService fileService;
 
     @Override
-    public Usuario guardarUsuario(Usuario usuario) throws Exception {
+    public Usuario guardarUsuario(Usuario usuario, Long cityId) throws Exception {
         Long usrId = usuario.getUsr_id();
 
         if (usrId != null) {
@@ -57,10 +57,15 @@ public class UsuarioServiceImpl implements UsuarioService {
             }
         }
 
-        City city = usuario.getCity();
+        // Asociar la ciudad al usuario si se proporciona cityId
+        if (cityId != null) {
+            usuario.setCityId(cityId);
+            System.out.println("ID de la ciudad asociada: " + cityId);
+        } else {
+            System.out.println("No se proporcionó cityId, la ciudad no será asociada al usuario");
+        }
 
-        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
-        usuario.setCity(city);
+
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
@@ -98,8 +103,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         user.setUsr_pass("");
         user.setUsr_rec_tkn("");
         user.setUsr_ver_code("");
-        user.setCreatedAt(new Date());
-        user.setUpdatedAt(new Date());
+        //user.setCreatedAt(new Date());
+       // user.setUpdatedAt(new Date());
         return user;
     }
 
@@ -168,7 +173,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
-    public Boolean actualizarUsuario(Usuario usuario, String jwt) {
+    public Boolean actualizarUsuario(Usuario usuario, String jwt, Long Id) {
         System.out.println("Iniciando actualización de usuario");
 
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
@@ -186,14 +191,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         Usuario usuarioExistente = usuarioOpt.get();
 
-        if (usuario.getCity() != null) {
-            if (usuario.getCity().getId() != null) {
-                City city = new City();
-                city.setId(usuario.getCity().getId());
-                usuarioExistente.setCity(city);
-                System.out.println("Ciudad asignada al usuario: " + city);
-            }
-        }
+
 
         if (usuario.getUsr_ap_mat() != null) {
             usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
@@ -235,6 +233,22 @@ public class UsuarioServiceImpl implements UsuarioService {
             System.out.println("URL del enlace actualizado: " + usuario.getUsr_url_link());
         }
 
+        if (Id != null) {
+            Optional<City> cityOpt = cityRepository.findById(Id);
+            System.out.println(cityOpt + " cityopt");
+            if (cityOpt.isPresent()) {
+                City city = cityOpt.get();
+                usuarioExistente.setCityId(city.getId());
+                System.out.println("ID de la ciudad asociada actualizado: " + city.getId());
+            } else {
+                System.out.println("La ciudad con ID " + Id + " no fue encontrada");
+                return false;
+            }
+        }
+
+
+
+
         Usuario usuarioActualizado = usuarioRepository.save(usuarioExistente);
         System.out.println("Usuario actualizado con éxito");
         return true;
@@ -260,7 +274,13 @@ public class UsuarioServiceImpl implements UsuarioService {
                 () -> new NoSuchElementException("El user con ID " + usuarioId + " no se encontro.")
         );
 
-        usuarioExistente.setCity(usuario.getCity());
+        if (usuario.getCityId() != null) {
+            usuarioExistente.setCityId(usuario.getCityId());
+            System.out.println("ID de la ciudad asociada actualizado: " + usuario.getCityId());
+        } else {
+            System.out.println("No se proporcionó cityId, la ciudad no será asociada al usuario");
+        }
+
         usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
         usuarioExistente.setUsr_ap_pat(usuario.getUsr_ap_pat());
         usuarioExistente.setUsr_email(usuario.getUsr_email());
@@ -287,16 +307,19 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         Usuario usuario = userOptional.get();
-        Long userId = usuario.getUsr_id();
+        Long cityId = usuario.getCityId();
 
-        // Cargar la relación City
-        Usuario usuarioConCity = usuarioRepository.findByIdWithCity(userId);
-        usuario.setCity(usuarioConCity.getCity());
+        // Cargar la relación City, State y Country
+        City city = cityRepository.findById(cityId).orElse(null);
+        if (city != null) {
+            usuario.setCityId(cityId);
 
-        // Ahora carga las relaciones de City con State y State con Country
-        City city = usuario.getCity();
-        Hibernate.initialize(city.getState());
-        Hibernate.initialize(city.getState().getCountry());
+            // Ahora carga las relaciones de City con State y State con Country
+            Hibernate.initialize(city.getState());
+            if (city.getState() != null) {
+                Hibernate.initialize(city.getState().getCountry());
+            }
+        }
 
         // Limpiar datos sensibles
         usuario.setUsr_pass("");
@@ -347,10 +370,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                 throw new Exception("El usuario ya está presente");
             }
         }
-        City city = usuario.getCity();
+        Long cityId = usuario.getCityId();
 
-        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
-        usuario.setCity(city);
+
+        usuario.setCityId(cityId);
 
         // para usuarios con rol "ADMIN"
         usuario.setUsr_rol("ADMIN");
@@ -376,10 +399,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                 throw new Exception("El usuario ya está presente");
             }
         }
-        City city = usuario.getCity();
+        Long cityId = usuario.getCityId();
 
-        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
-        usuario.setCity(city);
+
+        usuario.setCityId(cityId);
 
         //para usuarios con rol "REC"
         usuario.setUsr_rol("REC");

@@ -14,4 +14,10 @@ public interface StateService {
 
     List<State> obtenerEstados();
 
+    void guardarEstado(State state);
+
+    //List <State> estadosbyCountryId(Long countryId);
+
+    List<City> getCitiesByState(Long stateId);
+
 }

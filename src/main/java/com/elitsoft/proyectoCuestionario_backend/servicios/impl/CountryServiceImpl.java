@@ -4,6 +4,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Country;
 import com.elitsoft.proyectoCuestionario_backend.entidades.State;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CountryRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.StateRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class CountryServiceImpl implements CountryService {
     
     @Autowired
     private CountryRepository countryRepository;
+    @Autowired
+    private StateRepository stateRepository;
 
     @Override
     public Country obtenerPaisId(Long id) {
@@ -30,10 +33,15 @@ public class CountryServiceImpl implements CountryService {
         return countryRepository.findAll();
     }
 
-    @Override
+   /* @Override
     public List<State> obtenerEstadosPorPais(Long countryId) {
         return countryRepository.findStatesByCountryId(countryId);
-    }
+    }*/
+   @Override
+   public List<State> getStatesByCountry(Long countryId) {
+       return stateRepository.findByCountryId(countryId);
+   }
+
 
     
 }

@@ -38,7 +38,6 @@ public class Examen {
     private List<Producto> productos;
 
     @ManyToOne(fetch = FetchType.EAGER)
-
     private Categoria categoria;
 
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

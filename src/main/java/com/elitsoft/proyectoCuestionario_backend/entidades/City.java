@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "cities")
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class City {
 
     @Id
@@ -23,24 +22,12 @@ public class City {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "id_state")
-    @Fetch(FetchMode.JOIN)
-    @JsonIgnoreProperties("state")
+    @JsonIgnore
     private State state;
 
-    @OneToMany(mappedBy = "usr_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cityId")  // El nombre "cityId" debe coincidir con el nombre del campo en Usuario
     private List<Usuario> usuarios;
-
-    @Override
-    public String toString() {
-        return "State{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-
-
 
 }

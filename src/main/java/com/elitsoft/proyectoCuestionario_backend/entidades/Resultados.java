@@ -24,6 +24,7 @@ public class Resultados {
     @JsonBackReference
     private Usuario usuario;
 
+
     @Column(name = "resultados_examen")
     private Integer resultadosExamen;
     private Integer tiempo;

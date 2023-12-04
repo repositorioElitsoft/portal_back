@@ -46,7 +46,7 @@ public class Usuario  {
     private Boolean usr_is_ver;
     private String usr_rec_tkn;
 
-    @CreationTimestamp
+   @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
@@ -56,9 +56,9 @@ public class Usuario  {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToOne( fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    private City city;
+    @Column(name = "id")
+    private Long cityId;
+
 
 
     @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)

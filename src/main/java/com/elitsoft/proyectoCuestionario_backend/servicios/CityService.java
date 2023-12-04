@@ -13,5 +13,5 @@ public interface CityService {
 
     List<City> obtenerCiudades();
 
-    List<City> obtenerCiudadesPorEstado(Long stateId);
+    //List<City> obtenerCiudadesPorEstado(Long stateId);
 }

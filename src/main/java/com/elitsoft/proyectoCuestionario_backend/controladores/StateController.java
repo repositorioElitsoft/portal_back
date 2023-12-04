@@ -1,12 +1,13 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.City;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Country;
 import com.elitsoft.proyectoCuestionario_backend.entidades.State;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CityService;
-import com.elitsoft.proyectoCuestionario_backend.servicios.CountryService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,5 +32,34 @@ public class StateController {
     public State obtenerEstadoId(@PathVariable("id") Long Id) {
         return stateService.obtenerEstadoId(Id);
     }
+
+    @PostMapping("/guardar")
+    public ResponseEntity<State> guardarEstado(@RequestBody State state ){
+
+
+        try {
+            stateService.guardarEstado(state);
+            System.out.println(state);
+        }
+        catch (DataAccessException ex){
+            return new ResponseEntity<State>(state, HttpStatus.BAD_REQUEST);
+
+        }
+
+        return new ResponseEntity<>(state, HttpStatus.OK);
+    }
+
+
+    /*@GetMapping("/country/{Id}")
+    public  List<State> obtenerEstadosporCountry(@PathVariable("Id") Long countryId){
+        return stateService.estadosbyCountryId(countryId);
+    }*/
+
+    @GetMapping("/{stateId}/cities")
+    public ResponseEntity<List<City>> getCitiesByState(@PathVariable Long stateId) {
+        List<City> cities = stateService.getCitiesByState(stateId);
+        return new ResponseEntity<>(cities, HttpStatus.OK);
+    }
+
 
 }

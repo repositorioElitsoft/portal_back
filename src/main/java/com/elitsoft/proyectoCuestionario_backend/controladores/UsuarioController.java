@@ -64,9 +64,9 @@ public class    UsuarioController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario) throws Exception{
+    public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario, Long cityId) throws Exception{
         try{
-            usuarioService.guardarUsuario(usuario);
+            usuarioService.guardarUsuario(usuario, cityId);
         }
         catch (DataAccessException ex){
             CustomError error = new CustomError();
@@ -77,9 +77,9 @@ public class    UsuarioController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario, @RequestHeader("Authorization") String Jwt){
+    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario, Long cityId,@RequestHeader("Authorization") String Jwt){
         try {
-            usuarioService.actualizarUsuario(usuario,Jwt);
+            usuarioService.actualizarUsuario(usuario, Jwt, cityId);
             System.out.println(usuario);
         }
         catch (DataAccessException ex){
