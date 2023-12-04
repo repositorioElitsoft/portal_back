@@ -62,7 +62,12 @@ public class Usuario  {
     @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Resultados> resultados;
-    
+
+   // @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    //@JsonManagedReference
+    //private List<ObservacionReclutador> observaciones; // unión con tbl_obs_rec
+
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Herramienta> herramientas;
