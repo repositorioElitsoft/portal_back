@@ -1,18 +1,13 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CargoUsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CargoUsuarioService;
@@ -108,5 +103,6 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         cargoRepository.save(cargoUsuario);
         return true;
     }
+
 
 }

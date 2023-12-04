@@ -91,5 +91,19 @@ public class AcademicaController {
     }
 
 
+    @GetMapping("/{academicaId}")
+    public ResponseEntity<Academica> obtenerAcademica(@PathVariable Long academicaId) {
+        try {
+            Academica academica = academicaService.obtenerAcademica(academicaId);
+            if (academica != null) {
+                return new ResponseEntity<>(academica, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

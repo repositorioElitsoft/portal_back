@@ -1,6 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ObservacionDTO;
+import com.elitsoft.proyectoCuestionario_backend.servicios.ObservacionService;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ObservacionService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
@@ -22,9 +24,6 @@ public class ObservacionController {
     private ObservacionService observacionService;
 
 
-    @Autowired
-    private UsuarioService usuarioService;
-
     @GetMapping("/por-usuario/{userId}")
     public ResponseEntity<List<Observacion>> obtenerObservacionesPorUsuario(@PathVariable Long userId) {
         List<Observacion> observaciones = observacionService.obtenerObservacionesPorUsuario(userId);
@@ -38,7 +37,7 @@ public class ObservacionController {
             Boolean resultado = observacionService.guardarObservacionRec(observacion, userId, usr_id_obs, usr_id_obs_mod);
             return ResponseEntity.ok(resultado);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Manejar la excepción según tus necesidades
             return ResponseEntity.status(500).body(false);
         }
     }
@@ -86,7 +85,30 @@ public class ObservacionController {
             return ResponseEntity.status(500).build();
         }
     }
+    @PutMapping("/actualizar/{observacionId}/{usr_id_obs_mod}")
+    public ResponseEntity<?> actualizarObservacion(@PathVariable Long observacionId, @RequestBody Observacion observacion, @PathVariable Long usr_id_obs_mod) {
+        try {
+            Observacion observacionActualizada = observacionService.actualizarObservacionRec(observacionId, observacion, usr_id_obs_mod);
+            if (observacionActualizada != null) {
+                return ResponseEntity.ok(observacionActualizada);
+            } else {
+                // Aquí puedes manejar el caso en el que la actualización no arroje un error pero tampoco retorne un resultado
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró la observación con el ID especificado para actualizar.");
+            }
+        } catch (Exception e) {
+            // Aquí manejas la excepción, e.g., imprimir la pila de llamadas o registrar el error
+            // Puedes personalizar el mensaje de error según el tipo de excepción y la información que desees exponer
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la observación: " + e.getMessage());
+        }
+    }
 
 
+
+    @GetMapping("/{usr_id}")
+    public ResponseEntity<List<ObservacionDTO>> getObservacionesByUsuario(@PathVariable Long usr_id) {
+        List<ObservacionDTO> observaciones = observacionService.findObservacionUsuarioDetails(usr_id);
+        return ResponseEntity.ok(observaciones);
+    }
 }
+
 

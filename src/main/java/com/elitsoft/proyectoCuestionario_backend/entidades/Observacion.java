@@ -1,7 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,7 +18,7 @@ public class Observacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long obs_id;
 
-    @Column(name = "obs_des")
+    @Column(name = "obs_desc")
     private String obs_desc;
 
     @Column(name = "obs_fec_cre")

@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,66 +31,85 @@ public class FileController {
     @Autowired
     FileService fileService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<FileMessage> uploadFiles(@RequestParam("files")MultipartFile[] files){
+    @PostMapping("/upload/{usr_id}")
+    public ResponseEntity<FileMessage> uploadFiles(@PathVariable Long usr_id, @RequestParam("files") MultipartFile[] files) {
         String message = "";
         try {
+            // Crear una carpeta por usr_id si no existe
+            File userFolder = new File(System.getProperty("user.dir") + "\\uploads\\" + usr_id);
+            System.out.println("Ruta absoluta: " + userFolder.getAbsolutePath());
+            System.out.println("Directorio de trabajo actual: " + System.getProperty("user.dir"));
+            if (!userFolder.exists()) {
+                userFolder.mkdir();
+            }
 
-            List<String> filesNames = new ArrayList<>();
+            List<String> fileNames = new ArrayList<>();
 
-            Arrays.asList(files).stream().forEach(file -> {
+            Arrays.asList(files).forEach(file -> {
                 try {
-                    fileService.save(file);
+                    // Guarda el archivo en la carpeta del usuario
+                    Path userFilePath = userFolder.toPath().resolve(file.getOriginalFilename());
+                    Files.copy(file.getInputStream(), userFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+                    fileNames.add(file.getOriginalFilename());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                filesNames.add(file.getOriginalFilename());
-
             });
-            message = "Se subieron los archivos correctamente " +filesNames;
+
+            message = "Se subieron los archivos correctamente " + fileNames;
             return ResponseEntity.status(HttpStatus.OK).body(new FileMessage(message));
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
             message = "Fallo al subir los archivos";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new FileMessage(message));
-
         }
     }
-    @GetMapping("/files")
-    public ResponseEntity<List<FileModel>> getFiles(){
-        List<FileModel> fileInfos = fileService.loadAll().map(path -> {
-            String filename =path.getFileName().toString();
+
+    @GetMapping("/files/{usr_id}")
+    public ResponseEntity<List<FileModel>> getFiles(@PathVariable Long usr_id) {
+        List<FileModel> fileInfos = fileService.loadAll(usr_id).map(path -> {
+            String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder.fromMethodName(FileController.class, "getFile",
-                    path.getFileName().toString()).build().toString();
+                    usr_id, path.getFileName().toString()).build().toString();
             return new FileModel(filename, url);
         }).collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
-
     }
-    @GetMapping("files/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename){
 
+    @GetMapping("/files/{usr_id}/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable Long usr_id, @PathVariable String filename) {
         try {
-            Resource file = fileService.load(filename);
-            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                    "attachment; filename=\""+ file.getFilename() + "\"").body(file);
-        } catch (IOException e) {
-            throw new RuntimeException("Error");
+            // Construir la ruta completa del archivo
+            String filePath = System.getProperty("user.dir") + "\\uploads\\" + usr_id + "\\" + filename;
+            Resource file = fileService.load(filePath);
 
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @GetMapping("/delete/{filename:.+}")
-    public ResponseEntity<FileMessage> deleteFile(@PathVariable String filename){
-
+    @DeleteMapping("/delete/{usr_id}/{filename:.+}")
+    public ResponseEntity<FileMessage> deleteFile(@PathVariable Long usr_id, @PathVariable String filename) {
         String message = "";
         try {
-            message = fileService.deletefile(filename);
-            return ResponseEntity.status(HttpStatus.OK).body(new FileMessage(message));
-        }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new FileMessage(message));
+            // Construir la ruta completa del archivo
+            String filePath = System.getProperty("user.dir") + "\\uploads\\" + usr_id + "\\" + filename;
+            File fileToDelete = new File(filePath);
 
+            // Verificar si el archivo existe antes de intentar eliminarlo
+            if (fileToDelete.exists()) {
+                fileToDelete.delete();
+                message = "Archivo eliminado con éxito";
+                return ResponseEntity.status(HttpStatus.OK).body(new FileMessage(message));
+            } else {
+                message = "El archivo no existe";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FileMessage(message));
+            }
+        } catch (Exception e) {
+            message = "Error al eliminar el archivo";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new FileMessage(message));
         }
     }
 

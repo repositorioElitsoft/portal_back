@@ -219,7 +219,7 @@ public class    UsuarioController {
             return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
         }
     }
-    @DeleteMapping("/file/{userId}")
+    /*@DeleteMapping("/file/{userId}")
     public ResponseEntity<?> eliminarCV(@PathVariable("userId") Long userId) {
         try {
             usuarioService.eliminarCVByUser(userId);
@@ -227,5 +227,5 @@ public class    UsuarioController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
+    }*/
 }

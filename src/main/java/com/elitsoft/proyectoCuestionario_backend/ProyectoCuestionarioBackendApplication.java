@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -35,34 +38,19 @@ public class ProyectoCuestionarioBackendApplication implements CommandLineRunner
         fileService.init();
 
 
+        }
 
 
+    @Bean
+    public WebMvcConfigurer corsConfigurer (){
+        return new WebMvcConfigurer(){
+            @Override
+            public void addCorsMappings (CorsRegistry registry){
+                registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET","POST","PUT","DELETE");
+            }
+        };
 
 
-
-
-
-       /*  Usuario usuario = new Usuario();
-        
-        usuario.setUsername("admin");
-        usuario.setPassword("123");
-        
-        Rol r = new Rol ();
-        r.setRolId(1L);
-        r.setrolNombre("ADMIN");
-        
-        Set<UsuarioRol> usuarioRoles = new HashSet<>(); 
-        
-        UsuarioRol usuarioRol = new UsuarioRol();
-        
-        usuarioRol.setRol(r);
-        usuarioRol.setUsuario(usuario);
-        
-        usuarioRoles.add(usuarioRol);
-        
-        Usuario usuarioGuardado = usuarioService.guardarUsuario(usuario, usuarioRoles);
-        System.out.println(usuarioGuardado.getUsername()); */
-        
         
 
     }

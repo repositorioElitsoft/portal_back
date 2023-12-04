@@ -54,10 +54,6 @@ public interface UsuarioService {
 
     public Usuario guardarRec(Usuario usuario) throws Exception;
 
+    public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException;
 
-    void eliminarCVByUserId(Long userId);
-
-    void deleteFile(String filePath);
-
-    void eliminarCVByUser(Long userId);
 }

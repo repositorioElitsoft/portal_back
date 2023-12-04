@@ -1,4 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ObservacionDTO;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.ObservacionDTORepository;
 import com.elitsoft.proyectoCuestionario_backend.entidades.CategoriaObservacion;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
@@ -10,6 +14,9 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataAccessException;
+
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +30,12 @@ public class ObservacionServiceImpl implements ObservacionService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private  ObservacionDTORepository observacionDTORepository;
 
     @Autowired
     private UsuarioService usuarioService;
+
     @Autowired
     private CategoriaObservacionRepository categoriaObservacionRepository;
 
@@ -106,8 +116,6 @@ public class ObservacionServiceImpl implements ObservacionService {
 
                 observacionExistente.setUsr_id_obs_mod(usr_id_obs_mod);
                 observacionExistente.setObs_fec_mod(new Date());
-                observacionExistente.setUsr_id_obs_mod(usr_id_obs_mod);
-
                 observacionExistente.setObs_desc(observacionActualizada.getObs_desc());
 
                 return observacionRepository.save(observacionExistente);
@@ -115,7 +123,7 @@ public class ObservacionServiceImpl implements ObservacionService {
                 throw new IllegalArgumentException("La observación con ID " + obs_id + " no existe.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Considera manejar esta excepción de manera más específica.
             return null;
         }
     }
@@ -163,4 +171,10 @@ public class ObservacionServiceImpl implements ObservacionService {
         return usuario.map(observacionRepository::findByUsuario).orElseGet(Collections::emptyList);
     }
 
-}
+
+    @Override
+    public List<ObservacionDTO> findObservacionUsuarioDetails(Long usr_id) {
+        return observacionDTORepository.findObservacionUsuarioDetails(usr_id);
+    }
+
+    }
