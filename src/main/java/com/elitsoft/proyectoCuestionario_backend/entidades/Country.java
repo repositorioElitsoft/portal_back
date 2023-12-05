@@ -30,7 +30,7 @@ public class Country {
     public Country() {
     }
 
-    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OneToMany(mappedBy = "country")
     private List<State> states = new ArrayList<>();
 }

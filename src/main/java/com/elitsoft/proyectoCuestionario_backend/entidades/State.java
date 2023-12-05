@@ -30,8 +30,9 @@ public class State {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @OneToMany(mappedBy = "state", cascade = CascadeType.ALL)
-    private List<City> cities = new ArrayList<>();
+    @OneToMany(mappedBy = "state")
+    @JsonIgnore
+    private List<City> cities;
 
     public State() {
     }

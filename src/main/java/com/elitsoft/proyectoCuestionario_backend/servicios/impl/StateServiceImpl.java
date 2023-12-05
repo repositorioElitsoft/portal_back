@@ -38,12 +38,12 @@ public class StateServiceImpl implements StateService {
         stateRepository.save(state);
     }
 
-    /*@Override
+    @Override
     public List<State> estadosbyCountryId(Long countryId) {
         Country country = new Country();
         country.setId(countryId);
         return stateRepository.findAllByCountry(country);
-    }*/
+    }
 
     @Override
     public List<City> getCitiesByState(Long stateId) {

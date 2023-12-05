@@ -16,7 +16,7 @@ public interface StateService {
 
     void guardarEstado(State state);
 
-    //List <State> estadosbyCountryId(Long countryId);
+    List <State> estadosbyCountryId(Long countryId);
 
     List<City> getCitiesByState(Long stateId);
 

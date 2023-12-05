@@ -50,10 +50,10 @@ public class StateController {
     }
 
 
-    /*@GetMapping("/country/{Id}")
+    @GetMapping("/country/{Id}")
     public  List<State> obtenerEstadosporCountry(@PathVariable("Id") Long countryId){
         return stateService.estadosbyCountryId(countryId);
-    }*/
+    }
 
     @GetMapping("/{stateId}/cities")
     public ResponseEntity<List<City>> getCitiesByState(@PathVariable Long stateId) {

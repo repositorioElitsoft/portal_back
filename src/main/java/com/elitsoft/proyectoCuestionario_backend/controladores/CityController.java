@@ -27,9 +27,9 @@ public class CityController {
         return cityService.obtenerCiudadId(Id);
     }
 
-   /* @GetMapping("/state/{stateId}/cities")
+    @GetMapping("/state/{stateId}")
     public List<City> obtenerCiudadesPorEstado(@PathVariable("stateId") Long stateId){
         return cityService.obtenerCiudadesPorEstado(stateId);
-    }*/
+    }
 
 }

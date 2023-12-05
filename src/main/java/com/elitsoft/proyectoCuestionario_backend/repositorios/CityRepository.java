@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.City;
+import com.elitsoft.proyectoCuestionario_backend.entidades.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,8 @@ public interface CityRepository extends JpaRepository<City, Long> {
     public City getReferenceById(Long id);
 
     List<City> findAll();
+
+    List<City> findAllByState(State state);
 
     List<City> findByStateId(Long stateId);
     List<City> getCitiesByState(Long stateId);
