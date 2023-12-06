@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
+import com.elitsoft.proyectoCuestionario_backend.entidades.CatObservacionDTO;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
 import com.elitsoft.proyectoCuestionario_backend.entidades.ObservacionDTO;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ObservacionService;
@@ -71,20 +72,27 @@ public class ObservacionController {
     }
 
     @PutMapping("/actualizarCat/{obs_id}/{catObsId}/{usr_id_obs_mod}")
-    public ResponseEntity<Observacion> actualizarObservacionCat(@PathVariable Long obs_id, @PathVariable Long catObsId,
-                                                                @RequestBody Observacion observacionActualizada2, @PathVariable Long usr_id_obs_mod) {
+    public ResponseEntity<?> actualizarObservacionConCategoria(
+            @PathVariable Long obs_id,
+            @PathVariable Long catObsId,
+            @PathVariable Long usr_id_obs_mod,
+            @RequestBody Observacion observacionActualizada) {
         try {
-            Observacion resultado = observacionService.actualizarObservacionCat(obs_id, catObsId, observacionActualizada2, usr_id_obs_mod);
+            Observacion resultado = observacionService.actualizarObservacionCat(obs_id, catObsId, observacionActualizada, usr_id_obs_mod);
             if (resultado != null) {
                 return ResponseEntity.ok(resultado);
             } else {
                 return ResponseEntity.notFound().build();
             }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+
     @PutMapping("/actualizar/{observacionId}/{usr_id_obs_mod}")
     public ResponseEntity<?> actualizarObservacion(@PathVariable Long observacionId, @RequestBody Observacion observacion, @PathVariable Long usr_id_obs_mod) {
         try {
@@ -107,6 +115,12 @@ public class ObservacionController {
     @GetMapping("/{usr_id}")
     public ResponseEntity<List<ObservacionDTO>> getObservacionesByUsuario(@PathVariable Long usr_id) {
         List<ObservacionDTO> observaciones = observacionService.findObservacionUsuarioDetails(usr_id);
+        return ResponseEntity.ok(observaciones);
+    }
+
+    @GetMapping("/Cat/{usr_id}")
+    public ResponseEntity<List<CatObservacionDTO>> getCatObservacionesByUsuario(@PathVariable Long usr_id) {
+        List<CatObservacionDTO> observaciones = observacionService.findCatObservacionUsuarioDetails(usr_id);
         return ResponseEntity.ok(observaciones);
     }
 }

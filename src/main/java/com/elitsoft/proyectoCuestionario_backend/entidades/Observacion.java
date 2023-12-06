@@ -51,12 +51,9 @@ public class Observacion {
     @Column(name = "usr_id_obs_mod")
     private Long usr_id_obs_mod;
 
-
-
-    //private CategoriaObservacion categoriaObservacion;
-
-
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cat_obs_id")  // Nombre de la columna que almacena la clave foránea
+    private CategoriaObservacion categoriaObservacion;
 
 
 }

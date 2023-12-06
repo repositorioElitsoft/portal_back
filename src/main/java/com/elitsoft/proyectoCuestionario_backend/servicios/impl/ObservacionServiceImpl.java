@@ -1,14 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
-import com.elitsoft.proyectoCuestionario_backend.entidades.ObservacionDTO;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
-import com.elitsoft.proyectoCuestionario_backend.repositorios.ObservacionDTORepository;
-import com.elitsoft.proyectoCuestionario_backend.entidades.CategoriaObservacion;
+import com.elitsoft.proyectoCuestionario_backend.entidades.*;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.*;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
-import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaObservacionRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositorios.ObservacionRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ObservacionService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +26,9 @@ public class ObservacionServiceImpl implements ObservacionService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private  ObservacionDTORepository observacionDTORepository;
+
+    @Autowired
+    private CatObservacionRepository catObservacionRepository;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -80,7 +77,7 @@ public class ObservacionServiceImpl implements ObservacionService {
 
             CategoriaObservacion categoriaObservacion = categoriaObservacionRepository.findById(catObsId).orElse(null);
             if (categoriaObservacion != null) {
-                //observacion.setCategoriaObservacion(categoriaObservacion);
+                observacion.setCategoriaObservacion(categoriaObservacion);
                 observacion.setObs_fec_cre(new Date());
 
                 Usuario usuario = usuarioRepository.findById(userId)
@@ -145,7 +142,7 @@ public class ObservacionServiceImpl implements ObservacionService {
                 CategoriaObservacion categoriaObservacion = categoriaObservacionRepository.findById(catObsId).orElse(null);
                 if (categoriaObservacion != null) {
 
-                    //observacionExistente.setCategoriaObservacion(categoriaObservacion);
+                    observacionExistente.setCategoriaObservacion(categoriaObservacion);
                     observacionExistente.setObs_desc(observacionActualizada2.getObs_desc());
                     observacionExistente.setApr_oper(observacionActualizada2.getApr_oper());
                     observacionExistente.setApr_tec(observacionActualizada2.getApr_tec());
@@ -160,7 +157,7 @@ public class ObservacionServiceImpl implements ObservacionService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return null; //
+            throw new RuntimeException("Error al actualizar la observación con nueva categoría.");
         }
     }
 
@@ -175,6 +172,11 @@ public class ObservacionServiceImpl implements ObservacionService {
     @Override
     public List<ObservacionDTO> findObservacionUsuarioDetails(Long usr_id) {
         return observacionDTORepository.findObservacionUsuarioDetails(usr_id);
+    }
+
+    @Override
+    public List<CatObservacionDTO> findCatObservacionUsuarioDetails(Long usr_id) {
+        return catObservacionRepository.findCatObservacionUsuarioDetails(usr_id);
     }
 
     }

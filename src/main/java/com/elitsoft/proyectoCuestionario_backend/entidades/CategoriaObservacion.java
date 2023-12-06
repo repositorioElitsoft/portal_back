@@ -1,8 +1,13 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,6 +23,8 @@ public class CategoriaObservacion {
     @Column(name = "cat_obs_desc")
     private String cat_obs_desc;
 
+    @OneToMany(mappedBy = "categoriaObservacion", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Observacion> observaciones = new ArrayList<>();
 
-    //private List<Observacion> observaciones;
 }
