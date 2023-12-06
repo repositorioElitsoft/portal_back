@@ -29,7 +29,6 @@ public class Producto {
     @JoinColumn(name = "cat_prod_id") // Nombre de la columna que será clave foránea hacia la tabla de cat_prod
     private Categoria_Producto cat_prod_id;
 
-
     public Producto() {
     }
 

@@ -17,7 +17,6 @@ public interface CargoUsuarioRepository extends JpaRepository <CargoUsuario, Lon
     // Método para obtener todos los cargos por usuario
     List<CargoUsuario> findByUsuario(Usuario usuario);
 
-
     // Método para listar todos los cargos postulados 
     List<CargoUsuario> findAll();
     

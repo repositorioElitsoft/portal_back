@@ -36,7 +36,7 @@ import javax.persistence.EntityNotFoundException;
 @RequestMapping("/usuarios")
 @CrossOrigin(origins = "http://localhost:4200")
 public class    UsuarioController {
-
+    
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
@@ -58,87 +58,89 @@ public class    UsuarioController {
     private HerramientaService herramientaService;
 
     @GetMapping("/usuarios")
-    public List<Usuario> obtenerUsuarios() {
+    public List<Usuario> obtenerUsuarios(){
         return usuarioService.obtenerUsuario();
     }
 
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario) throws Exception {
-        try {
-            usuarioService.guardarUsuario(usuario);
-        } catch (DataAccessException ex) {
+    public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario, Long cityId) throws Exception{
+        try{
+            usuarioService.guardarUsuario(usuario, cityId);
+        }
+        catch (DataAccessException ex){
             CustomError error = new CustomError();
             error.setError("El usuario ya existe.");
             return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+        return new ResponseEntity<Boolean>(true ,HttpStatus.CREATED);
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario,
-                                               @RequestHeader("Authorization") String Jwt) {
+    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario, Long cityId,@RequestHeader("Authorization") String Jwt){
         try {
-            usuarioService.actualizarUsuario(usuario, Jwt);
-        } catch (DataAccessException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            usuarioService.actualizarUsuario(usuario, Jwt, cityId);
+            System.out.println(usuario);
+        }
+        catch (DataAccessException ex){
+            return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return new ResponseEntity<>(true ,HttpStatus.OK);
     }
 
     @GetMapping("/file/{userId}")
-    public ResponseEntity<?> getUserFile(@PathVariable("userId") Long userId) {
-        try {
+    public ResponseEntity<?> getUserFile(@PathVariable("userId") Long userId){
+        try{
             Resource cv = usuarioService.getCVByUser(userId);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/pdf"));
             return new ResponseEntity<Resource>(cv, headers, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
+        }
+        catch (IOException e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/file")
     public ResponseEntity<?> actualizarUsuarioFile(@RequestParam("file") MultipartFile file,
-                                                   @RequestHeader("Authorization") String jwt) {
+                                               @RequestHeader("Authorization") String jwt){
         try {
-            usuarioService.uploadUserCv(jwt, file);
-        } catch (DataAccessException | IOException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            usuarioService.uploadUserCv(jwt,file);
+        }
+        catch (DataAccessException | IOException ex){
+            return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return new ResponseEntity<>(true ,HttpStatus.OK);
     }
 
     @GetMapping("/")
-    public Usuario obtenerUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
+    public Usuario obtenerUsuario(@RequestHeader("Authorization") String jwt)throws Exception{
         return usuarioService.obtenerDatosUsuario(jwt);
     }
 
     @PostMapping("/verificar")
-    public ResponseEntity<Boolean> verificarUsuario(@RequestBody Map<String, String> requestData) {
-        if (usuarioService.verificarUsuario(requestData)) {
+    public ResponseEntity<Boolean> verificarUsuario(@RequestBody Map<String, String> requestData){
+        if(usuarioService.verificarUsuario(requestData)){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
-
     @PostMapping("/pedir-restauracion-pass")
     public void pedirRestauracionPassword(@RequestBody Usuario usuario) throws MessagingException, UnsupportedEncodingException {
-        usuarioService.pedirRestaurarPassword(usuario);
+      usuarioService.pedirRestaurarPassword(usuario);
     }
-
     @PutMapping("/cambiar-password/{code}")
-    public Boolean cambiarPassword(@PathVariable("code") String rec_code, @RequestBody Map<String, String> password) {
+    public Boolean cambiarPassword(@PathVariable("code") String rec_code,@RequestBody Map<String,String> password){
 
         return usuarioService.cambiarPassword(rec_code, password.get("pass"));
     }
 
     @GetMapping("/usuarios-herramientas")
-    public List<Usuario> listarUsuariosConHerramientas() {
+    public List<Usuario> listarUsuariosConHerramientas(){
         List<Usuario> usuariosConHerramientas = usuarioService.listarUsuariosConHerramientas();
         return usuariosConHerramientas;
     }
@@ -169,28 +171,28 @@ public class    UsuarioController {
 
     @PutMapping("/actualizar/{usuarioId}")
     public ResponseEntity<Usuario> actualizarUsuarioId(@PathVariable Long usuarioId,
-                                                       @RequestBody Usuario usuario) {
+                                                       @RequestBody Usuario usuario){
         Usuario usuarioActualizado = usuarioService.actualizarUsuarioId(usuarioId, usuario);
         return ResponseEntity.ok(usuarioActualizado);
     }
 
 
     @GetMapping("/lista-usuarios")
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
+    public ResponseEntity<List<Usuario>> listarUsuarios(){
         List<Usuario> usuarios = usuarioService.listarUsuarios();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
 
     @GetMapping("/email/{userEmail}")
-    public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable String userEmail) {
+    public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable String userEmail){
         Usuario user = usuarioService.getUsuarioByEmail(userEmail);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
     @GetMapping("/{usuarioId}")
-    public Usuario obtenerUsuarioId(@PathVariable Long usuarioId) throws Exception {
+    public Usuario obtenerUsuarioId(@PathVariable Long usuarioId) throws Exception{
         return usuarioService.obtenerUsuarioId(usuarioId);
     }
 
@@ -216,27 +218,14 @@ public class    UsuarioController {
             error.setError("El usuario ya existe.");
             return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
         }
-
     }
-
-    @DeleteMapping("/eliminar-cv/{usuarioId}")
-    public ResponseEntity<Map<String, String>> eliminarCV(@PathVariable("usuarioId") Long usuarioId) {
-        Map<String, String> response = new HashMap<>();
-
+    /*@DeleteMapping("/file/{userId}")
+    public ResponseEntity<?> eliminarCV(@PathVariable("userId") Long userId) {
         try {
-            usuarioService.eliminarCV(usuarioId);
-            response.put("message", "CV eliminado con éxito.");
-            return ResponseEntity.ok(response);
+            usuarioService.eliminarCVByUser(userId);
+            return new ResponseEntity<>("Currículum eliminado con éxito.", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            response.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        } catch (IOException e) {
-            response.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
-
-
-
-
+    }*/
 }

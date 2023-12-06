@@ -3,7 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.*;
-import com.elitsoft.proyectoCuestionario_backend.repositorios.PaisRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.CityRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.FileService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.*;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,13 +38,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
     @Autowired
-    private PaisRepository paisRepository;
+    private CityRepository cityRepository;
+
     @Autowired
     private FileService fileService;
 
     @Override
-    public Usuario guardarUsuario(Usuario usuario) throws Exception {
+    public Usuario guardarUsuario(Usuario usuario, Long cityId) throws Exception {
         Long usrId = usuario.getUsr_id();
 
         if (usrId != null) {
@@ -54,10 +57,15 @@ public class UsuarioServiceImpl implements UsuarioService {
             }
         }
 
-        Pais pais = usuario.getPais();
+        // Asociar la ciudad al usuario si se proporciona cityId
+        if (cityId != null) {
+            usuario.setCityId(cityId);
+            System.out.println("ID de la ciudad asociada: " + cityId);
+        } else {
+            System.out.println("No se proporcionó cityId, la ciudad no será asociada al usuario");
+        }
 
-        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
-        usuario.setPais(pais);
+
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
@@ -95,8 +103,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         user.setUsr_pass("");
         user.setUsr_rec_tkn("");
         user.setUsr_ver_code("");
-        user.setCreatedAt(new Date());
-        user.setUpdatedAt(new Date());
+        //user.setCreatedAt(new Date());
+       // user.setUpdatedAt(new Date());
         return user;
     }
 
@@ -165,52 +173,84 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
-    public Boolean actualizarUsuario(Usuario usuario, String jwt) {
+    public Boolean actualizarUsuario(Usuario usuario, String jwt, Long Id) {
+        System.out.println("Iniciando actualización de usuario");
 
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null) {
+            System.out.println("Token JWT es nulo");
             return false;
         }
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+
         if (!usuarioOpt.isPresent()) {
+            System.out.println("Usuario no encontrado en la base de datos");
             return false;
         }
 
         Usuario usuarioExistente = usuarioOpt.get();
 
-        if (usuario.getPais() != null) {
-            if (usuario.getPais().getPais_id() != null) {
-                Pais pais = new Pais();
-                pais.setPais_id(usuario.getPais().getPais_id());
-                usuarioExistente.setPais(pais);
-            }
-        }
+
 
         if (usuario.getUsr_ap_mat() != null) {
             usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
+            System.out.println("Apellido Materno actualizado: " + usuario.getUsr_ap_mat());
         }
 
         if (usuario.getUsr_ap_pat() != null) {
             usuarioExistente.setUsr_ap_pat(usuario.getUsr_ap_pat());
+            System.out.println("Apellido Paterno actualizado: " + usuario.getUsr_ap_pat());
         }
 
         if (usuario.getUsr_nom() != null) {
             usuarioExistente.setUsr_nom(usuario.getUsr_nom());
+            System.out.println("Nombre actualizado: " + usuario.getUsr_ap_pat());
         }
 
         if (usuario.getUsr_rut() != null) {
             usuarioExistente.setUsr_rut(usuario.getUsr_rut());
+            System.out.println("RUT actualizado: " + usuario.getUsr_rut());
         }
 
         if (usuario.getUsr_tel() != null) {
             usuarioExistente.setUsr_tel(usuario.getUsr_tel());
-        }
-        if (usuario.getUsr_url_link() != null) {
-            usuarioExistente.setUsr_url_link(usuario.getUsr_url_link());
+            System.out.println("Teléfono actualizado: " + usuario.getUsr_tel());
         }
 
+        if (usuario.getUsr_direcc() != null) {
+            usuarioExistente.setUsr_direcc(usuario.getUsr_direcc());
+            System.out.println("Dirección actualizada: " + usuario.getUsr_direcc());
+        }
+
+        if (usuario.getUsr_gen() != null) {
+            usuarioExistente.setUsr_gen(usuario.getUsr_gen());
+            System.out.println("Género actualizado: " + usuario.getUsr_gen());
+        }
+
+        if (usuario.getUsr_url_link() != null) {
+            usuarioExistente.setUsr_url_link(usuario.getUsr_url_link());
+            System.out.println("URL del enlace actualizado: " + usuario.getUsr_url_link());
+        }
+
+        if (Id != null) {
+            Optional<City> cityOpt = cityRepository.findById(Id);
+            System.out.println(cityOpt + " cityopt");
+            if (cityOpt.isPresent()) {
+                City city = cityOpt.get();
+                usuarioExistente.setCityId(city.getId());
+                System.out.println("ID de la ciudad asociada actualizado: " + city.getId());
+            } else {
+                System.out.println("La ciudad con ID " + Id + " no fue encontrada");
+                return false;
+            }
+        }
+
+
+
+
         Usuario usuarioActualizado = usuarioRepository.save(usuarioExistente);
+        System.out.println("Usuario actualizado con éxito");
         return true;
     }
 
@@ -234,10 +274,17 @@ public class UsuarioServiceImpl implements UsuarioService {
                 () -> new NoSuchElementException("El user con ID " + usuarioId + " no se encontro.")
         );
 
-        usuarioExistente.setPais(usuario.getPais());
+        if (usuario.getCityId() != null) {
+            usuarioExistente.setCityId(usuario.getCityId());
+            System.out.println("ID de la ciudad asociada actualizado: " + usuario.getCityId());
+        } else {
+            System.out.println("No se proporcionó cityId, la ciudad no será asociada al usuario");
+        }
+
         usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
         usuarioExistente.setUsr_ap_pat(usuario.getUsr_ap_pat());
         usuarioExistente.setUsr_email(usuario.getUsr_email());
+        usuarioExistente.setUsr_direcc(usuario.getUsr_direcc());
         usuarioExistente.setUsr_nom(usuario.getUsr_nom());
         usuarioExistente.setUsr_pass(usuario.getUsr_pass());
         usuarioExistente.setUsr_rut(usuario.getUsr_rut());
@@ -259,12 +306,14 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
-        userOptional.get().setUsr_pass("");
-        userOptional.get().setUsr_ver_code("");
-        userOptional.get().setUsr_rec_tkn("");
-        userOptional.get().setHerramientas(new ArrayList<>());
+        Usuario usuario = userOptional.get();
+        // Limpiar datos sensibles
+        usuario.setUsr_pass("");
+        usuario.setUsr_ver_code("");
+        usuario.setUsr_rec_tkn("");
+        usuario.setHerramientas(new ArrayList<>());
 
-        return userOptional.get();
+        return usuario;
     }
 
     @Override
@@ -306,10 +355,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                 throw new Exception("El usuario ya está presente");
             }
         }
-        Pais pais = usuario.getPais();
+        Long cityId = usuario.getCityId();
 
-        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
-        usuario.setPais(pais);
+
+        usuario.setCityId(cityId);
 
         // para usuarios con rol "ADMIN"
         usuario.setUsr_rol("ADMIN");
@@ -335,10 +384,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                 throw new Exception("El usuario ya está presente");
             }
         }
-        Pais pais = usuario.getPais();
+        Long cityId = usuario.getCityId();
 
-        // Asignamos el objeto Pais obtenido al atributo pais de la entidad Usuario
-        usuario.setPais(pais);
+
+        usuario.setCityId(cityId);
 
         //para usuarios con rol "REC"
         usuario.setUsr_rol("REC");

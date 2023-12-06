@@ -1,8 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.AcademicaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
@@ -44,6 +42,13 @@ public class AcademicaServiceImpl implements AcademicaService {
             return false;
         }
         academica.setUsuario(userOptional.get());
+
+        if (academica.getReferenciaAcademicas() != null) {
+            for (ReferenciaAcademica referencia : academica.getReferenciaAcademicas()) {
+                referencia.setAcademica(academica);
+            }
+        }
+
         academicaRepository.save(academica);
         return true;
     }

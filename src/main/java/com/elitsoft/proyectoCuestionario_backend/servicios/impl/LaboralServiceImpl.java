@@ -1,9 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.LaboralRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
@@ -12,12 +9,14 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;
 import java.util.*;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -72,6 +71,13 @@ public class LaboralServiceImpl implements LaboralService {
             return false;
         }
         laboral.setUsuario(userOptional.get());
+
+        if (laboral.getReferenciasLaborales() != null) {
+            for (ReferenciaLaboral referencia : laboral.getReferenciasLaborales()) {
+                referencia.setLaboral(laboral);
+            }
+        }
+
         laboralRepository.save(laboral);
         return true;
     }
@@ -92,10 +98,46 @@ public class LaboralServiceImpl implements LaboralService {
             throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
         }
 
-        laboral.setInf_lab_id(laboralOld.get().getInf_lab_id());
-        laboral.setUsuario(userOptional.get());
+        Laboral laboralExistente = laboralOld.get();
 
-        laboralRepository.save(laboral);
+        // Actualizamos los campos de Laboral
+        laboralExistente.setInf_lab_crg_emp(laboral.getInf_lab_crg_emp());
+        laboralExistente.setInf_lab_emp(laboral.getInf_lab_emp());
+        laboralExistente.setInf_lab_act(laboral.getInf_lab_act());
+        laboralExistente.setInf_lab_fec_ini(laboral.getInf_lab_fec_ini());
+        laboralExistente.setInf_lab_fec_fin(laboral.getInf_lab_fec_fin());
+
+        // Actualizamos la lista de referencias laborales
+        List<ReferenciaLaboral> referenciasActualizadas = laboral.getReferenciasLaborales();
+        if (referenciasActualizadas != null) {
+            // Actualizamos las referencias existentes o añadir las nuevas
+            for (ReferenciaLaboral referencia : referenciasActualizadas) {
+                if (referencia.getRef_lab_id() == null) {
+                    referencia.setLaboral(laboralExistente);
+                    laboralExistente.getReferenciasLaborales().add(referencia);
+                } else {
+                    ReferenciaLaboral referenciaExistente = laboralExistente.getReferenciasLaborales().stream()
+                            .filter(r -> r.getRef_lab_id().equals(referencia.getRef_lab_id()))
+                            .findFirst()
+                            .orElse(null);
+                    if (referenciaExistente != null) {
+                        referenciaExistente.setRef_lab_nom(referencia.getRef_lab_nom());
+                        referenciaExistente.setRef_lab_emp(referencia.getRef_lab_emp());
+                        referenciaExistente.setRef_lab_email(referencia.getRef_lab_email());
+                        referenciaExistente.setRef_lab_tel(referencia.getRef_lab_tel());
+                    } else {
+                        throw new EntityNotFoundException("Referencia laboral no encontrada con id: " + referencia.getRef_lab_id());
+                    }
+                }
+            }
+            laboralExistente.getReferenciasLaborales().removeIf(
+                    refExistente -> referenciasActualizadas.stream()
+                            .noneMatch(refActualizada -> refActualizada.getRef_lab_id().equals(refExistente.getRef_lab_id()))
+            );
+        }
+
+        laboralRepository.save(laboralExistente);
+
         return true;
     }
 

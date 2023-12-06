@@ -19,7 +19,9 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
     // Método para obtener productos filtrados por categoría
     @Query("SELECT p FROM Producto p WHERE p.cat_prod_id.id = :cat_prod_id")
     List<Producto> findByCat_prod_id_Id(@Param("cat_prod_id") Long cat_prod_id);
-     
+
+    @Query("SELECT p FROM Producto p WHERE p.prd_nom = :prd_nom")
+    Optional<Producto> findByPrd_nom(@Param("prd_nom") String prd_nom);
     
     // Método para obtener todos los productos disponibles
     List<Producto> findAll();
