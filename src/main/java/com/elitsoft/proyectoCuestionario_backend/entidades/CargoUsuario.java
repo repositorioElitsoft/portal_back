@@ -34,7 +34,7 @@ public class CargoUsuario {
     private Usuario usuario;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_Postulacion")
-    private Date fechaPostuacion;
+    private Date fechaPostulacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crg_elit_id")
@@ -62,5 +62,6 @@ public class CargoUsuario {
 
 
     public void setFechaPostulacion(Date fechaPostulacion) {
+        this.fechaPostulacion = fechaPostulacion;
     }
 }

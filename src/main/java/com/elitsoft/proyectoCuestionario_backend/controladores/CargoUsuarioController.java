@@ -34,13 +34,15 @@ public class CargoUsuarioController {
     public ResponseEntity<?> guardarCargo(@RequestBody CargoUsuario cargo,
                                           @RequestHeader("Authorization") String jwt) {
         try {
-
-            Boolean result = cargoService.guardarCargo(cargo, jwt);
+            Date fechaPostulacion = new Date();
+            Boolean result = cargoService.guardarCargo(cargo, jwt, fechaPostulacion);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     @GetMapping("/")
     public ResponseEntity<CargoUsuario> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
@@ -74,19 +76,5 @@ public class CargoUsuarioController {
         }
     }
 
-    @PostMapping("/postular/{usuarioId}")
-    public ResponseEntity<?> postularCargo(@PathVariable Long usuarioId,
-                                           @RequestHeader("Authorization") String jwt) {
-        try {
-            if (usuarioId == null) {
-                // Manejar el caso en que usuarioId es null o undefined
-                return new ResponseEntity<>("usuarioId es null o undefined", HttpStatus.BAD_REQUEST);
-            }
-            Date fechaPostulacion = new Date();
-            Boolean result = cargoService.postularCargo(usuarioId, fechaPostulacion);
-            return new ResponseEntity<>(result, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+
 }

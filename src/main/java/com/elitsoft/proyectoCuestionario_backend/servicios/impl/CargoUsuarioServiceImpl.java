@@ -42,13 +42,14 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
     }
     
     @Override
-    public Boolean guardarCargo(CargoUsuario cargo, String jwt) throws Exception {
+    public Boolean guardarCargo(CargoUsuario cargo, String jwt, Date fechaPostulacion) throws Exception {
 
         Optional<Usuario> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
             return false;
         }
         cargo.setUsuario(usuarioOptional.get());
+        cargo.setFechaPostulacion(fechaPostulacion);
 
         cargoRepository.findByUsuario(usuarioOptional.get())
                 .forEach((cargoRepository::delete));
@@ -57,6 +58,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         cargoRepository.save(cargo);
         return true;
     }
+
 
     @Override
     public List<CargoUsuario> obtenerCargosPorUsuario(Usuario usr_id) {
@@ -110,19 +112,6 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         return true;
     }
 
-    @Override
-    public Boolean postularCargo(Long usuarioId, Date fechaPostulacion) throws Exception {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioId);
-        if (!usuarioOptional.isPresent()) {
-            return false;
-        }
 
-        CargoUsuario cargoUsuario = new CargoUsuario();
-        cargoUsuario.setUsuario(usuarioOptional.get());
-        cargoUsuario.setFechaPostulacion(fechaPostulacion);
-
-        cargoRepository.save(cargoUsuario);
-        return true;
-    }
 
 }
