@@ -18,6 +18,6 @@ public class CategoriaObservacion {
     @Column(name = "cat_obs_desc")
     private String cat_obs_desc;
 
-    @OneToMany(mappedBy = "categoriaObservacion")
-    private List<Observacion> observaciones;
+
+    //private List<Observacion> observaciones;
 }

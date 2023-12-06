@@ -80,7 +80,7 @@ public class ObservacionServiceImpl implements ObservacionService {
 
             CategoriaObservacion categoriaObservacion = categoriaObservacionRepository.findById(catObsId).orElse(null);
             if (categoriaObservacion != null) {
-                observacion.setCategoriaObservacion(categoriaObservacion);
+                //observacion.setCategoriaObservacion(categoriaObservacion);
                 observacion.setObs_fec_cre(new Date());
 
                 Usuario usuario = usuarioRepository.findById(userId)
@@ -145,7 +145,7 @@ public class ObservacionServiceImpl implements ObservacionService {
                 CategoriaObservacion categoriaObservacion = categoriaObservacionRepository.findById(catObsId).orElse(null);
                 if (categoriaObservacion != null) {
 
-                    observacionExistente.setCategoriaObservacion(categoriaObservacion);
+                    //observacionExistente.setCategoriaObservacion(categoriaObservacion);
                     observacionExistente.setObs_desc(observacionActualizada2.getObs_desc());
                     observacionExistente.setApr_oper(observacionActualizada2.getApr_oper());
                     observacionExistente.setApr_tec(observacionActualizada2.getApr_tec());

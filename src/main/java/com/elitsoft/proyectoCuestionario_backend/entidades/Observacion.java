@@ -51,9 +51,9 @@ public class Observacion {
     @Column(name = "usr_id_obs_mod")
     private Long usr_id_obs_mod;
 
-    @ManyToOne
-    @JoinColumn(name = "cat_obs_id")
-    private CategoriaObservacion categoriaObservacion;
+
+
+    //private CategoriaObservacion categoriaObservacion;
 
 
 
