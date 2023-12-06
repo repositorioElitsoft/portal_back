@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,13 +37,15 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
     }
     
     @Override
-    public Boolean guardarCargo(CargoUsuario cargo, String jwt) throws Exception {
+    public Boolean guardarCargo(CargoUsuario cargo, String jwt, Date fechaPostulacion) throws Exception {
 
         Optional<Usuario> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
             return false;
         }
         cargo.setUsuario(usuarioOptional.get());
+        cargo.setFechaPostulacion(fechaPostulacion);
+
 
         cargoRepository.findByUsuario(usuarioOptional.get())
                 .forEach((cargoRepository::delete));
