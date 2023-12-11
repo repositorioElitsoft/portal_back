@@ -307,9 +307,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         Usuario usuario = userOptional.get();
-        Long cityId = usuario.getCityId();
+        //Long cityId = usuario.getCityId();
 
         // Cargar la relación City, State y Country
+        /*
         City city = cityRepository.findById(cityId).orElse(null);
         if (city != null) {
             usuario.setCityId(cityId);
@@ -319,7 +320,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             if (city.getState() != null) {
                 Hibernate.initialize(city.getState().getCountry());
             }
-        }
+        }*/
 
         // Limpiar datos sensibles
         usuario.setUsr_pass("");

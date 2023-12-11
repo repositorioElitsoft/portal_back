@@ -1,8 +1,10 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Email;
+import com.elitsoft.proyectoCuestionario_backend.entidades.dto.MassiveEmailRequestDTO;
 import com.elitsoft.proyectoCuestionario_backend.servicios.EmailRService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +21,14 @@ public class EmailRController {
     private EmailRService emailRService;
 
     @PostMapping("/enviar-correo")
-    public ResponseEntity<String> enviarCorreo(@RequestBody Email email) {
+    public ResponseEntity<String> enviarCorreo(@RequestBody MassiveEmailRequestDTO massiveEmailRequestDTO) {
         try {
-            List<String> toEmails = Collections.singletonList(email.getToEmail());
-
             // Llamar al método enviarCorreo del servicio
-            emailRService.enviarCorreo(toEmails, email.getSubject(), email.getBody(), email.getMotivo());
+            emailRService.enviarCorreo(massiveEmailRequestDTO);
 
-            return ResponseEntity.ok("Correo enviado correctamente");
+            return new ResponseEntity<String>("Ok, enviados correctamente", HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al enviar el correo: " + e.getMessage());
+            return new ResponseEntity<String>("Error al enviar el correo: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
