@@ -18,7 +18,7 @@ public interface StateRepository extends JpaRepository<State, Long> {
     List<State> findAll();
 
     List<State> findByCountryId(Long countryId);
-    //List<State> findAllByCountry(Country country);
+    List<State> findAllByCountry(Country country);
 
 
 

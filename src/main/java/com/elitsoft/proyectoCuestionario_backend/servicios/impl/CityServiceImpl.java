@@ -2,6 +2,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.City;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Country;
+import com.elitsoft.proyectoCuestionario_backend.entidades.State;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CityRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CountryRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CityService;
@@ -26,8 +27,10 @@ public class CityServiceImpl implements CityService {
         return cityRepository.findAll();
     }
 
-  /*  @Override
+    @Override
     public List<City> obtenerCiudadesPorEstado(Long stateId) {
-        return cityRepository.findByStateId(stateId);
-    }*/
+        State state = new State();
+        state.setId(stateId);
+        return cityRepository.findAllByState(state);
+    }
 }

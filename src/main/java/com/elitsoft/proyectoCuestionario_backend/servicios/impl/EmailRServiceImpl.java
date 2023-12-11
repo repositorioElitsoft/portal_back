@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Email;
+import com.elitsoft.proyectoCuestionario_backend.entidades.dto.MassiveEmailRequestDTO;
 import com.elitsoft.proyectoCuestionario_backend.servicios.EmailRService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,16 +20,19 @@ public class EmailRServiceImpl implements EmailRService {
 
 
     @Override
-    public void enviarCorreo(List<String> toEmails, String subject, String body, String motivo) {
+    public void enviarCorreo(MassiveEmailRequestDTO massiveEmailRequestDTO) {
         // Itera sobre los correos electrónicos y envía el correo a cada destinatario
-        for (String toEmail : toEmails) {
+        for (String toEmail : massiveEmailRequestDTO.getEmails()) {
+
+            System.out.println(toEmail);
+
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
             message.setFrom(remitente);
-            message.setSubject(motivo);
+            message.setSubject(massiveEmailRequestDTO.getSubject());
 
             // Maneja la lógica específica para diferentes motivos
-            switch (motivo) {
+            switch (massiveEmailRequestDTO.getSubject()) {
                 case "Solicitud de datos":
                     message.setText("Estimado/a destinatario/a,\n\n"
                             + "Estamos solicitando información adicional para completar su perfil. "
@@ -49,16 +53,22 @@ public class EmailRServiceImpl implements EmailRService {
                             + "Nos complace informarle que ha sido seleccionado/a para avanzar en nuestro proceso de selección. "
                             + "Pronto nos pondremos en contacto para coordinar la siguiente fase. ¡Felicidades!");
                     break;
+                case "Informar que el usuario fue aprobado":
+                    message.setText("Estimado/a destinatario/a,\n\n"
+                            + "Es un placer para nosotros informarte que has sido seleccionado/a pare el cargo en Elitsoft. "
+                            + "Felicitaciones por destacarte entre los candidatos y demostrar tus habilidades y experiencia durante el proceso de selección."
+                            + " ¡Felicidades! 🎉");
+                    break;
                 default:
                     // Motivo no reconocido
-                    throw new IllegalArgumentException("Motivo no reconocido: " + motivo);
+                    throw new IllegalArgumentException("Motivo no reconocido: " + massiveEmailRequestDTO.getSubject());
             }
 
             try {
                 javaMailSender.send(message);
-                System.out.println("Correo enviado correctamente a " + toEmail + " con motivo: " + motivo);
+                System.out.println("Correo enviado correctamente a " + toEmail + " con motivo: " + massiveEmailRequestDTO.getSubject());
             } catch (Exception e) {
-                System.err.println("Error al enviar el correo a " + toEmail + " con motivo: " + motivo + ": " + e.getMessage());
+                System.err.println("Error al enviar el correo a " + toEmail + " con motivo: " + massiveEmailRequestDTO.getSubject() + ": " + e.getMessage());
                 throw new RuntimeException("Error al enviar el correo");
             }
         }

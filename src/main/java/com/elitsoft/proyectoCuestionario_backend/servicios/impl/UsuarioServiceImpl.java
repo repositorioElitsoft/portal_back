@@ -307,11 +307,26 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         Usuario usuario = userOptional.get();
+        Long cityId = usuario.getCityId();
+
+        // Cargar la relación City, State y Country
+        City city = cityRepository.findById(cityId).orElse(null);
+        if (city != null) {
+            usuario.setCityId(cityId);
+
+            // Ahora carga las relaciones de City con State y State con Country
+            Hibernate.initialize(city.getState());
+            if (city.getState() != null) {
+                Hibernate.initialize(city.getState().getCountry());
+            }
+        }
+
         // Limpiar datos sensibles
         usuario.setUsr_pass("");
         usuario.setUsr_ver_code("");
         usuario.setUsr_rec_tkn("");
         usuario.setHerramientas(new ArrayList<>());
+
 
         return usuario;
     }
@@ -403,6 +418,33 @@ public class UsuarioServiceImpl implements UsuarioService {
         return nuevoUsuario;
     }
 
+
+
+    @Override
+    public void eliminarCVByUserId(Long userId) throws IOException {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(userId);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            String cvPath = usuario.getCvPath();
+            if (cvPath != null && !cvPath.isEmpty()) {
+                fileService.deleteFile(cvPath); // Agregar lógica para eliminar el archivo
+                usuario.setCvPath(null); // Establecer el campo del CV en null
+                usuarioRepository.save(usuario);
+            }
+        }
+    }
+
+    @Override
+    public void deleteFile(String filePath) {
+        // Agrega la lógica para eliminar el archivo en el sistema de archivos
+        // Esto dependerá de cómo almacenas tus archivos, por ejemplo, usando java.io.File o algún otro enfoque.
+    }
+
+    @Override
+    public void eliminarCVByUser(Long userId) {
+
+    }
+
     @Override
     public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
@@ -421,6 +463,5 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new EntityNotFoundException("El usuario no tiene un CV adjunto.");
         }
 
-    }
 
 }

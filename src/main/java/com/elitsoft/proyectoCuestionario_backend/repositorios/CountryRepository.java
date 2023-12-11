@@ -20,6 +20,9 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
     
     public Country getReferenceById(Long id);
     List<Country> findAll();
+
+
+
     //@Query("SELECT c.states FROM Country c WHERE c.id = :countryId")
    // List<State> findStatesByCountryId(@Param("countryId") Long countryId);
 
