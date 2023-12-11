@@ -40,15 +40,16 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         this.cargoRepository = cargoRepository;
         this.usuarioService = usuarioService;
     }
-    
+
     @Override
-    public Boolean guardarCargo(CargoUsuario cargo, String jwt) throws Exception {
+    public Boolean guardarCargo(CargoUsuario cargo, String jwt, Date fechaPostulacion) throws Exception {
 
         Optional<Usuario> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
             return false;
         }
         cargo.setUsuario(usuarioOptional.get());
+        cargo.setFechaPostulacion(fechaPostulacion);
 
         cargoRepository.findByUsuario(usuarioOptional.get())
                 .forEach((cargoRepository::delete));

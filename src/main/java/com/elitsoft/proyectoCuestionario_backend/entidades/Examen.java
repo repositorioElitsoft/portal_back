@@ -34,6 +34,9 @@ public class Examen {
     @Column (name = "exam_n_preg")
     private String numeroDePreguntas;
 
+    @Column (name = "exam_nvl")
+    private Long nivelDificultad;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "exm_prd",
             joinColumns = @JoinColumn(name = "exam_id"),
@@ -51,16 +54,7 @@ public class Examen {
     @JsonIgnore
     private List<Resultados> resultados;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "nvl_id")
-    private Nivel nivel;
 
-    public Long getnvl() {
-        if (nivel != null) {
-            return nivel.getNvl_id();
-        }
-        return null;
-    }
 
 
 

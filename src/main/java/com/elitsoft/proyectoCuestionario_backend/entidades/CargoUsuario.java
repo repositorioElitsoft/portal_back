@@ -22,7 +22,7 @@ public class CargoUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long crg_usr_id;
-    
+
     private String crg_usr_pret;
     private String crg_prf;
     private String disponibilidad;
@@ -32,13 +32,16 @@ public class CargoUsuario {
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     @JsonBackReference
     private Usuario usuario;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_Postulacion")
-    private Date fechaPostuacion;
+    private Date fechaPostulacion;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crg_elit_id")
     private CargoElitsoft cargoElitsoft;
+
 
     public CargoUsuario() {
     }
@@ -62,5 +65,6 @@ public class CargoUsuario {
 
 
     public void setFechaPostulacion(Date fechaPostulacion) {
+        this.fechaPostulacion = fechaPostulacion;
     }
 }

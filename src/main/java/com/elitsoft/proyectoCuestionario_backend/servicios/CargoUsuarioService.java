@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface CargoUsuarioService {
     
-    Boolean guardarCargo(CargoUsuario cargo, String jwt) throws Exception;
+    Boolean guardarCargo(CargoUsuario cargo, String jwt, Date fechaPostulacion) throws Exception;
 
     List<CargoUsuario> obtenerCargosPorUsuario(Usuario usuario);
     

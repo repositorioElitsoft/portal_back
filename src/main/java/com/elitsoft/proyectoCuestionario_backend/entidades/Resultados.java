@@ -1,6 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,9 +25,10 @@ public class Resultados {
     private Usuario usuario;
 
 
-
     @Column(name = "resultados_examen")
     private Integer resultadosExamen;
+
+
 
     @Column(name = "usr_id", insertable = false, updatable = false)
     private Long usuarioId;
