@@ -56,4 +56,10 @@ public interface UsuarioService {
 
     public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException;
 
+    public void eliminarCVByUserId (Long userId) throws IOException;
+
+    public void deleteFile(String filePath);
+
+    public void eliminarCVByUser(Long userId) ;
+
 }

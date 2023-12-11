@@ -462,6 +462,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         } else {
             throw new EntityNotFoundException("El usuario no tiene un CV adjunto.");
         }
+    }
 
 
 }
