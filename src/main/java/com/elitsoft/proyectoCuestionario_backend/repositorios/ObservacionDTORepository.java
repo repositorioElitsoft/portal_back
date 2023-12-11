@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ObservacionDTORepository extends JpaRepository <ObservacionDTO, Long>{
+public interface ObservacionDTORepository extends JpaRepository <ObservacionDTO, Long> {
+
     @Query("SELECT new com.elitsoft.proyectoCuestionario_backend.entidades.ObservacionDTO(" +
             "o.usuario.usr_id,o.obs_id, o.apr_ger, o.apr_tec, o.obs_desc, o.obs_fec_cre, o.obs_fec_mod, " +
             "o.usr_id_obs, o.usr_id_obs_mod, " +

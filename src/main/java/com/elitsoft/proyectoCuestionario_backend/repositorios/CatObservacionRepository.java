@@ -12,10 +12,10 @@ import java.util.List;
 public interface CatObservacionRepository extends JpaRepository<CatObservacionDTO, Long> {
 
     @Query("SELECT new com.elitsoft.proyectoCuestionario_backend.entidades.CatObservacionDTO(" +
-            "c.cat_obs_id, c.cat_obs_desc, o.usuario.usr_id, o.obs_id, o.apr_ger, o.apr_oper,  o.apr_tec, o.obs_desc, o.obs_fec_cre, o.obs_fec_mod, " +
+            "c.cat_obs_id, c.cat_obs_desc, o.obs_id, o.usuario.usr_id, o.apr_ger, o.apr_oper,  o.apr_tec, o.obs_desc, o.obs_fec_cre, o.obs_fec_mod, " +
             "o.usr_id_obs, o.usr_id_obs_mod, " +
             "u1.usr_id, u1.usr_nom, u1.usr_ap_pat, u1.usr_email, " +
-            "u2.usr_id , u2.usr_nom , u2.usr_ap_pat, u2.usr_email) " +
+            "u2.usr_id, u2.usr_nom, u2.usr_ap_pat, u2.usr_email) " +
             "FROM Observacion o " +
             "LEFT JOIN o.categoriaObservacion c " +
             "LEFT JOIN o.usuario u " +
@@ -23,4 +23,5 @@ public interface CatObservacionRepository extends JpaRepository<CatObservacionDT
             "LEFT JOIN Usuario u2 ON o.usr_id_obs_mod = u2.usr_id " +
             "WHERE u.usr_id = :usr_id")
     List<CatObservacionDTO> findCatObservacionUsuarioDetails(@Param("usr_id") Long usr_id);
+
 }
