@@ -42,6 +42,8 @@ public class CargoUsuarioController {
                 }
             }
 
+
+
     @GetMapping("/")
     public ResponseEntity<CargoUsuario> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
         CargoUsuario cargoUsuario = cargoService.obtenerCargoUsuario(jwt);

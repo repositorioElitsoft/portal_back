@@ -59,6 +59,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         return true;
     }
 
+
     @Override
     public List<CargoUsuario> obtenerCargosPorUsuario(Usuario usr_id) {
         return cargoRepository.findByUsuario(usr_id);
