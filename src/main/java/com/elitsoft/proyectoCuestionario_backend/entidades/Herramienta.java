@@ -31,7 +31,7 @@ public class Herramienta {
     @JsonBackReference
     private Usuario usuario;
 
-
+    private String herr_prd_otro;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vrs_prd_id", referencedColumnName = "vrs_id") // Nombre de la columna que será clave foránea para la tabla de Producto
