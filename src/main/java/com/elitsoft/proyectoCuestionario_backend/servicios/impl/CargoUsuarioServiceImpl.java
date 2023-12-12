@@ -4,11 +4,13 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 
 import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CargoUsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CargoUsuarioService;
@@ -35,7 +37,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         this.cargoRepository = cargoRepository;
         this.usuarioService = usuarioService;
     }
-    
+
     @Override
     public Boolean guardarCargo(CargoUsuario cargo, String jwt, Date fechaPostulacion) throws Exception {
 
@@ -44,8 +46,8 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
             return false;
         }
         cargo.setUsuario(usuarioOptional.get());
-        cargo.setFechaPostulacion(fechaPostulacion);
 
+        cargo.setFechaPostulacion(fechaPostulacion);
 
         cargoRepository.findByUsuario(usuarioOptional.get())
                 .forEach((cargoRepository::delete));
@@ -54,6 +56,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
         cargoRepository.save(cargo);
         return true;
     }
+
 
     @Override
     public List<CargoUsuario> obtenerCargosPorUsuario(Usuario usr_id) {

@@ -74,6 +74,4 @@ public class CargoUsuario {
     public void setFechaPostulacion(Date fechaPostulacion) {
         this.fechaPostulacion = fechaPostulacion;
     }
-    
-    
 }

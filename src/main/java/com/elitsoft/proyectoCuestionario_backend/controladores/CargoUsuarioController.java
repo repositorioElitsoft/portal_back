@@ -27,20 +27,22 @@ public class CargoUsuarioController {
     public CargoUsuarioController(CargoUsuarioService cargoService) {
         this.cargoService = cargoService;
     }
-    
-    
+
+
 
     @PostMapping("/")
     public ResponseEntity<?> guardarCargo(@RequestBody CargoUsuario cargo,
-                                                           @RequestHeader("Authorization") String jwt) {
+                                          @RequestHeader("Authorization") String jwt) {
         try {
             Date fechaPostulacion = new Date();
             Boolean result = cargoService.guardarCargo(cargo, jwt, fechaPostulacion);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+                }
+            }
+
+
 
     @GetMapping("/")
     public ResponseEntity<CargoUsuario> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
@@ -69,6 +71,22 @@ public class CargoUsuarioController {
             String disponibilidadLaboral = request.get("disponibilidadLaboral");
             Boolean result = cargoService.actualizarDisponibilidadLaboral(disponibilidadLaboral, jwt);
             return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/postular/{usuarioId}")
+    public ResponseEntity<?> postularCargo(@PathVariable Long usuarioId,
+                                           @RequestHeader("Authorization") String jwt) {
+        try {
+            if (usuarioId == null) {
+                // Manejar el caso en que usuarioId es null o undefined
+                return new ResponseEntity<>("usuarioId es null o undefined", HttpStatus.BAD_REQUEST);
+            }
+            Date fechaPostulacion = new Date();
+            Boolean result = cargoService.postularCargo(usuarioId, fechaPostulacion);
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

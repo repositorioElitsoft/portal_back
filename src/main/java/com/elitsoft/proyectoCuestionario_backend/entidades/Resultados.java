@@ -27,11 +27,26 @@ public class Resultados {
 
     @Column(name = "resultados_examen")
     private Integer resultadosExamen;
+
+
+
+    @Column(name = "usr_id", insertable = false, updatable = false)
+    private Long usuarioId;
+
+
+    public String getRol() {
+        if (usuario != null) {
+            return usuario.getUsr_rol();
+        }
+        return null;
+    }
     private Integer tiempo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exam_id")
     private Examen examen;
+
+
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -42,6 +57,5 @@ public class Resultados {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
-
 
 }

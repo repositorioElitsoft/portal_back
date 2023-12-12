@@ -2,6 +2,8 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "TBL_NVL")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Data
 public class Nivel {
     
    @Id

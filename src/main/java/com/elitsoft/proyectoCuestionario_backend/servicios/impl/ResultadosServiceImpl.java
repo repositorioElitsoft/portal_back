@@ -1,9 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
-import com.elitsoft.proyectoCuestionario_backend.entidades.ExamenUserCount;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Resultados;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ExamenUserCountRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ResultadosRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;

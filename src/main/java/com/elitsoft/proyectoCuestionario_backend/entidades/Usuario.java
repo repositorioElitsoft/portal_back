@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.lang.Nullable;
 
 import java.util.Date;
 import java.util.List;
@@ -46,7 +48,8 @@ public class Usuario  {
     private Boolean usr_is_ver;
     private String usr_rec_tkn;
 
-   @CreationTimestamp
+
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
@@ -74,6 +77,7 @@ public class Usuario  {
     @JsonManagedReference
     private List<Herramienta> herramientas;
 
+
     @Column(name = "usr_cv_pth")
     private String cvPath;
 
@@ -93,5 +97,7 @@ public class Usuario  {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Observacion> observaciones;
+
+
 
 }
