@@ -26,8 +26,6 @@ public class City {
     @JoinColumn(name = "id_state")
     private State state;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "cityId")  // El nombre "cityId" debe coincidir con el nombre del campo en Usuario
-    private List<Usuario> usuarios;
+
 
 }

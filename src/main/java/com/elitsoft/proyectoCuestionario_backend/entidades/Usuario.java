@@ -59,8 +59,9 @@ public class Usuario  {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @Column(name = "id")
-    private Long cityId;
+    @ManyToOne
+    @JoinColumn(name = "usr_city_id")
+    private City city;
 
 
 

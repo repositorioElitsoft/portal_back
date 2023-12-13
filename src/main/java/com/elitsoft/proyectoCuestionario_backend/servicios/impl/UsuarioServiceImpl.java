@@ -57,15 +57,6 @@ public class UsuarioServiceImpl implements UsuarioService {
             }
         }
 
-        // Asociar la ciudad al usuario si se proporciona cityId
-        if (cityId != null) {
-            usuario.setCityId(cityId);
-            System.out.println("ID de la ciudad asociada: " + cityId);
-        } else {
-            System.out.println("No se proporcionó cityId, la ciudad no será asociada al usuario");
-        }
-
-
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         usuario.setUsr_pass(encoder.encode(usuario.getUsr_pass()));
@@ -218,6 +209,11 @@ public class UsuarioServiceImpl implements UsuarioService {
             System.out.println("Teléfono actualizado: " + usuario.getUsr_tel());
         }
 
+        if (usuario.getCity() != null) {
+            usuarioExistente.setCity(usuario.getCity());
+            System.out.println("Teléfono actualizado: " + usuario.getCity());
+        }
+
         if (usuario.getUsr_direcc() != null) {
             usuarioExistente.setUsr_direcc(usuario.getUsr_direcc());
             System.out.println("Dirección actualizada: " + usuario.getUsr_direcc());
@@ -232,22 +228,6 @@ public class UsuarioServiceImpl implements UsuarioService {
             usuarioExistente.setUsr_url_link(usuario.getUsr_url_link());
             System.out.println("URL del enlace actualizado: " + usuario.getUsr_url_link());
         }
-
-        if (Id != null) {
-            Optional<City> cityOpt = cityRepository.findById(Id);
-            System.out.println(cityOpt + " cityopt");
-            if (cityOpt.isPresent()) {
-                City city = cityOpt.get();
-                usuarioExistente.setCityId(city.getId());
-                System.out.println("ID de la ciudad asociada actualizado: " + city.getId());
-            } else {
-                System.out.println("La ciudad con ID " + Id + " no fue encontrada");
-                return false;
-            }
-        }
-
-
-
 
         Usuario usuarioActualizado = usuarioRepository.save(usuarioExistente);
         System.out.println("Usuario actualizado con éxito");
@@ -274,17 +254,13 @@ public class UsuarioServiceImpl implements UsuarioService {
                 () -> new NoSuchElementException("El user con ID " + usuarioId + " no se encontro.")
         );
 
-        if (usuario.getCityId() != null) {
-            usuarioExistente.setCityId(usuario.getCityId());
-            System.out.println("ID de la ciudad asociada actualizado: " + usuario.getCityId());
-        } else {
-            System.out.println("No se proporcionó cityId, la ciudad no será asociada al usuario");
-        }
+
 
         usuarioExistente.setUsr_ap_mat(usuario.getUsr_ap_mat());
         usuarioExistente.setUsr_ap_pat(usuario.getUsr_ap_pat());
         usuarioExistente.setUsr_email(usuario.getUsr_email());
         usuarioExistente.setUsr_direcc(usuario.getUsr_direcc());
+        usuarioExistente.setCity(usuario.getCity());
         usuarioExistente.setUsr_nom(usuario.getUsr_nom());
         usuarioExistente.setUsr_pass(usuario.getUsr_pass());
         usuarioExistente.setUsr_rut(usuario.getUsr_rut());
@@ -307,7 +283,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         Usuario usuario = userOptional.get();
-        Long cityId = usuario.getCityId();
+
 
         // Cargar la relación City, State y Country
         /*City city = cityRepository.findById(cityId).orElse(null);
@@ -370,10 +346,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 throw new Exception("El usuario ya está presente");
             }
         }
-        Long cityId = usuario.getCityId();
 
-
-        usuario.setCityId(cityId);
 
         // para usuarios con rol "ADMIN"
         usuario.setUsr_rol("ADMIN");
@@ -399,10 +372,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 throw new Exception("El usuario ya está presente");
             }
         }
-        Long cityId = usuario.getCityId();
 
-
-        usuario.setCityId(cityId);
 
         //para usuarios con rol "REC"
         usuario.setUsr_rol("REC");
