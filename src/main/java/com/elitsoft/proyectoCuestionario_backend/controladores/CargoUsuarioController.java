@@ -2,6 +2,8 @@ package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,19 +27,22 @@ public class CargoUsuarioController {
     public CargoUsuarioController(CargoUsuarioService cargoService) {
         this.cargoService = cargoService;
     }
-    
-    
+
+
 
     @PostMapping("/")
     public ResponseEntity<?> guardarCargo(@RequestBody CargoUsuario cargo,
-                                                           @RequestHeader("Authorization") String jwt) {
+                                          @RequestHeader("Authorization") String jwt) {
         try {
-            Boolean result = cargoService.guardarCargo(cargo, jwt);
+            Date fechaPostulacion = new Date();
+            Boolean result = cargoService.guardarCargo(cargo, jwt, fechaPostulacion);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+                }
+            }
+
+
 
     @GetMapping("/")
     public ResponseEntity<CargoUsuario> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
@@ -70,4 +75,6 @@ public class CargoUsuarioController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }

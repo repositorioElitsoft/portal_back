@@ -29,6 +29,7 @@ public class Categoria {
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Examen> examenes = new LinkedHashSet<>();
-    
-    
+
+
+
 }

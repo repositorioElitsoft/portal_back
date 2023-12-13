@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  *
@@ -32,7 +34,6 @@ public class CargoUsuario {
     
     private String crg_usr_pret;
     private String crg_prf;
-    private Date crg_fecha_postulacion;
     private String disponibilidad;
     private String tiempo_incorporacion;
     private String otro_tiempo_incorporacion;
@@ -44,6 +45,10 @@ public class CargoUsuario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crg_elit_id")
     private CargoElitsoft cargoElitsoft;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_Postulacion")
+    private Date fechaPostulacion;
 
     public CargoUsuario() {
     }
@@ -66,7 +71,7 @@ public class CargoUsuario {
     }
 
 
-    
-    
-    
+    public void setFechaPostulacion(Date fechaPostulacion) {
+        this.fechaPostulacion = fechaPostulacion;
+    }
 }
