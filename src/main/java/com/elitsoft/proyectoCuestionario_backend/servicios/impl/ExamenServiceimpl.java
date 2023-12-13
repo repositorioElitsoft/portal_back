@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ExamenRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.PreguntaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
@@ -29,6 +30,9 @@ public class ExamenServiceimpl implements ExamenService {
     private PreguntaRepository preguntaRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private HerramientaRepository herramientaRepository;
 
     @Override
     public Examen agregarExamen(Examen examen) {
@@ -96,6 +100,7 @@ public class ExamenServiceimpl implements ExamenService {
 
     @Override
     public List<Examen> obtenerExamenesByUser(String jwt) {
+
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null) {
             return Collections.emptyList();
@@ -110,18 +115,30 @@ public class ExamenServiceimpl implements ExamenService {
 
         Set<Producto> productsUsed = new HashSet<>();
 
-        if (usuarioOpt.get().getLaborales() != null) {
+
+        List<Herramienta> herrUsr = herramientaRepository.findByUsuario(usuarioOpt.get());
+
+        herrUsr.forEach(herramienta -> {
+
+            productsUsed.add(herramienta.getVersionProducto().getPrd());
+        });
+
+
+        /*if (usuarioOpt.get().getLaborales() != null) {
             usuarioOpt.get().getLaborales().forEach(laboral -> {
+
                 if (laboral.getHerramientas() != null) {
                     laboral.getHerramientas().forEach(herramienta -> {
+
                         productsUsed.add(herramienta.getVersionProducto().getPrd());
                     });
                 }
             });
-        }
+        }*/
 
         productsUsed.forEach(producto -> {
             List<Examen> examsByProduct = examenRepository.findByProductos(producto);
+
             examenes.addAll(examsByProduct);
         });
 
