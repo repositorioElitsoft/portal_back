@@ -22,19 +22,24 @@ public class Academica {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long inf_acad_id;
-
-    private String titl;
-    private String inf_acad_nom_esc;
+    @Column(name = "inf_acad_id")
+    private Long id;
+    @Column(name = "inf_acad_titl")
+    private String degree;
+    @Column(name = "inf_acad_name_uni")
+    private String university;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate inf_acad_fec_ini;
+    @Column(name = "inf_acad_fec_ini")
+    private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate inf_acad_fec_fin;
-    private String inf_acad_est;
+    @Column(name = "inf_acad_fec_fin")
+    private LocalDate endDate;
+    @Column(name = "inf_acad_fec_fin")
+    private String status;
 
     @OneToMany( cascade = CascadeType.ALL)
     @JoinColumn(name = "inf_acad_id")
-    private List<ReferenciaAcademica> referenciaAcademicas;
+    private List<ReferenciaAcademica> academicReference;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

@@ -13,22 +13,22 @@ import javax.persistence.*;
  * @author ELITSOFT86
  */
 @Entity
-@Table ( name = "tbl_cat_exam")
+@Table ( name = "tbl_exam_cat")
 @Data
 public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cat_exam_id")
-    private Long categoriaId;
-    @Column(name = "cat_exam_titl")
-    private String titulo;
-    @Column(name = "cat_exam_desc")
-    private String descripcion;
+    @Column(name = "exam_cat_id")
+    private Long id;
+    @Column(name = "exam_cat_titl")
+    private String title;
+    @Column(name = "exam_cat_desc")
+    private String description;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Examen> examenes = new LinkedHashSet<>();
+    private Set<Examen> exams = new LinkedHashSet<>();
 
 
 
