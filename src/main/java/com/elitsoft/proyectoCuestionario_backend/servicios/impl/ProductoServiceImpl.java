@@ -1,15 +1,13 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaProductoRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ProductoRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ProductoService;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

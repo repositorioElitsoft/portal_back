@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TBL_JOB_POS")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class CargoElitsoft {
+public class JobPosition {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

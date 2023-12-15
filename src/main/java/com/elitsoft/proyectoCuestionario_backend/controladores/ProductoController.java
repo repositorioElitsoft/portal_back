@@ -1,6 +1,5 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ProductoService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

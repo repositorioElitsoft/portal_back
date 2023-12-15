@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ExamCategory;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 import java.util.List;
@@ -58,9 +58,9 @@ public class ExamenController {
 
     @GetMapping("/categoria/{cat_exam_id}")
     public List<Examen> listarExamenesDeUnaCategoria(@PathVariable("cat_exam_id") Long cat_exam_id){
-        Categoria categoria = new Categoria();
-        categoria.setCategoriaId(cat_exam_id);
-        return examenService.listarExamenesDeUnaCategoria(categoria);
+        ExamCategory examCategory = new ExamCategory();
+        examCategory.setCategoriaId(cat_exam_id);
+        return examenService.listarExamenesDeUnaCategoria(examCategory);
     }
 
 }

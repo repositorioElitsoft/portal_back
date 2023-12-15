@@ -1,6 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
+import com.elitsoft.proyectoCuestionario_backend.entidades.Academic;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
@@ -26,10 +26,10 @@ public class AcademicaController {
     }
     
     @PostMapping("/multiple")
-    public ResponseEntity<Boolean> guardarListaAcademicas(@RequestBody List<Academica> academicas,
+    public ResponseEntity<Boolean> guardarListaAcademicas(@RequestBody List<Academic> academics,
                                                            @RequestHeader("Authorization") String jwt) {
         try {
-            academicaService.guardarListaAcademicas(academicas, jwt);
+            academicaService.guardarListaAcademicas(academics, jwt);
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -38,28 +38,28 @@ public class AcademicaController {
 
     @PostMapping("/")
     public ResponseEntity<?> guardarAcademica(
-            @RequestBody Academica academica,
+            @RequestBody Academic academic,
             @RequestHeader("Authorization") String jwt
     ) {
         try {
-            return new ResponseEntity<>(academicaService.guardarAcademica(academica, jwt), HttpStatus.CREATED);
+            return new ResponseEntity<>(academicaService.guardarAcademica(academic, jwt), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/por-usuario/{usuarioId}")
-    public ResponseEntity<List<Academica>> obtenerAcademicasPorUsuario(@PathVariable Long usuarioId) {
+    public ResponseEntity<List<Academic>> obtenerAcademicasPorUsuario(@PathVariable Long usuarioId) {
         User user = new User();
         user.setUsr_id(usuarioId);
-        List<Academica> academicas = academicaService.obtenerAcademicasPorUsuario(user);
-        return new ResponseEntity<>(academicas, HttpStatus.OK);
+        List<Academic> academics = academicaService.obtenerAcademicasPorUsuario(user);
+        return new ResponseEntity<>(academics, HttpStatus.OK);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<?>> obtenerListaAcademicas(@RequestHeader("Authorization") String jwt) throws Exception {
-        List<Academica> listaAcademicas = academicaService.obtenerListaAcademicas(jwt);
-        return new ResponseEntity<>(listaAcademicas, HttpStatus.OK);
+        List<Academic> listaAcademics = academicaService.obtenerListaAcademicas(jwt);
+        return new ResponseEntity<>(listaAcademics, HttpStatus.OK);
     }
     
     @GetMapping("/estados-academicos-unicos")
@@ -71,11 +71,11 @@ public class AcademicaController {
     @PutMapping("/{academicaId}")
     public ResponseEntity<?> actualizarACademica(
             @PathVariable Long academicaId,
-            @RequestBody Academica academica,
+            @RequestBody Academic academic,
             @RequestHeader("Authorization") String jwt
     ) {
         try {
-            return new ResponseEntity<>(academicaService.actualizarAcademica(academicaId, academica, jwt), HttpStatus.CREATED);
+            return new ResponseEntity<>(academicaService.actualizarAcademica(academicaId, academic, jwt), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
@@ -91,11 +91,11 @@ public class AcademicaController {
 
 
     @GetMapping("/{academicaId}")
-    public ResponseEntity<Academica> obtenerAcademica(@PathVariable Long academicaId) {
+    public ResponseEntity<Academic> obtenerAcademica(@PathVariable Long academicaId) {
         try {
-            Academica academica = academicaService.obtenerAcademica(academicaId);
-            if (academica != null) {
-                return new ResponseEntity<>(academica, HttpStatus.OK);
+            Academic academic = academicaService.obtenerAcademica(academicaId);
+            if (academic != null) {
+                return new ResponseEntity<>(academic, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }

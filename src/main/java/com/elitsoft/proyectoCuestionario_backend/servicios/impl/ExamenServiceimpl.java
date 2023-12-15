@@ -92,8 +92,8 @@ public class ExamenServiceimpl implements ExamenService {
     }
 
     @Override
-    public List<Examen> listarExamenesDeUnaCategoria(Categoria categoria) {
-        return examenRepository.findByCategoria(categoria);
+    public List<Examen> listarExamenesDeUnaCategoria(ExamCategory examCategory) {
+        return examenRepository.findByCategoria(examCategory);
     }
 
     @Override

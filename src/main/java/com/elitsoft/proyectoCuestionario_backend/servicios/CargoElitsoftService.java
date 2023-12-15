@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
+import com.elitsoft.proyectoCuestionario_backend.entidades.JobPosition;
 import java.util.List;
 
 /**
@@ -10,10 +10,10 @@ import java.util.List;
  */
 public interface CargoElitsoftService {
     
-    List<CargoElitsoft> obtenerListaCargosElitsoft();
+    List<JobPosition> obtenerListaCargosElitsoft();
 
 
-    public Boolean guardar_cargos(CargoElitsoft cargo);
+    public Boolean guardar_cargos(JobPosition cargo);
 
     public Boolean remove_cargo(Long cargo);
 }

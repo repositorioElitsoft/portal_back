@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Certificado;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

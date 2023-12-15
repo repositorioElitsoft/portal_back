@@ -18,23 +18,23 @@ import javax.persistence.*;
 @Table(name = "TBL_INF_ACAD")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
-public class Academica {
+public class Academic {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inf_acad_id")
     private Long id;
-    @Column(name = "inf_acad_titl")
+    @Column(name = "inf_acad_degree")
     private String degree;
     @Column(name = "inf_acad_name_uni")
     private String university;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "inf_acad_fec_ini")
+    @Column(name = "inf_acad_start_date")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "inf_acad_fec_fin")
+    @Column(name = "inf_acad_end_date")
     private LocalDate endDate;
-    @Column(name = "inf_acad_fec_fin")
+    @Column(name = "inf_acad_status")
     private String status;
 
     @OneToMany( cascade = CascadeType.ALL)

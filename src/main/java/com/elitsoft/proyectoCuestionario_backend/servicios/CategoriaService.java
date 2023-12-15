@@ -1,10 +1,10 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ExamCategory;
 
 import java.util.List;
-import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 public interface CategoriaService {
     
     
-    Categoria agregarCategoria(Categoria categoria);
+    ExamCategory agregarCategoria(ExamCategory examCategory);
 
-    Categoria actualizarCategoria(Long categoriaId, Categoria categoria);
+    ExamCategory actualizarCategoria(Long categoriaId, ExamCategory examCategory);
 
-    List<Categoria> obtenerCategorias();
+    List<ExamCategory> obtenerCategorias();
 
-    Categoria obtenerCategoria(Long categoriaId);
+    ExamCategory obtenerCategoria(Long categoriaId);
 
     void eliminarCategoria(Long categoriaId);
     

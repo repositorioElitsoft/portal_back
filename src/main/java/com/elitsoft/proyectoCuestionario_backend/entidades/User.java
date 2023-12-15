@@ -89,7 +89,7 @@ public class User {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Academica> academics;
+    private List<Academic> academics;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference

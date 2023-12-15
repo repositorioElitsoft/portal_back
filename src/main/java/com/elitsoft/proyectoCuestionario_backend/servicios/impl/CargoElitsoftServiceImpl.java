@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
+import com.elitsoft.proyectoCuestionario_backend.entidades.JobPosition;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CargoElitsoftRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CargoElitsoftService;
 import java.util.List;
@@ -23,12 +23,12 @@ public class CargoElitsoftServiceImpl implements CargoElitsoftService{
     }
     
     @Override
-    public List<CargoElitsoft> obtenerListaCargosElitsoft() {
+    public List<JobPosition> obtenerListaCargosElitsoft() {
         return cargoElitsoftRepository.findAll();
     }
 
     @Override
-    public Boolean guardar_cargos(CargoElitsoft cargo){
+    public Boolean guardar_cargos(JobPosition cargo){
         cargoElitsoftRepository.save(cargo);
         return true;
     }

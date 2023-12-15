@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Certificado;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CertificadoService;
 import java.util.List;

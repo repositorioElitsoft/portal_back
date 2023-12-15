@@ -1,8 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ExamCategory;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,27 +31,27 @@ public class CategoriaController {
 
 
     @PostMapping("/")
-    public ResponseEntity<Categoria> guardarCategoria(@RequestBody Categoria categoria){
-        Categoria categoriaGuardada = categoriaService.agregarCategoria(categoria);
-        return ResponseEntity.ok(categoriaGuardada);
+    public ResponseEntity<ExamCategory> guardarCategoria(@RequestBody ExamCategory examCategory){
+        ExamCategory examCategoryGuardada = categoriaService.agregarCategoria(examCategory);
+        return ResponseEntity.ok(examCategoryGuardada);
     }
 
     //Petición para enlistar las categorias por ID
     @GetMapping("/{categoriaId}")
-    public Categoria listarCategoriaPorId(@PathVariable("categoriaId") Long categoriaId){
+    public ExamCategory listarCategoriaPorId(@PathVariable("categoriaId") Long categoriaId){
         return categoriaService.obtenerCategoria(categoriaId);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Categoria>> listarCategorias(){
+    public ResponseEntity<List<ExamCategory>> listarCategorias(){
         return ResponseEntity.ok(categoriaService.obtenerCategorias());
     }
 
 
     @PutMapping("/actualizar/{categoriaId}")
-    public ResponseEntity <Categoria> actualizarCategoria(@PathVariable Long categoriaId, @RequestBody Categoria categoria){
-        Categoria categoriaActualizada = categoriaService.actualizarCategoria(categoriaId, categoria);
-        return ResponseEntity.ok(categoriaActualizada);
+    public ResponseEntity <ExamCategory> actualizarCategoria(@PathVariable Long categoriaId, @RequestBody ExamCategory examCategory){
+        ExamCategory examCategoryActualizada = categoriaService.actualizarCategoria(categoriaId, examCategory);
+        return ResponseEntity.ok(examCategoryActualizada);
     }
 
     @DeleteMapping("/eliminar/{categoriaId}")

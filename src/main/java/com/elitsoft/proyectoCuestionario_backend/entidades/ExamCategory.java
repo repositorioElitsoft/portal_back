@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table ( name = "tbl_exam_cat")
 @Data
-public class Categoria {
+public class ExamCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +28,7 @@ public class Categoria {
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Examen> exams = new LinkedHashSet<>();
-
+    private Set<Examen> exams;
 
 
 }

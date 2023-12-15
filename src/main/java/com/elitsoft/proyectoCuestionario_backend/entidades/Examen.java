@@ -44,7 +44,7 @@ public class Examen {
     private List<Producto> productos;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Categoria categoria;
+    private ExamCategory category;
 
     @OneToMany(mappedBy="examen", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference

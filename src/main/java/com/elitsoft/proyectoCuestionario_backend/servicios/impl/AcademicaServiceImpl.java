@@ -35,13 +35,13 @@ public class AcademicaServiceImpl implements AcademicaService {
     }
 
     @Override
-    public Boolean guardarAcademica(Academica academica, String jwt) throws Exception {
+    public Boolean guardarAcademica(Academic academic, String jwt) throws Exception {
         Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
             return false;
         }
-        academica.setUser(userOptional.get());
+        academic.setUser(userOptional.get());
 
       //  if (academica.getReferenciaAcademicas() != null) {
         //    for (ReferenciaAcademica referencia : academica.getReferenciaAcademicas()) {
@@ -49,12 +49,12 @@ public class AcademicaServiceImpl implements AcademicaService {
         //    }
       //  }
 
-        academicaRepository.save(academica);
+        academicaRepository.save(academic);
         return true;
     }
     
     @Override
-    public Boolean guardarListaAcademicas(List<Academica> academicas, String jwt)  {
+    public Boolean guardarListaAcademicas(List<Academic> academics, String jwt)  {
         Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
@@ -64,7 +64,7 @@ public class AcademicaServiceImpl implements AcademicaService {
         academicaRepository.findByUsuario(userOptional.get())
                 .forEach((academicaRepository::delete));
 
-        academicas.forEach(academica -> {
+        academics.forEach(academica -> {
             academica.setUser(userOptional.get());
             academicaRepository.save(academica);
         });
@@ -75,42 +75,42 @@ public class AcademicaServiceImpl implements AcademicaService {
     }
     
     @Override
-    public List<Academica> obtenerAcademicasPorUsuario(User usr_id) {
+    public List<Academic> obtenerAcademicasPorUsuario(User usr_id) {
         return academicaRepository.findByUsuario(usr_id);
     }
 
     @Override
-    public Boolean actualizarAcademica(Long academicaId, Academica academica, String jwt) throws Exception{
+    public Boolean actualizarAcademica(Long academicaId, Academic academic, String jwt) throws Exception{
         Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
 
-        academica.getReferenciaAcademicas().forEach(a -> {
+        academic.getReferenciaAcademicas().forEach(a -> {
         System.out.println(a.toString());
         });
 
-        academica.setInf_acad_id(academicaId);
-        academica.setUser(userOptional.get());
+        academic.setInf_acad_id(academicaId);
+        academic.setUser(userOptional.get());
 
-        academicaRepository.save(academica);
+        academicaRepository.save(academic);
         return true;
     }
 
     @Override
-    public List<Academica> obtenerListaAcademicas(String jwt) {
+    public List<Academic> obtenerListaAcademicas(String jwt) {
         Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
-        List<Academica> academicas = academicaRepository.findByUsuario(userOptional.get());
-        if(academicas == null){
+        List<Academic> academics = academicaRepository.findByUsuario(userOptional.get());
+        if(academics == null){
             return Collections.emptyList();
         }
 
-        return academicas;
+        return academics;
     }
     
     @Override
@@ -125,7 +125,7 @@ public class AcademicaServiceImpl implements AcademicaService {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
-        Optional<Academica> academicaOld = academicaRepository.findById(academicaId);
+        Optional<Academic> academicaOld = academicaRepository.findById(academicaId);
         if( !academicaOld.isPresent()){
             throw new EntityNotFoundException("No se encontró la entidad laboral");
         }
@@ -142,15 +142,15 @@ public class AcademicaServiceImpl implements AcademicaService {
     public void eliminarAcademicasPorUsuario(Long usuarioId) {
         Optional<User> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isPresent()) {
-            List<Academica> academicas = academicaRepository.findByUsuario(usuario.get());
-            academicaRepository.deleteAll(academicas);
+            List<Academic> academics = academicaRepository.findByUsuario(usuario.get());
+            academicaRepository.deleteAll(academics);
         }
     }
 
 
     @Override
-    public Academica obtenerAcademica(Long academicaId) {
-        Optional<Academica> academicaOptional = academicaRepository.findById(academicaId);
+    public Academic obtenerAcademica(Long academicaId) {
+        Optional<Academic> academicaOptional = academicaRepository.findById(academicaId);
         if (academicaOptional.isPresent()) {
             return academicaOptional.get();
         } else {

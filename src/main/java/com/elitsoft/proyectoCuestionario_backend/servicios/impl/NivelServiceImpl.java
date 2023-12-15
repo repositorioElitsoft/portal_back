@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Nivel;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.NivelRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.NivelService;

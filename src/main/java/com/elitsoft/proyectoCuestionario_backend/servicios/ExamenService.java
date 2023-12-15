@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ExamCategory;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public interface ExamenService {
     
     void eliminarExamen(Long examenId);
     
-    List<Examen> listarExamenesDeUnaCategoria(Categoria categoria);
+    List<Examen> listarExamenesDeUnaCategoria(ExamCategory examCategory);
 
 
     List<Examen> obtenerExamenesByUser(String jwt);

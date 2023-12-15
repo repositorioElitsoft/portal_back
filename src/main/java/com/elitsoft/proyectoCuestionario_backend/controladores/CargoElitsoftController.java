@@ -1,6 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoElitsoft;
+import com.elitsoft.proyectoCuestionario_backend.entidades.JobPosition;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CargoElitsoftService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,15 @@ public class CargoElitsoftController {
     }
     
     @GetMapping("/listar")
-    public ResponseEntity<List<CargoElitsoft>> obtenerListaCargosElitsoft() {
-        List<CargoElitsoft> cargosElitsoft = cargoElitsoftService.obtenerListaCargosElitsoft();
+    public ResponseEntity<List<JobPosition>> obtenerListaCargosElitsoft() {
+        List<JobPosition> cargosElitsoft = cargoElitsoftService.obtenerListaCargosElitsoft();
         return new ResponseEntity<>(cargosElitsoft, HttpStatus.OK);
     }
 
 
 
     @PostMapping("/")
-    public Boolean guardar_cargos (@RequestBody CargoElitsoft tipo_de_cargo )  {
+    public Boolean guardar_cargos (@RequestBody JobPosition tipo_de_cargo )  {
         System.out.println(tipo_de_cargo.getCrg_elit_nom());
         cargoElitsoftService.guardar_cargos(tipo_de_cargo);
         return  true;

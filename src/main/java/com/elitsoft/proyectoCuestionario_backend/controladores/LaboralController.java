@@ -1,7 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;

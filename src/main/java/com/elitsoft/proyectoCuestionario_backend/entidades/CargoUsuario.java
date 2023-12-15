@@ -42,7 +42,7 @@ public class CargoUsuario {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crg_elit_id")
-    private CargoElitsoft cargoElitsoft;
+    private JobPosition jobPosition;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_Postulacion")
