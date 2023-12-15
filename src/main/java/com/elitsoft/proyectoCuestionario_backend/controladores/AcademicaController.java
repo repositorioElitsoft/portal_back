@@ -2,8 +2,7 @@ package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import com.elitsoft.proyectoCuestionario_backend.servicios.AcademicaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +50,9 @@ public class AcademicaController {
 
     @GetMapping("/por-usuario/{usuarioId}")
     public ResponseEntity<List<Academica>> obtenerAcademicasPorUsuario(@PathVariable Long usuarioId) {
-        Usuario usuario = new Usuario();
-        usuario.setUsr_id(usuarioId);
-        List<Academica> academicas = academicaService.obtenerAcademicasPorUsuario(usuario);
+        User user = new User();
+        user.setUsr_id(usuarioId);
+        List<Academica> academicas = academicaService.obtenerAcademicasPorUsuario(user);
         return new ResponseEntity<>(academicas, HttpStatus.OK);
     }
 

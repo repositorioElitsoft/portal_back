@@ -2,10 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
-import org.springframework.data.jpa.repository.Query;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 
 import java.util.List;
 
@@ -19,7 +16,7 @@ public interface AcademicaService {
 
     Boolean guardarAcademica(Academica academica, String jwt) throws Exception;
 
-    List<Academica> obtenerAcademicasPorUsuario(Usuario usuario);
+    List<Academica> obtenerAcademicasPorUsuario(User user);
 
     List<Academica> obtenerListaAcademicas(String jwt) throws Exception;
 

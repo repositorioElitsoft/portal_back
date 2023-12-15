@@ -3,15 +3,10 @@ package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
@@ -44,7 +39,7 @@ public class Academica {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
-    private Usuario usuario;
+    private User user;
 
 
     

@@ -1,7 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 
 import java.util.Date;
 import java.util.List;
@@ -52,9 +52,9 @@ public class CargoUsuarioController {
 
     @GetMapping("/por-usuario/{usuarioId}")
     public ResponseEntity<List<CargoUsuario>> obtenerCargosPorUsuario(@PathVariable Long usuarioId) {
-        Usuario usuario = new Usuario();
-        usuario.setUsr_id(usuarioId);
-        List<CargoUsuario> cargos = cargoService.obtenerCargosPorUsuario(usuario);
+        User user = new User();
+        user.setUsr_id(usuarioId);
+        List<CargoUsuario> cargos = cargoService.obtenerCargosPorUsuario(user);
         return new ResponseEntity<>(cargos, HttpStatus.OK);
     }
 

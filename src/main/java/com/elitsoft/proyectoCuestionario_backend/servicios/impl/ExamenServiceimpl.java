@@ -10,9 +10,7 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.ExamenService;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
-import com.elitsoft.proyectoCuestionario_backend.servicios.PreguntaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -106,7 +104,7 @@ public class ExamenServiceimpl implements ExamenService {
             return Collections.emptyList();
         }
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+        Optional<User> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
 
         if (!usuarioOpt.isPresent()) {
             return Collections.emptyList();

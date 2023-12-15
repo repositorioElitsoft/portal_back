@@ -1,7 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.Config;
 
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Usuario appUser = appUserRepository
+        User appUser = appUserRepository
                 .findByUsrEmail(username)
                 .orElseThrow(()->new UsernameNotFoundException("No existe el usuario"));
 

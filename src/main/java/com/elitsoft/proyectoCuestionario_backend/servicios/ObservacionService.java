@@ -3,12 +3,9 @@ package com.elitsoft.proyectoCuestionario_backend.servicios;
 import com.elitsoft.proyectoCuestionario_backend.entidades.CatObservacionDTO;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
 import com.elitsoft.proyectoCuestionario_backend.entidades.ObservacionDTO;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface ObservacionService {

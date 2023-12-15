@@ -17,7 +17,7 @@ public class ExamenUserCount {
 
     @ManyToOne
     @JoinColumn(name = "usr_id")
-    private Usuario usuario;
+    private User user;
     @ManyToOne
     @JoinColumn(name = "exam_id")
     private Examen examen;

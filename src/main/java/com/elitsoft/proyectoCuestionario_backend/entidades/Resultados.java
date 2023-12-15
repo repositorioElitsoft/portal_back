@@ -1,8 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,7 +20,7 @@ public class Resultados {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id")
     @JsonBackReference
-    private Usuario usuario;
+    private User user;
 
 
     @Column(name = "resultados_examen")

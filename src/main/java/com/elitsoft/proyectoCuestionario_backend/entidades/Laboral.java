@@ -2,16 +2,10 @@ package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -40,7 +34,7 @@ public class Laboral {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
-    private Usuario usuario;
+    private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "inf_lab_id")

@@ -9,14 +9,11 @@ import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;
 import java.util.*;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import javax.swing.text.html.Option;
-import javax.transaction.Transactional;
 
 /**
  *
@@ -45,7 +42,7 @@ public class LaboralServiceImpl implements LaboralService {
     @Override
     public Boolean guardarLaborales(List<Laboral> laborales, String jwt) throws Exception {
 
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
             return false;
@@ -55,7 +52,7 @@ public class LaboralServiceImpl implements LaboralService {
                 .forEach((laboralRepository::delete));
 
         laborales.forEach(laboral -> {
-            laboral.setUsuario(userOptional.get());
+            laboral.setUser(userOptional.get());
             laboralRepository.save(laboral);
         });
 
@@ -65,12 +62,12 @@ public class LaboralServiceImpl implements LaboralService {
 
     @Override
     public Boolean guardarLaboral(Laboral laboral, String jwt) throws Exception {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
             return false;
         }
-        laboral.setUsuario(userOptional.get());
+        laboral.setUser(userOptional.get());
 
    //     if (laboral.getReferenciasLaborales() != null) {
      //       for (ReferenciaLaboral referencia : laboral.getReferenciasLaborales()) {
@@ -88,13 +85,13 @@ public class LaboralServiceImpl implements LaboralService {
 
     @Override
     public Boolean actualizarLaboral(Long laboralId, Laboral laboral, String jwt) throws Exception{
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 // TODO: 15-12-2023 Verificar que efectivamente esto pertenezca al usuario:
         laboral.setInf_lab_id(laboralId);
-        laboral.setUsuario(userOptional.get());
+        laboral.setUser(userOptional.get());
         laboralRepository.save(laboral);
 
         return true;
@@ -103,7 +100,7 @@ public class LaboralServiceImpl implements LaboralService {
 
     @Override
     public List<Laboral> obtenerListaLaboral(String jwt) throws Exception{
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
@@ -118,7 +115,7 @@ public class LaboralServiceImpl implements LaboralService {
 
     @Override
     public Boolean deleteLaboral(Long laboralId, String jwt) throws Exception {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
@@ -128,7 +125,7 @@ public class LaboralServiceImpl implements LaboralService {
             throw new EntityNotFoundException("No se encontró la entidad laboral");
         }
 
-        if(!laboralOld.get().getUsuario().getUsr_id().equals(userOptional.get().getUsr_id())){
+        if(!laboralOld.get().getUser().getUsr_id().equals(userOptional.get().getUsr_id())){
             throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
         }
 
@@ -139,7 +136,7 @@ public class LaboralServiceImpl implements LaboralService {
 
     @Override
     public void eliminarLaboralPorUsuario(Long usuarioId) {
-        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        Optional<User> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isPresent()) {
             List<Laboral> laborales = laboralRepository.findByUsuario(usuario.get());
             laboralRepository.deleteAll(laborales);
@@ -151,7 +148,7 @@ public class LaboralServiceImpl implements LaboralService {
     @Override
     public Laboral obtenerLaboralPorId(Long laboralId, String jwt) throws Exception {
         // Aquí verificas el JWT y luego obtienes el objeto Laboral
-        Optional<Usuario> usuario = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> usuario = usuarioService.getUsuarioByToken(jwt);
         if (!usuario.isPresent()) {
             throw new EntityNotFoundException("No se encontró el usuario");
         }

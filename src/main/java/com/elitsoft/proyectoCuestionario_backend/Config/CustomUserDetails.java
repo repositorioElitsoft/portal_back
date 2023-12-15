@@ -1,6 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.Config;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
     //Se hace override de métodos teniendo en cuenta  los roles de usuario
-    private final Usuario appuser;
+    private final User appuser;
 
 
     @Override

@@ -29,7 +29,7 @@ public class Herramienta {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id")
     @JsonBackReference
-    private Usuario usuario;
+    private User user;
 
     private String herr_prd_otro;
 

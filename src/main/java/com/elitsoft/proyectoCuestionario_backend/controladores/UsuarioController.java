@@ -1,12 +1,10 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.Exceptions.MissingJwtException;
 import com.elitsoft.proyectoCuestionario_backend.entidades.CustomError;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import com.elitsoft.proyectoCuestionario_backend.servicios.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -58,15 +56,15 @@ public class    UsuarioController {
     private HerramientaService herramientaService;
 
     @GetMapping("/usuarios")
-    public List<Usuario> obtenerUsuarios(){
+    public List<User> obtenerUsuarios(){
         return usuarioService.obtenerUsuario();
     }
 
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarUsuario(@RequestBody Usuario usuario, Long cityId) throws Exception{
+    public ResponseEntity<?> guardarUsuario(@RequestBody User user, Long cityId) throws Exception{
         try{
-            usuarioService.guardarUsuario(usuario, cityId);
+            usuarioService.guardarUsuario(user, cityId);
         }
         catch (DataAccessException ex){
             CustomError error = new CustomError();
@@ -77,10 +75,10 @@ public class    UsuarioController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario, Long cityId,@RequestHeader("Authorization") String Jwt){
+    public ResponseEntity<?> actualizarUsuario(@RequestBody User user, Long cityId, @RequestHeader("Authorization") String Jwt){
         try {
-            usuarioService.actualizarUsuario(usuario, Jwt, cityId);
-            System.out.println(usuario);
+            usuarioService.actualizarUsuario(user, Jwt, cityId);
+            System.out.println(user);
         }
         catch (DataAccessException ex){
             return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
@@ -118,7 +116,7 @@ public class    UsuarioController {
     }
 
     @GetMapping("/")
-    public Usuario obtenerUsuario(@RequestHeader("Authorization") String jwt)throws Exception{
+    public User obtenerUsuario(@RequestHeader("Authorization") String jwt)throws Exception{
         return usuarioService.obtenerDatosUsuario(jwt);
     }
 
@@ -130,8 +128,8 @@ public class    UsuarioController {
         return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/pedir-restauracion-pass")
-    public void pedirRestauracionPassword(@RequestBody Usuario usuario) throws MessagingException, UnsupportedEncodingException {
-      usuarioService.pedirRestaurarPassword(usuario);
+    public void pedirRestauracionPassword(@RequestBody User user) throws MessagingException, UnsupportedEncodingException {
+      usuarioService.pedirRestaurarPassword(user);
     }
     @PutMapping("/cambiar-password/{code}")
     public Boolean cambiarPassword(@PathVariable("code") String rec_code,@RequestBody Map<String,String> password){
@@ -140,8 +138,8 @@ public class    UsuarioController {
     }
 
     @GetMapping("/usuarios-herramientas")
-    public List<Usuario> listarUsuariosConHerramientas(){
-        List<Usuario> usuariosConHerramientas = usuarioService.listarUsuariosConHerramientas();
+    public List<User> listarUsuariosConHerramientas(){
+        List<User> usuariosConHerramientas = usuarioService.listarUsuariosConHerramientas();
         return usuariosConHerramientas;
     }
 
@@ -170,37 +168,37 @@ public class    UsuarioController {
 
 
     @PutMapping("/actualizar/{usuarioId}")
-    public ResponseEntity<Usuario> actualizarUsuarioId(@PathVariable Long usuarioId,
-                                                       @RequestBody Usuario usuario){
-        Usuario usuarioActualizado = usuarioService.actualizarUsuarioId(usuarioId, usuario);
-        return ResponseEntity.ok(usuarioActualizado);
+    public ResponseEntity<User> actualizarUsuarioId(@PathVariable Long usuarioId,
+                                                    @RequestBody User user){
+        User userActualizado = usuarioService.actualizarUsuarioId(usuarioId, user);
+        return ResponseEntity.ok(userActualizado);
     }
 
 
     @GetMapping("/lista-usuarios")
-    public ResponseEntity<List<Usuario>> listarUsuarios(){
-        List<Usuario> usuarios = usuarioService.listarUsuarios();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    public ResponseEntity<List<User>> listarUsuarios(){
+        List<User> users = usuarioService.listarUsuarios();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 
     @GetMapping("/email/{userEmail}")
-    public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable String userEmail){
-        Usuario user = usuarioService.getUsuarioByEmail(userEmail);
+    public ResponseEntity<User> getUsuarioByEmail(@PathVariable String userEmail){
+        User user = usuarioService.getUsuarioByEmail(userEmail);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
     @GetMapping("/{usuarioId}")
-    public Usuario obtenerUsuarioId(@PathVariable Long usuarioId) throws Exception{
+    public User obtenerUsuarioId(@PathVariable Long usuarioId) throws Exception{
         return usuarioService.obtenerUsuarioId(usuarioId);
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<?> guardarAdmin(@RequestBody Usuario usuario) throws Exception {
+    public ResponseEntity<?> guardarAdmin(@RequestBody User user) throws Exception {
         try {
-            Usuario nuevoUsuario = usuarioService.guardarAdmin(usuario);
-            return new ResponseEntity<Usuario>(nuevoUsuario, HttpStatus.CREATED);
+            User nuevoUser = usuarioService.guardarAdmin(user);
+            return new ResponseEntity<User>(nuevoUser, HttpStatus.CREATED);
         } catch (DataAccessException ex) {
             CustomError error = new CustomError();
             error.setError("El usuario ya existe.");
@@ -209,10 +207,10 @@ public class    UsuarioController {
     }
 
     @PostMapping("/rec")
-    public ResponseEntity<?> guardarRec(@RequestBody Usuario usuario) throws Exception {
+    public ResponseEntity<?> guardarRec(@RequestBody User user) throws Exception {
         try {
-            Usuario nuevoUsuario = usuarioService.guardarRec(usuario);
-            return new ResponseEntity<Usuario>(nuevoUsuario, HttpStatus.CREATED);
+            User nuevoUser = usuarioService.guardarRec(user);
+            return new ResponseEntity<User>(nuevoUser, HttpStatus.CREATED);
         } catch (DataAccessException ex) {
             CustomError error = new CustomError();
             error.setError("El usuario ya existe.");

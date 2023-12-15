@@ -33,19 +33,19 @@ public class ResultadosServiceImpl implements ResultadosService {
 
     @Override
     public List<Resultados> obtenerResultadosByUser(Long userId) {
-        Usuario usuario = new Usuario();
-        usuario.setUsr_id(userId);
-        return resultadosRepository.findByUsuario(usuario);
+        User user = new User();
+        user.setUsr_id(userId);
+        return resultadosRepository.findByUsuario(user);
     }
 
     @Override
     public Boolean guardarResultados(Resultados resultados, String jwt){
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
             return false;
         }
-        resultados.setUsuario(userOptional.get());
+        resultados.setUser(userOptional.get());
         Resultados createdResultados = resultadosRepository.save(resultados);
 
         Optional<ExamenUserCount> examenUserCountOptional = examenUserCountRepository.findByUsuarioAndExamen(userOptional.get(), resultados.getExamen());
@@ -55,7 +55,7 @@ public class ResultadosServiceImpl implements ResultadosService {
             examenUserCount.setCount(examenUserCount.getCount() + 1);
         } else{
             examenUserCount.setExamen(resultados.getExamen());
-            examenUserCount.setUsuario(userOptional.get());
+            examenUserCount.setUser(userOptional.get());
             examenUserCount.setCount(1);
         }
         examenUserCountRepository.save(examenUserCount);
@@ -64,7 +64,7 @@ public class ResultadosServiceImpl implements ResultadosService {
 
     @Override
     public void eliminarResultadosPorUsuario(Long usuarioId) {
-        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        Optional<User> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isPresent()) {
             List<Resultados> resultados = resultadosRepository.findByUsuario(usuario.get());
             resultadosRepository.deleteAll(resultados);

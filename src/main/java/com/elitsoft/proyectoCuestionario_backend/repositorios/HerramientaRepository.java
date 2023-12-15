@@ -3,7 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +23,7 @@ public interface HerramientaRepository extends JpaRepository <Herramienta, Long>
     Herramienta save(Herramienta herramienta);
 
     // Método para obtener herramientas por usuario
-    List<Herramienta> findByUsuario(Usuario usuario);
+    List<Herramienta> findByUsuario(User user);
 
     // Método para listar todas las herramientas
     List<Herramienta> findAll();

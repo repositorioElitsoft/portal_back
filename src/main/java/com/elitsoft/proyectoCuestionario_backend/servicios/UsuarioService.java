@@ -1,6 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,38 +21,38 @@ import java.util.Optional;
 @Service
 public interface UsuarioService {
     
-    public Usuario guardarUsuario(Usuario usuario, Long Id) throws Exception;
+    public User guardarUsuario(User user, Long Id) throws Exception;
 
-    public Usuario obtenerUsuarioId(Long usr_id)throws Exception ;
+    public User obtenerUsuarioId(Long usr_id)throws Exception ;
 
     public Boolean verificarUsuario(Map<String,String> body);
-    public Usuario getUsuarioByEmail(String email);
+    public User getUsuarioByEmail(String email);
 
-    public Optional<Usuario> getUsuarioByToken(String jwt);
-    public void pedirRestaurarPassword(Usuario usuario) throws MessagingException, UnsupportedEncodingException;
+    public Optional<User> getUsuarioByToken(String jwt);
+    public void pedirRestaurarPassword(User user) throws MessagingException, UnsupportedEncodingException;
     public Boolean cambiarPassword(String code, String password);
 
     void uploadUserCv(String jwt, MultipartFile cv) throws IOException;
 
-    public Boolean actualizarUsuario(Usuario usuario, String jwt, Long cityId);
+    public Boolean actualizarUsuario(User user, String jwt, Long cityId);
 
     public Resource getCVByUser(Long userId) throws IOException, EntityNotFoundException;
 
-    Usuario actualizarUsuarioId(Long usr_id, Usuario usuario);
+    User actualizarUsuarioId(Long usr_id, User user);
 
-    public List<Usuario> listarUsuarios();
+    public List<User> listarUsuarios();
 
-    Usuario obtenerDatosUsuario(String jwt) throws Exception;
+    User obtenerDatosUsuario(String jwt) throws Exception;
 
-    public  List<Usuario> obtenerUsuario();
+    public  List<User> obtenerUsuario();
 
-    public List<Usuario> listarUsuariosConHerramientas();
+    public List<User> listarUsuariosConHerramientas();
 
     void eliminarUsuarioId (Long usr_id);
 
-    public Usuario guardarAdmin(Usuario usuario) throws Exception;
+    public User guardarAdmin(User user) throws Exception;
 
-    public Usuario guardarRec(Usuario usuario) throws Exception;
+    public User guardarRec(User user) throws Exception;
 
     public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException;
 

@@ -4,13 +4,11 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 
 import java.util.Date;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CargoUsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CargoUsuarioService;
@@ -41,11 +39,11 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
     @Override
     public Boolean guardarCargo(CargoUsuario cargo, String jwt, Date fechaPostulacion) throws Exception {
 
-        Optional<Usuario> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
             return false;
         }
-        cargo.setUsuario(usuarioOptional.get());
+        cargo.setUser(usuarioOptional.get());
 
         cargo.setFechaPostulacion(fechaPostulacion);
 
@@ -59,7 +57,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
 
 
     @Override
-    public List<CargoUsuario> obtenerCargosPorUsuario(Usuario usr_id) {
+    public List<CargoUsuario> obtenerCargosPorUsuario(User usr_id) {
         return cargoRepository.findByUsuario(usr_id);
     }
 
@@ -70,7 +68,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
 
     @Override
     public CargoUsuario obtenerCargoUsuario(String jwt) throws Exception {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
@@ -88,7 +86,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
 
     @Override
     public void eliminarCargoPorUsuario(Long usuarioId) {
-        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        Optional<User> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isPresent()) {
             List<CargoUsuario> cargos = cargoRepository.findByUsuario(usuario.get());
             cargoRepository.deleteAll(cargos);
@@ -96,7 +94,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
     }
     @Override
     public Boolean actualizarDisponibilidadLaboral(String disponibilidadLaboral, String jwt) throws Exception {
-        Optional<Usuario> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
         if (!usuarioOptional.isPresent()) {
             return false;
         }

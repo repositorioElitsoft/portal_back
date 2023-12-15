@@ -2,8 +2,7 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.Config.JWT.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.HerramientaRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.UsuarioRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
@@ -45,7 +44,7 @@ public class HerramientaServiceImpl implements HerramientaService {
             return false;
         }
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
+        Optional<User> usuarioOpt = usuarioRepository.findByUsrEmail(token.getPrincipal().toString());
 
         if (!usuarioOpt.isPresent()){
             return false;
@@ -58,7 +57,7 @@ public class HerramientaServiceImpl implements HerramientaService {
         Set<Long> idsEncontradas = new HashSet<>();
 
         for (Herramienta herramienta : herramientas){
-            herramienta.setUsuario(usuarioOpt.get());
+            herramienta.setUser(usuarioOpt.get());
             herramientaRepository.save(herramienta);
             idsEncontradas.add(herramienta.getHerr_usr_id());
         }
@@ -80,7 +79,7 @@ public class HerramientaServiceImpl implements HerramientaService {
 
     @Override
     public List<Herramienta> obtenerListaHerramientasPorUsuario(String jwt) {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
@@ -106,7 +105,7 @@ public class HerramientaServiceImpl implements HerramientaService {
 
     @Override
     public void eliminarHerramientaPorUsuario(Long usuarioId) {
-        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        Optional<User> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isPresent()) {
             List<Herramienta> herramientas = herramientaRepository.findByUsuario(usuario.get());
             herramientaRepository.deleteAll(herramientas);

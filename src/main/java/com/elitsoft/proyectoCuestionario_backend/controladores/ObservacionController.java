@@ -4,18 +4,12 @@ import com.elitsoft.proyectoCuestionario_backend.entidades.CatObservacionDTO;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
 import com.elitsoft.proyectoCuestionario_backend.entidades.ObservacionDTO;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ObservacionService;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
-import com.elitsoft.proyectoCuestionario_backend.servicios.ObservacionService;
-import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/observaciones")

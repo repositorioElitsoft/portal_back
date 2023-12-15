@@ -36,12 +36,12 @@ public class AcademicaServiceImpl implements AcademicaService {
 
     @Override
     public Boolean guardarAcademica(Academica academica, String jwt) throws Exception {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
             return false;
         }
-        academica.setUsuario(userOptional.get());
+        academica.setUser(userOptional.get());
 
       //  if (academica.getReferenciaAcademicas() != null) {
         //    for (ReferenciaAcademica referencia : academica.getReferenciaAcademicas()) {
@@ -55,7 +55,7 @@ public class AcademicaServiceImpl implements AcademicaService {
     
     @Override
     public Boolean guardarListaAcademicas(List<Academica> academicas, String jwt)  {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
             return false;
@@ -65,7 +65,7 @@ public class AcademicaServiceImpl implements AcademicaService {
                 .forEach((academicaRepository::delete));
 
         academicas.forEach(academica -> {
-            academica.setUsuario(userOptional.get());
+            academica.setUser(userOptional.get());
             academicaRepository.save(academica);
         });
 
@@ -75,13 +75,13 @@ public class AcademicaServiceImpl implements AcademicaService {
     }
     
     @Override
-    public List<Academica> obtenerAcademicasPorUsuario(Usuario usr_id) {
+    public List<Academica> obtenerAcademicasPorUsuario(User usr_id) {
         return academicaRepository.findByUsuario(usr_id);
     }
 
     @Override
     public Boolean actualizarAcademica(Long academicaId, Academica academica, String jwt) throws Exception{
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
@@ -92,7 +92,7 @@ public class AcademicaServiceImpl implements AcademicaService {
         });
 
         academica.setInf_acad_id(academicaId);
-        academica.setUsuario(userOptional.get());
+        academica.setUser(userOptional.get());
 
         academicaRepository.save(academica);
         return true;
@@ -100,7 +100,7 @@ public class AcademicaServiceImpl implements AcademicaService {
 
     @Override
     public List<Academica> obtenerListaAcademicas(String jwt) {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
@@ -120,7 +120,7 @@ public class AcademicaServiceImpl implements AcademicaService {
 
     @Override
     public Boolean deleteAcademica(Long academicaId, String jwt) throws Exception {
-        Optional<Usuario> userOptional = usuarioService.getUsuarioByToken(jwt);
+        Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
@@ -130,7 +130,7 @@ public class AcademicaServiceImpl implements AcademicaService {
             throw new EntityNotFoundException("No se encontró la entidad laboral");
         }
 
-        if(!academicaOld.get().getUsuario().getUsr_id().equals(userOptional.get().getUsr_id())){
+        if(!academicaOld.get().getUser().getUsr_id().equals(userOptional.get().getUsr_id())){
             throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
         }
 
@@ -140,7 +140,7 @@ public class AcademicaServiceImpl implements AcademicaService {
 
     @Override
     public void eliminarAcademicasPorUsuario(Long usuarioId) {
-        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        Optional<User> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isPresent()) {
             List<Academica> academicas = academicaRepository.findByUsuario(usuario.get());
             academicaRepository.deleteAll(academicas);

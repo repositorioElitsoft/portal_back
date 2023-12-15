@@ -1,7 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,7 +15,7 @@ public interface CargoUsuarioRepository extends JpaRepository <CargoUsuario, Lon
     CargoUsuario save(CargoUsuario cargo);
 
     // Método para obtener todos los cargos por usuario
-    List<CargoUsuario> findByUsuario(Usuario usuario);
+    List<CargoUsuario> findByUsuario(User user);
 
     // Método para listar todos los cargos postulados 
     List<CargoUsuario> findAll();

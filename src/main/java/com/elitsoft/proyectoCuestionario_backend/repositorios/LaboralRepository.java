@@ -1,13 +1,10 @@
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -23,6 +20,6 @@ public interface LaboralRepository extends JpaRepository <Laboral, Long>{
     // Método para listar toda la info laboral
     List<Laboral> findAll();
 
-    List<Laboral> findByUsuario(Usuario usuario);
+    List<Laboral> findByUsuario(User user);
 
 }

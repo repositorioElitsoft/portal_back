@@ -43,7 +43,7 @@ public class Observacion {
     @JoinColumn(name = "usr_id")
     @JsonBackReference
     @Getter
-    private Usuario usuario;
+    private User user;
 
     @Column(name = "usr_id_obs")
     private Long usr_id_obs;

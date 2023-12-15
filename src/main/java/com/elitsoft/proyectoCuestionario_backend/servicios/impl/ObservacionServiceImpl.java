@@ -2,15 +2,13 @@ package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 import com.elitsoft.proyectoCuestionario_backend.entidades.*;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.*;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Observacion;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import com.elitsoft.proyectoCuestionario_backend.servicios.ObservacionService;
 import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataAccessException;
 
-import java.lang.reflect.Field;
-import java.util.*;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -44,10 +42,10 @@ public class ObservacionServiceImpl implements ObservacionService {
                 throw new IllegalArgumentException("El usuario que crea y modifica la observación debe ser el mismo.");
             }
 
-            Usuario usuario = usuarioRepository.findById(userId)
+            User user = usuarioRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + userId));
 
-            observacion.setUsuario(usuario);
+            observacion.setUser(user);
             observacion.setUsr_id_obs(userId);
             observacion.setUsr_id_obs(usr_id_obs);
             observacion.setUsr_id_obs_mod(usr_id_obs);
@@ -80,10 +78,10 @@ public class ObservacionServiceImpl implements ObservacionService {
                 observacion.setCategoriaObservacion(categoriaObservacion);
                 observacion.setObs_fec_cre(new Date());
 
-                Usuario usuario = usuarioRepository.findById(userId)
+                User user = usuarioRepository.findById(userId)
                         .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + userId));
 
-                observacion.setUsuario(usuario);
+                observacion.setUser(user);
 
                 observacion.setUsr_id_obs(userId);
 
@@ -164,7 +162,7 @@ public class ObservacionServiceImpl implements ObservacionService {
 
     @Override
     public List<Observacion> obtenerObservacionesPorUsuario(Long userId) {
-        Optional<Usuario> usuario = usuarioRepository.findById(userId);
+        Optional<User> usuario = usuarioRepository.findById(userId);
         return usuario.map(observacionRepository::findByUsuario).orElseGet(Collections::emptyList);
     }
 

@@ -2,8 +2,6 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Examen;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaService;
 

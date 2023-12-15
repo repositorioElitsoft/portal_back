@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Table(name = "TBL_USR")
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "usr_id")
-public class Usuario {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

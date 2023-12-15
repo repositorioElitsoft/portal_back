@@ -2,7 +2,6 @@
 package com.elitsoft.proyectoCuestionario_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -16,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  *
@@ -40,7 +38,7 @@ public class CargoUsuario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     @JsonBackReference
-    private Usuario usuario;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crg_elit_id")
@@ -62,12 +60,12 @@ public class CargoUsuario {
     }
 
 
-    public Usuario getUsuario() {
-        return usuario;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 

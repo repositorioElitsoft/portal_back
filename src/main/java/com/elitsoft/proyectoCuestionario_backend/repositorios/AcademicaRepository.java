@@ -2,9 +2,8 @@
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Academica;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +18,7 @@ public interface AcademicaRepository extends JpaRepository <Academica, Long> {
     Academica save(Academica academica);
     
     // Método para obtener inf. academica por usuario
-    List<Academica> findByUsuario(Usuario usuario);
+    List<Academica> findByUsuario(User user);
 
     // Método para listar todas las inf. academica
     List<Academica> findAll();

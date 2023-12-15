@@ -2,12 +2,9 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
 import com.elitsoft.proyectoCuestionario_backend.entidades.Herramienta;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Laboral;
 import com.elitsoft.proyectoCuestionario_backend.servicios.LaboralService;
-import com.elitsoft.proyectoCuestionario_backend.entidades.Usuario;
 import com.elitsoft.proyectoCuestionario_backend.servicios.HerramientaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
