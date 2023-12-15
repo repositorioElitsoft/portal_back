@@ -29,7 +29,6 @@ public class Academica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inf_acad_id;
 
-
     private String titl;
     private String inf_acad_nom_esc;
     @JsonFormat(pattern = "yyyy-MM-dd")

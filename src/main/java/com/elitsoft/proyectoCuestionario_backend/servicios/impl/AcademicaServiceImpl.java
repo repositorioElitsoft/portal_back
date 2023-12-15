@@ -87,9 +87,10 @@ public class AcademicaServiceImpl implements AcademicaService {
         }
 
 
-    academica.getReferenciaAcademicas().forEach(a -> {
+        academica.getReferenciaAcademicas().forEach(a -> {
         System.out.println(a.toString());
-    });
+        });
+
         academica.setInf_acad_id(academicaId);
         academica.setUsuario(userOptional.get());
 
