@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.jmx.export.annotation.ManagedResource;
-import org.springframework.lang.Nullable;
 
 import java.util.Date;
 import java.util.List;
@@ -24,29 +20,41 @@ import javax.persistence.*;
 @Table(name = "TBL_USR")
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "usr_id")
-public class Usuario  {
-    
+public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long usr_id;
-    private String usr_rut;
-    private String usr_nom;
-    private String usr_ap_pat;
-    private String usr_ap_mat;
-    @Column(name="usr_direcc")
-    private String usr_direcc;
-    @Column(unique = true)
-    private String usr_email;
-    private String usr_pass;
-    private String usr_tel;
+    @Column(name = "usr_id")
+    private Long userId;
+    @Column(name = "usr_rut")
+    private String rut;
+    @Column(name = "fst_lst_id")
+    private String name;
+    @Column(name = "scn_lst_id")
+    private String firstlastname;
+    @Column(name = "usr_id")
+    private String secondLastname;
+    @Column(name="usr_addr")
+    private String address;
+    @Column(unique = true, name = "usr_email")
+    private String email;
+    @Column(name = "usr_pass")
+    private String password;
+    @Column(name = "usr_phone")
+    private String phone;
     @Column(name = "usr_gen")
-    private String usr_gen;
-    private String usr_url_link;
-    private String usr_rol;
-    private String usr_ver_code;
+    private String gender;
+    @Column(name = "usr_url_link")
+    private String verificationUrl;
+    @Column(name = "usr_rol")
+    private String rol;
+    @Column(name = "usr_ver_code")
+    private String verificationToken;
+    @Column(name = "usr_is_ver")
     // Relación muchos a uno con la entidad Pais
-    private Boolean usr_is_ver;
-    private String usr_rec_tkn;
+    private Boolean isVerified;
+    @Column(name = "usr_rec_tkn")
+    private String recoveryToken;
 
 
     @CreationTimestamp
@@ -59,45 +67,37 @@ public class Usuario  {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Column(name = "usr_cv_pth")
+    private String cvPath;
+
     @ManyToOne
     @JoinColumn(name = "usr_city_id")
     private City city;
 
-
-
-    @OneToMany(mappedBy="usuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Resultados> resultados;
+    private List<Resultados> results;
 
-   // @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
-    //@JsonManagedReference
-    //private List<ObservacionReclutador> observaciones; // unión con tbl_obs_rec
-
-
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
     @JsonManagedReference
-    private List<Herramienta> herramientas;
+    private List<Herramienta> tools;
 
 
-    @Column(name = "usr_cv_pth")
-    private String cvPath;
-
-
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Laboral> laborales;
+    private List<Laboral> jobs;
 
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Academica> academicas;
+    private List<Academica> academics;
 
-    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<CargoUsuario> cargoUsuario;
+    private List<CargoUsuario> userJob;
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Observacion> observaciones;
+    private List<Observacion> observations;
 
 
 
