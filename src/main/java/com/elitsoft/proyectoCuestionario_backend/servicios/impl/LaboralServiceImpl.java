@@ -55,6 +55,7 @@ public class LaboralServiceImpl implements LaboralService {
                 .forEach((laboralRepository::delete));
 
         laborales.forEach(laboral -> {
+            System.out.println(laboral);
             laboral.setUsuario(userOptional.get());
             laboralRepository.save(laboral);
         });
@@ -71,6 +72,10 @@ public class LaboralServiceImpl implements LaboralService {
             return false;
         }
         laboral.setUsuario(userOptional.get());
+
+        laboral.getHerramientas().forEach(herramienta -> {
+            System.out.println(herramienta.toString());
+        });
 
         if (laboral.getReferenciasLaborales() != null) {
             for (ReferenciaLaboral referencia : laboral.getReferenciasLaborales()) {

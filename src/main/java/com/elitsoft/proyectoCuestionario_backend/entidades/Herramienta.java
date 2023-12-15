@@ -43,7 +43,6 @@ public class Herramienta {
             message = "Error valores solamente pueden ser alto, medio, or bajo.")
     private String herr_nvl;
 
-
     @ManyToMany
     @JsonIgnore
     private List<Laboral> laborals;

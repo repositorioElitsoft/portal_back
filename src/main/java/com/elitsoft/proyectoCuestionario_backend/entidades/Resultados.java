@@ -46,8 +46,6 @@ public class Resultados {
     @JoinColumn(name = "exam_id")
     private Examen examen;
 
-
-
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
