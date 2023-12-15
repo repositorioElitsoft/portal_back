@@ -21,7 +21,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "TBL_INF_LAB")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 public class Laboral {
     
@@ -43,8 +42,9 @@ public class Laboral {
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "laboral", cascade = CascadeType.ALL)
-    private List<ReferenciaLaboral> referenciasLaborales = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "inf_lab_id")
+    private List<ReferenciaLaboral> referenciasLaborales;
 
     @ManyToMany
     @JoinTable(name = "laboral_herramienta",

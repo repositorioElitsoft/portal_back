@@ -43,11 +43,11 @@ public class AcademicaServiceImpl implements AcademicaService {
         }
         academica.setUsuario(userOptional.get());
 
-        if (academica.getReferenciaAcademicas() != null) {
-            for (ReferenciaAcademica referencia : academica.getReferenciaAcademicas()) {
-                referencia.setAcademica(academica);
-            }
-        }
+      //  if (academica.getReferenciaAcademicas() != null) {
+        //    for (ReferenciaAcademica referencia : academica.getReferenciaAcademicas()) {
+          //      referencia.setAcademica(academica);
+        //    }
+      //  }
 
         academicaRepository.save(academica);
         return true;
@@ -86,16 +86,11 @@ public class AcademicaServiceImpl implements AcademicaService {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
-        Optional<Academica> academicaOld = academicaRepository.findById(academicaId);
-        if( !academicaOld.isPresent()){
-            throw new EntityNotFoundException("No se encontró la entidad laboral");
-        }
 
-        if(academicaOld.get().getUsuario().getUsr_id() != userOptional.get().getUsr_id()){
-            throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
-        }
-
-        academica.setInf_acad_id(academicaOld.get().getInf_acad_id());
+    academica.getReferenciaAcademicas().forEach(a -> {
+        System.out.println(a.toString());
+    });
+        academica.setInf_acad_id(academicaId);
         academica.setUsuario(userOptional.get());
 
         academicaRepository.save(academica);

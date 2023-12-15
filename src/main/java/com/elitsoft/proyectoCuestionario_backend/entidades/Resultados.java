@@ -34,12 +34,7 @@ public class Resultados {
     private Long usuarioId;
 
 
-    public String getRol() {
-        if (usuario != null) {
-            return usuario.getUsr_rol();
-        }
-        return null;
-    }
+
     private Integer tiempo;
 
     @ManyToOne(fetch = FetchType.EAGER)

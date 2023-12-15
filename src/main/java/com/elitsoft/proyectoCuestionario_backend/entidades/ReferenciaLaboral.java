@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "TBL_REF_LAB")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 public class ReferenciaLaboral {
 
@@ -23,8 +22,5 @@ public class ReferenciaLaboral {
     private String ref_lab_email;
     private String ref_lab_tel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "inf_lab_id")
-    private Laboral laboral;
+
 }
