@@ -38,8 +38,9 @@ public class Academica {
     private LocalDate inf_acad_fec_fin;
     private String inf_acad_est;
 
-    @OneToMany(mappedBy = "academica", cascade = CascadeType.ALL)
-    private List<ReferenciaAcademica> referenciaAcademicas = new ArrayList<>();
+    @OneToMany( cascade = CascadeType.ALL)
+    @JoinColumn(name = "inf_acad_id")
+    private List<ReferenciaAcademica> referenciaAcademicas;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

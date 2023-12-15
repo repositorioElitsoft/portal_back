@@ -55,7 +55,6 @@ public class LaboralServiceImpl implements LaboralService {
                 .forEach((laboralRepository::delete));
 
         laborales.forEach(laboral -> {
-            System.out.println(laboral);
             laboral.setUsuario(userOptional.get());
             laboralRepository.save(laboral);
         });
@@ -73,15 +72,15 @@ public class LaboralServiceImpl implements LaboralService {
         }
         laboral.setUsuario(userOptional.get());
 
-        laboral.getHerramientas().forEach(herramienta -> {
-            System.out.println(herramienta.toString());
-        });
+   //     if (laboral.getReferenciasLaborales() != null) {
+     //       for (ReferenciaLaboral referencia : laboral.getReferenciasLaborales()) {
+      //          referencia.setLaboral(laboral);
+       //     }
+       // }
+            laboral.getReferenciasLaborales().forEach(r ->{
+                System.out.println(r.toString());
 
-        if (laboral.getReferenciasLaborales() != null) {
-            for (ReferenciaLaboral referencia : laboral.getReferenciasLaborales()) {
-                referencia.setLaboral(laboral);
-            }
-        }
+            });
 
         laboralRepository.save(laboral);
         return true;
@@ -93,55 +92,10 @@ public class LaboralServiceImpl implements LaboralService {
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
-
-        Optional<Laboral> laboralOld = laboralRepository.findById(laboralId);
-        if( !laboralOld.isPresent()){
-            throw new EntityNotFoundException("No se encontró la entidad laboral");
-        }
-
-        if(!laboralOld.get().getUsuario().getUsr_id().equals(userOptional.get().getUsr_id())){
-            throw new AccessDeniedException("Este usuario no está autorizado para actualizar este entidad");
-        }
-
-        Laboral laboralExistente = laboralOld.get();
-
-        // Actualizamos los campos de Laboral
-        laboralExistente.setInf_lab_crg_emp(laboral.getInf_lab_crg_emp());
-        laboralExistente.setInf_lab_emp(laboral.getInf_lab_emp());
-        laboralExistente.setInf_lab_act(laboral.getInf_lab_act());
-        laboralExistente.setInf_lab_fec_ini(laboral.getInf_lab_fec_ini());
-        laboralExistente.setInf_lab_fec_fin(laboral.getInf_lab_fec_fin());
-
-        // Actualizamos la lista de referencias laborales
-        List<ReferenciaLaboral> referenciasActualizadas = laboral.getReferenciasLaborales();
-        if (referenciasActualizadas != null) {
-            // Actualizamos las referencias existentes o añadir las nuevas
-            for (ReferenciaLaboral referencia : referenciasActualizadas) {
-                if (referencia.getRef_lab_id() == null) {
-                    referencia.setLaboral(laboralExistente);
-                    laboralExistente.getReferenciasLaborales().add(referencia);
-                } else {
-                    ReferenciaLaboral referenciaExistente = laboralExistente.getReferenciasLaborales().stream()
-                            .filter(r -> r.getRef_lab_id().equals(referencia.getRef_lab_id()))
-                            .findFirst()
-                            .orElse(null);
-                    if (referenciaExistente != null) {
-                        referenciaExistente.setRef_lab_nom(referencia.getRef_lab_nom());
-                        referenciaExistente.setRef_lab_emp(referencia.getRef_lab_emp());
-                        referenciaExistente.setRef_lab_email(referencia.getRef_lab_email());
-                        referenciaExistente.setRef_lab_tel(referencia.getRef_lab_tel());
-                    } else {
-                        throw new EntityNotFoundException("Referencia laboral no encontrada con id: " + referencia.getRef_lab_id());
-                    }
-                }
-            }
-            laboralExistente.getReferenciasLaborales().removeIf(
-                    refExistente -> referenciasActualizadas.stream()
-                            .noneMatch(refActualizada -> refActualizada.getRef_lab_id().equals(refExistente.getRef_lab_id()))
-            );
-        }
-
-        laboralRepository.save(laboralExistente);
+// TODO: 15-12-2023 Verificar que efectivamente esto pertenezca al usuario:
+        laboral.setInf_lab_id(laboralId);
+        laboral.setUsuario(userOptional.get());
+        laboralRepository.save(laboral);
 
         return true;
     }

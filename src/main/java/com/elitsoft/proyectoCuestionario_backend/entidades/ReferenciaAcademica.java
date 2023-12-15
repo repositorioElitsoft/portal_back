@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "TBL_REF_ACAD")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 @Data
 public class ReferenciaAcademica {
     @Id
@@ -22,8 +22,5 @@ public class ReferenciaAcademica {
     private String ref_acad_email;
     private String ref_acad_tel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "inf_acad_id")
-    private Academica academica;
+
 }
