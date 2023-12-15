@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ProductCategory;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaProductoRepository;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaProductoService;
@@ -25,7 +25,7 @@ public class CategoriaProductoServiceImpl implements CategoriaProductoService{
     }
 
     @Override
-    public List<Categoria_Producto> listarCategorias() {
+    public List<ProductCategory> listarCategorias() {
         return categoriaProductoRepository.findAll();
     }
 

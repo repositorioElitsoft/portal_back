@@ -1,9 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.entidades.VersionProducto;
-import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaProductoRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ProductoRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.VersionProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

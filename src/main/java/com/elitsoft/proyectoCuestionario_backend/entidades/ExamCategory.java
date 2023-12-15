@@ -25,7 +25,6 @@ public class ExamCategory {
     private String title;
     @Column(name = "exam_cat_desc")
     private String description;
-
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Examen> exams;

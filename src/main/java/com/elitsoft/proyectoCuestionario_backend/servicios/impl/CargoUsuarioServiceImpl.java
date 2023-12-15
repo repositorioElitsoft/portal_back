@@ -37,7 +37,7 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
     }
 
     @Override
-    public Boolean guardarCargo(CargoUsuario cargo, String jwt, Date fechaPostulacion) throws Exception {
+    public Boolean guardarCargo(UserJob cargo, String jwt, Date fechaPostulacion) throws Exception {
 
         Optional<User> usuarioOptional = usuarioService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
@@ -57,38 +57,38 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
 
 
     @Override
-    public List<CargoUsuario> obtenerCargosPorUsuario(User usr_id) {
+    public List<UserJob> obtenerCargosPorUsuario(User usr_id) {
         return cargoRepository.findByUsuario(usr_id);
     }
 
     @Override
-    public List<CargoUsuario> obtenerListaCargos() {
+    public List<UserJob> obtenerListaCargos() {
         return cargoRepository.findAll();
     }
 
     @Override
-    public CargoUsuario obtenerCargoUsuario(String jwt) throws Exception {
+    public UserJob obtenerCargoUsuario(String jwt) throws Exception {
         Optional<User> userOptional = usuarioService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
-        List<CargoUsuario> cargoUsuario = cargoRepository.findByUsuario(userOptional.get());
-        if(cargoUsuario == null){
+        List<UserJob> userJob = cargoRepository.findByUsuario(userOptional.get());
+        if(userJob == null){
             throw new EntityNotFoundException();
         }
-        if(cargoUsuario.isEmpty()){
-            return new CargoUsuario();
+        if(userJob.isEmpty()){
+            return new UserJob();
         }
 
-        return cargoUsuario.get(0);
+        return userJob.get(0);
     }
 
     @Override
     public void eliminarCargoPorUsuario(Long usuarioId) {
         Optional<User> usuario = usuarioRepository.findById(usuarioId);
         if (usuario.isPresent()) {
-            List<CargoUsuario> cargos = cargoRepository.findByUsuario(usuario.get());
+            List<UserJob> cargos = cargoRepository.findByUsuario(usuario.get());
             cargoRepository.deleteAll(cargos);
         }
     }
@@ -99,12 +99,12 @@ public class CargoUsuarioServiceImpl implements CargoUsuarioService{
             return false;
         }
 
-        CargoUsuario cargoUsuario = cargoRepository.findByUsuario(usuarioOptional.get()).stream()
+        UserJob userJob = cargoRepository.findByUsuario(usuarioOptional.get()).stream()
                 .findFirst()
-                .orElse(new CargoUsuario());
+                .orElse(new UserJob());
 
-        cargoUsuario.setDisponibilidad(disponibilidadLaboral);
-        cargoRepository.save(cargoUsuario);
+        userJob.setDisponibilidad(disponibilidadLaboral);
+        cargoRepository.save(userJob);
         return true;
     }
 

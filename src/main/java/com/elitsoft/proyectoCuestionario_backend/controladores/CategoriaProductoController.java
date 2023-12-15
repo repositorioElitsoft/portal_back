@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ProductCategory;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.servicios.CategoriaProductoService;
 import java.util.List;
@@ -30,7 +30,7 @@ public class CategoriaProductoController {
     }
 
     @GetMapping("/")
-    public List<Categoria_Producto> listarCategorias() {
+    public List<ProductCategory> listarCategorias() {
         return categoriaProductoService.listarCategorias();
     }
 

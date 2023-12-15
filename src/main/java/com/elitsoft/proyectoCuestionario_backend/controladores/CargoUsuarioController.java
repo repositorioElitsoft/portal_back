@@ -1,6 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.controladores;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.CargoUsuario;
+import com.elitsoft.proyectoCuestionario_backend.entidades.UserJob;
 import com.elitsoft.proyectoCuestionario_backend.entidades.User;
 
 import java.util.Date;
@@ -31,7 +31,7 @@ public class CargoUsuarioController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarCargo(@RequestBody CargoUsuario cargo,
+    public ResponseEntity<?> guardarCargo(@RequestBody UserJob cargo,
                                           @RequestHeader("Authorization") String jwt) {
         try {
             Date fechaPostulacion = new Date();
@@ -45,22 +45,22 @@ public class CargoUsuarioController {
 
 
     @GetMapping("/")
-    public ResponseEntity<CargoUsuario> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
-        CargoUsuario cargoUsuario = cargoService.obtenerCargoUsuario(jwt);
-        return new ResponseEntity<>(cargoUsuario,HttpStatus.OK);
+    public ResponseEntity<UserJob> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
+        UserJob userJob = cargoService.obtenerCargoUsuario(jwt);
+        return new ResponseEntity<>(userJob,HttpStatus.OK);
     }
 
     @GetMapping("/por-usuario/{usuarioId}")
-    public ResponseEntity<List<CargoUsuario>> obtenerCargosPorUsuario(@PathVariable Long usuarioId) {
+    public ResponseEntity<List<UserJob>> obtenerCargosPorUsuario(@PathVariable Long usuarioId) {
         User user = new User();
         user.setUsr_id(usuarioId);
-        List<CargoUsuario> cargos = cargoService.obtenerCargosPorUsuario(user);
+        List<UserJob> cargos = cargoService.obtenerCargosPorUsuario(user);
         return new ResponseEntity<>(cargos, HttpStatus.OK);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<CargoUsuario>> obtenerListaCargos() {
-        List<CargoUsuario> herramientas = cargoService.obtenerListaCargos();
+    public ResponseEntity<List<UserJob>> obtenerListaCargos() {
+        List<UserJob> herramientas = cargoService.obtenerListaCargos();
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
     }
 

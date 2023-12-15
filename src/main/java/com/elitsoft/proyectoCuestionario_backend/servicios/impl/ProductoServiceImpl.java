@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.servicios.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ProductCategory;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.CategoriaProductoRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositorios.ProductoRepository;
@@ -30,7 +30,7 @@ public class ProductoServiceImpl implements ProductoService {
    
     @Override
     public List<Producto> findByCategoriaId(Long cat_prod_id) {
-        Categoria_Producto categoriaProducto = categoriaProductoRepository.findById(cat_prod_id)
+        ProductCategory categoriaProducto = categoriaProductoRepository.findById(cat_prod_id)
                 .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada con el ID: " + cat_prod_id));
         return productoRepository.findByCat_prod_id_Id(cat_prod_id);
     }

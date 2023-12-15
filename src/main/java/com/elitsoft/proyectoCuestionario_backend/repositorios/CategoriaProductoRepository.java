@@ -1,7 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.repositorios;
 
-import com.elitsoft.proyectoCuestionario_backend.entidades.Categoria_Producto;
+import com.elitsoft.proyectoCuestionario_backend.entidades.ProductCategory;
 import com.elitsoft.proyectoCuestionario_backend.entidades.Producto;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Maeva Martínez
  */
-public interface CategoriaProductoRepository extends JpaRepository <Categoria_Producto, Long> {
+public interface CategoriaProductoRepository extends JpaRepository <ProductCategory, Long> {
     
     //List<Categoria_Producto> findByProductos(Producto producto);
     // Método para obtener todos los productos asociados a una categoría específica
@@ -20,7 +20,7 @@ public interface CategoriaProductoRepository extends JpaRepository <Categoria_Pr
     List<Producto> findProductosByCategoriaId(@Param("cat_prod_id") Long cat_prod_id);
     
     // Método para obtener todas las categorías de productos
-    List<Categoria_Producto> findAll();
+    List<ProductCategory> findAll();
     
      
     

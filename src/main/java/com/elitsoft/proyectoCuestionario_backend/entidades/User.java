@@ -93,7 +93,7 @@ public class User {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<CargoUsuario> userJob;
+    private List<UserJob> userJob;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference

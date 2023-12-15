@@ -21,55 +21,39 @@ import javax.persistence.*;
  * @author Maeva Martínez
  */
 @Entity
-@Table(name = "TBL_CRG_USR")
+@Table(name = "TBL_JOB_USR")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
-public class CargoUsuario {
+public class UserJob {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long crg_usr_id;
-    
-    private String crg_usr_pret;
-    private String crg_prf;
-    private String disponibilidad;
-    private String tiempo_incorporacion;
-    private String otro_tiempo_incorporacion;
+    @Column(name = "job_usr_id")
+    private Long id;
+    @Column(name = "job_usr_sal")
+    private String salaryRequirement;
+    @Column(name = "job_prf")
+    private String optionalJob;
+    @Column(name = "job_ava")
+    private String availability;
+    @Column(name = "job_time")
+    private String integrationTime;
+    @Column(name = "job_opt_time")
+    private String optionalIntegrationTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "job_app_date")
+    private Date applicationDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     @JsonBackReference
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crg_elit_id")
+    @JoinColumn(name = "job_pos_id")
     private JobPosition jobPosition;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "fecha_Postulacion")
-    private Date fechaPostulacion;
-
-    public CargoUsuario() {
-    }
-
-    public Long getCrg_usr_id() {
-        return crg_usr_id;
-    }
-
-    public void setCrg_usr_id(Long crg_usr_id) {
-        this.crg_usr_id = crg_usr_id;
-    }
 
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-
-    public void setFechaPostulacion(Date fechaPostulacion) {
-        this.fechaPostulacion = fechaPostulacion;
-    }
 }
