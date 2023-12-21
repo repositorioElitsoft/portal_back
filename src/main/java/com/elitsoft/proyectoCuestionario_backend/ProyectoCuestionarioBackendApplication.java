@@ -1,7 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend;
 
-import com.elitsoft.proyectoCuestionario_backend.servicios.FileService;
-import com.elitsoft.proyectoCuestionario_backend.servicios.UsuarioService;
+import com.elitsoft.proyectoCuestionario_backend.services.FileService;
+import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.TimeZone;
 
 @SpringBootApplication
 public class ProyectoCuestionarioBackendApplication implements CommandLineRunner{
@@ -20,7 +19,7 @@ public class ProyectoCuestionarioBackendApplication implements CommandLineRunner
     FileService fileService;
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoCuestionarioBackendApplication.class, args);
