@@ -96,7 +96,6 @@ public class LaboralServiceImpl implements LaboralService {
         laboral.setInf_lab_id(laboralId);
         laboral.setUsuario(userOptional.get());
         laboralRepository.save(laboral);
-
         return true;
     }
 
