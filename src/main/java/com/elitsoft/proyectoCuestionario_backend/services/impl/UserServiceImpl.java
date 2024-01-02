@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean verificarUsuario(Map<String, String> body) {
 
-        Optional<User> user = userRepository.findByVerificationToken(body.get("code"));
+        Optional<User> user = userRepository.findByVerification(new UserVerification());
 
         if (!user.isPresent()) {
             return false;

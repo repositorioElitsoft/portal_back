@@ -19,11 +19,7 @@ public class ObservationController {
     private ObservationService observationService;
 
 
-    @GetMapping("/por-usuario/{userId}")
-    public ResponseEntity<List<Observation>> obtenerObservacionesPorUsuario(@PathVariable Long userId) {
-        List<Observation> observaciones = observationService.obtenerObservacionesPorUsuario(userId);
-        return ResponseEntity.ok(observaciones);
-    }
+
 
     @PostMapping("/guardarRec/{userId}/{usr_id_obs}/{usr_id_obs_mod}")
     public ResponseEntity<Boolean> guardarObservacionRec(@RequestBody Observation observation, @PathVariable Long userId,
@@ -76,17 +72,6 @@ public class ObservationController {
 
 
 
-    @GetMapping("/{usr_id}")
-    public ResponseEntity<List<ObservacionDTO>> getObservacionesByUsuario(@PathVariable Long usr_id) {
-        List<ObservacionDTO> observaciones = observationService.findObservacionUsuarioDetails(usr_id);
-        return ResponseEntity.ok(observaciones);
-    }
-
-    @GetMapping("/Cat/{usr_id}")
-    public ResponseEntity<List<CatObservacionDTO>> getCatObservacionesByUsuario(@PathVariable Long usr_id) {
-        List<CatObservacionDTO> observaciones = observationService.findCatObservacionUsuarioDetails(usr_id);
-        return ResponseEntity.ok(observaciones);
-    }
 }
 
 

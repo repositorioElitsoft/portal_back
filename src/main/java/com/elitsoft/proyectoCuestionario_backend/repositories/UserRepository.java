@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.elitsoft.proyectoCuestionario_backend.entities.UserRecoveryToken;
+import com.elitsoft.proyectoCuestionario_backend.entities.UserVerification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +24,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional <User> findById(Long usr_id);
 
     Optional<User> findByRecoveryToken(UserRecoveryToken token);
-    Optional<User> findByVerificationToken(String token);
+    Optional<User> findByVerification(UserVerification verification);
     Optional<User> findByEmail(String email);
 
     List<User> findAll();

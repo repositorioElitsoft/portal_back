@@ -17,11 +17,6 @@ public interface ObservationService {
     Observation actualizarObservacionRec(Long obs_id, Observation observationActualizada, Long usr_id_obs_mod); //felipe
 
 
-    List<Observation> obtenerObservacionesPorUsuario(Long userId); // felipe y mio
-
-    List<ObservacionDTO> findObservacionUsuarioDetails(Long usr_id);
-
-    List<CatObservacionDTO> findCatObservacionUsuarioDetails(Long usr_id);
 
 
 

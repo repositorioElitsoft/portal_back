@@ -73,28 +73,12 @@ public class ObservationServiceImpl implements ObservationService {
             return null;
         }
     }
+}
 
 
 
-    @Override
-    public List<Observation> obtenerObservacionesPorUsuario(Long userId) {
-        Optional<User> usuario = userRepository.findById(userId);
-        return usuario.map(observationRepository::findByUser).orElseGet(Collections::emptyList);
-    }
 
 
-    @Override
-    public List<ObservacionDTO> findObservacionUsuarioDetails(Long usr_id) {
-        List<Observation> observations = observationRepository.findByUser(new User());
 
-        return new ArrayList<>();
-    }
 
-    @Override
-    public List<CatObservacionDTO> findCatObservacionUsuarioDetails(Long usr_id) {
-        List<Observation> observations = observationRepository.findByUser(new User());
 
-        return new ArrayList<>();
-    }
-
-    }
