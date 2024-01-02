@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -50,7 +51,8 @@ public class UserJob {
     private UserJobAvailability availability;
 
 
-
+    @OneToMany(mappedBy = "userJob", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserJobApproval> approvals;
 
 
 }
