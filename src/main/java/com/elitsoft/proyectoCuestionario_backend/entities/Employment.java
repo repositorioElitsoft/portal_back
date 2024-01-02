@@ -22,7 +22,7 @@ public class Employment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inf_emp_id")
     private Long id;
-    @Column(name = "inf_emp_crg_emp")
+    @Column(name = "inf_emp_job_emp")
     private String position;
     @Column(name = "inf_emp_comp")
     private String company;
@@ -39,7 +39,7 @@ public class Employment {
     @JoinColumn(name = "usr_id") // Nombre de la columna que será clave foránea para la tabla user
     private User user;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "inf_lab_id")
+    @JoinColumn(name = "inf_emp_id")
     private List<EmploymentReference> employmentReferences;
 
     @ManyToMany

@@ -7,21 +7,21 @@ import javax.persistence.*;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TBL_REF_LAB")
+@Table(name = "TBL_REF_emp")
 @Data
 public class EmploymentReference {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ref_lab_id")
+    @Column(name = "ref_emp_id")
     private Long id;
-    @Column(name = "ref_lab_nom")
+    @Column(name = "ref_emp_nom")
     private String name;
-    @Column(name = "ref_lab_emp")
+    @Column(name = "ref_emp_emp")
     private String company;
-    @Column(name = "ref_lab_email")
+    @Column(name = "ref_emp_email")
     private String email;
-    @Column(name = "ref_lab_phn")
+    @Column(name = "ref_emp_phn")
     private String phone;
 
 

@@ -1,6 +1,5 @@
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
-import com.elitsoft.proyectoCuestionario_backend.entities.ObservationCategory;
 import com.elitsoft.proyectoCuestionario_backend.services.ObservationCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
