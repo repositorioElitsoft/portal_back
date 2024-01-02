@@ -22,7 +22,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "TBL_JOB_USR")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 public class UserJob {
     
@@ -31,15 +30,8 @@ public class UserJob {
     @Column(name = "job_usr_id")
     private Long id;
     @Column(name = "job_usr_sal")
-    private String salaryRequirement;
-    @Column(name = "job_prf")
-    private String optionalJob;
-    @Column(name = "job_ava")
-    private String availability;
-    @Column(name = "job_time")
-    private String integrationTime;
-    @Column(name = "job_opt_time")
-    private String optionalIntegrationTime;
+    private String salary;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "job_app_date")
     private Date applicationDate;
@@ -52,6 +44,11 @@ public class UserJob {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_pos_id")
     private JobPosition jobPosition;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "availability_usr_id")
+    private UserJobAvailability availability;
+
 
 
 
