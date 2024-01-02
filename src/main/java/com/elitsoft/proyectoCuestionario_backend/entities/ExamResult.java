@@ -17,25 +17,28 @@ public class ExamResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "res_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usr_id")
-    @JsonBackReference
-    private User user;
-    @Column(name = "res_res")
-    private Integer examResult;
-    @Column(name = "usr_id", insertable = false, updatable = false)
-    private Long usuarioId;
-    private Integer time;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "exam_id")
-    private Exam exam;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @Column(name = "res_res")
+    private Integer score;
+    @Column(name = "res_time")
+    private Integer time;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usr_id")
+    @JsonBackReference
+    private User user;
+    @Column(name = "res_score_max")
+    private Integer maxScore;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prd_id")
+    private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "level_id")
+    private Level level;
+
+
+
 
 }

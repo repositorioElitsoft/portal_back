@@ -1,6 +1,5 @@
 package com.elitsoft.proyectoCuestionario_backend.repositories;
 
-import com.elitsoft.proyectoCuestionario_backend.entities.Exam;
 import com.elitsoft.proyectoCuestionario_backend.entities.ExamUserCount;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
-import com.elitsoft.proyectoCuestionario_backend.entities.Exam;
 import com.elitsoft.proyectoCuestionario_backend.entities.Question;
 import com.elitsoft.proyectoCuestionario_backend.repositories.QuestionRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.QuestionService;

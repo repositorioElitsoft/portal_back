@@ -3,14 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -25,8 +18,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "qst_id")
     private Long id;
-
-    @Column(length = 5000, name = "qst_cont")
+    @Column(length = 5000, name = "qst_content")
     private String contenido;
     @Column(name = "qst_opt1")
     private String option1;
@@ -40,8 +32,10 @@ public class Question {
     private String answer;
     @Column(name = "qst_pts")
     private int points ;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
-    private Exam exam;
+    @JoinColumn(name = "prd_id")
+    private Product product;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "level_id")
+    private Level level;
 }

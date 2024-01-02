@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.repositories;
 
-import com.elitsoft.proyectoCuestionario_backend.entities.Exam;
 import com.elitsoft.proyectoCuestionario_backend.entities.Question;
 
 import java.util.List;

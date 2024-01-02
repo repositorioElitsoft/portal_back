@@ -1,7 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
-import com.elitsoft.proyectoCuestionario_backend.entities.ExamCategory;
 import com.elitsoft.proyectoCuestionario_backend.services.ExamCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

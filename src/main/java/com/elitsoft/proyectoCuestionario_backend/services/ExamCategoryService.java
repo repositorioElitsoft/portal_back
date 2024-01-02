@@ -1,8 +1,6 @@
 
 package com.elitsoft.proyectoCuestionario_backend.services;
 
-import com.elitsoft.proyectoCuestionario_backend.entities.ExamCategory;
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
