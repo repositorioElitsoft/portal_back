@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 
@@ -45,14 +46,11 @@ public class User {
     @Column(name = "usr_gen")
     private String gender;
     @Column(name = "usr_url_link")
-    private String verificationUrl;
-    @Column(name = "usr_rol")
-    private String rol;
+    private String linkedin;
+
     @Column(name = "usr_ver_code")
     private String verificationToken;
-    @Column(name = "usr_is_ver")
-    // Relación muchos a uno con la entidad Pais
-    private Boolean isVerified;
+
     @Column(name = "usr_rec_tkn")
     private String recoveryToken;
 
@@ -98,6 +96,12 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Observation> observations;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
 
 
 
