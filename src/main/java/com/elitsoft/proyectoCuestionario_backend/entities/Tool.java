@@ -32,7 +32,7 @@ public class Tool {
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vrs_id",)
+    @JoinColumn(name = "vrs_id")
     private ProductVersion productVersion;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -40,7 +40,7 @@ public class Tool {
     private Certification certification;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "usr_cert_id")
+    @JoinColumn(name = "level_id")
     private Level level;
 
     @ManyToMany
