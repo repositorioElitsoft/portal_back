@@ -43,34 +43,34 @@ public class User {
     private String password;
     @Column(name = "usr_phone")
     private String phone;
-    @Column(name = "usr_gen")
-    private String gender;
+
     @Column(name = "usr_url_link")
     private String linkedin;
 
-    @Column(name = "usr_ver_code")
-    private String verificationToken;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "recovery_tkn_id")
+    private UserRecoveryToken recoveryToken;
 
-    @Column(name = "usr_rec_tkn")
-    private String recoveryToken;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "gen_id")
+    private Gender gender;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usr_cv_id")
+    private UserCV cv;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
-
-    @Column(name = "usr_cv_pth")
-    private String cvPath;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usr_ver_id")
+    private UserVerification verification;
 
     @ManyToOne
     @JoinColumn(name = "usr_city_id")
     private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "usr_city_id")
+    private UserPreferredJob preferredJob;
+
 
     @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     @JsonManagedReference
