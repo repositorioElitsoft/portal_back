@@ -18,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Stream.of(new SimpleGrantedAuthority("ROLE_"+ appuser.getRol().toUpperCase()))
+        return Stream.of(new SimpleGrantedAuthority("ROLE_"))
                 .collect(Collectors.toList());
     }
 

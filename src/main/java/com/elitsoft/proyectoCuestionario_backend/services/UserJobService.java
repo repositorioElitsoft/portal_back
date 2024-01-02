@@ -21,6 +21,5 @@ public interface UserJobService {
 
     void eliminarCargoPorUsuario(Long usuarioId);
 
-    Boolean actualizarDisponibilidadLaboral(String disponibilidadLaboral, String jwt) throws  Exception;
-    
+
 }

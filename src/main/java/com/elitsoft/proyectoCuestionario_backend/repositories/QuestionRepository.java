@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
  */
 public interface QuestionRepository extends JpaRepository <Question, Long>{
     
-    List<Question> findByExam(Exam exam);
 
     @Modifying
     @Transactional

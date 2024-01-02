@@ -13,6 +13,6 @@ public class Gender {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gen_id")
     private Long id;
-    @Column(name = "gen_id")
+    @Column(name = "gen_name")
     private String name;
 }

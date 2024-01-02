@@ -60,10 +60,6 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findById(preguntaId).get();
     }
 
-    @Override
-    public List<Question> obtenerPreguntasDelExamen(Exam exam) { //admin
-        return questionRepository.findByExam(exam);
-    }
 
     @Override
     public void eliminarPregunta(Long preguntaId) {

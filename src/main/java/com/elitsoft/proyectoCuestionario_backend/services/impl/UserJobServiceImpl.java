@@ -92,21 +92,6 @@ public class UserJobServiceImpl implements UserJobService {
             cargoRepository.deleteAll(cargos);
         }
     }
-    @Override
-    public Boolean actualizarDisponibilidadLaboral(String disponibilidadLaboral, String jwt) throws Exception {
-        Optional<User> usuarioOptional = userService.getUsuarioByToken(jwt);
-        if (!usuarioOptional.isPresent()) {
-            return false;
-        }
-
-        UserJob userJob = cargoRepository.findByUser(usuarioOptional.get()).stream()
-                .findFirst()
-                .orElse(new UserJob());
-
-        userJob.setAvailability(disponibilidadLaboral);
-        cargoRepository.save(userJob);
-        return true;
-    }
 
 
 }

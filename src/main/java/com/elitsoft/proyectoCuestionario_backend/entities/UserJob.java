@@ -51,7 +51,7 @@ public class UserJob {
     private UserJobAvailability availability;
 
 
-    @OneToMany(mappedBy = "userJob", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserJobApproval> approvals;
 
 

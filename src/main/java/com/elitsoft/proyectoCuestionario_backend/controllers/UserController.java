@@ -194,36 +194,6 @@ public class UserController {
         return userService.obtenerUsuarioId(usuarioId);
     }
 
-    @PostMapping("/admin")
-    public ResponseEntity<?> guardarAdmin(@RequestBody User user) throws Exception {
-        try {
-            User nuevoUser = userService.guardarAdmin(user);
-            return new ResponseEntity<User>(nuevoUser, HttpStatus.CREATED);
-        } catch (DataAccessException ex) {
-            CustomError error = new CustomError();
-            error.setError("El usuario ya existe.");
-            return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
-        }
-    }
 
-    @PostMapping("/rec")
-    public ResponseEntity<?> guardarRec(@RequestBody User user) throws Exception {
-        try {
-            User nuevoUser = userService.guardarRec(user);
-            return new ResponseEntity<User>(nuevoUser, HttpStatus.CREATED);
-        } catch (DataAccessException ex) {
-            CustomError error = new CustomError();
-            error.setError("El usuario ya existe.");
-            return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
-        }
-    }
-    /*@DeleteMapping("/file/{userId}")
-    public ResponseEntity<?> eliminarCV(@PathVariable("userId") Long userId) {
-        try {
-            usuarioService.eliminarCVByUser(userId);
-            return new ResponseEntity<>("Currículum eliminado con éxito.", HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }*/
+
 }

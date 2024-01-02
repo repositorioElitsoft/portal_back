@@ -1,7 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
-import com.elitsoft.proyectoCuestionario_backend.repositories.ExamenUserCountRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.ExamResultRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.ExamResultService;
@@ -19,8 +18,7 @@ public class ExamResultServiceImpl implements ExamResultService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ExamenUserCountRepository examenUserCountRepository;
+
     @Autowired
     private UserService userService;
 
@@ -48,17 +46,7 @@ public class ExamResultServiceImpl implements ExamResultService {
         examResult.setUser(userOptional.get());
         ExamResult createdExamResult = examResultRepository.save(examResult);
 
-        Optional<ExamUserCount> examenUserCountOptional = examenUserCountRepository.findByUserAndExam(userOptional.get(), examResult.getExam());
-        ExamUserCount examUserCount = new ExamUserCount();
-        if(examenUserCountOptional.isPresent()) {
-            examUserCount = examenUserCountOptional.get();
-            examUserCount.setCount(examUserCount.getCount() + 1);
-        } else{
-            examUserCount.setExam(examResult.getExam());
-            examUserCount.setUser(userOptional.get());
-            examUserCount.setCount(1);
-        }
-        examenUserCountRepository.save(examUserCount);
+
         return true;
     }
 

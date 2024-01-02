@@ -42,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
         String messageBody =
                 "Gracias por registrarte en la plataforma de Elitsoft."
                 + "Para verificar tu email haz click en el siguiente link: <br>"
-                + "<a href='"+ verificationRoute + user.getVerificationUrl() +"'> Verificar email </a>  <br>"
+                //TODO + "<a href='"+ verificationRoute + user.getVerificationUrl() +"'> Verificar email </a>  <br>"
                 + "Si no te has registrado y ignora este email.";
 
         helper.setFrom(senderEmail, "Equipo Elitsoft");

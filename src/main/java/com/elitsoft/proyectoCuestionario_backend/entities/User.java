@@ -68,7 +68,7 @@ public class User {
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "usr_city_id")
+    @JoinColumn(name = "pref_job_usr_id")
     private UserPreferredJob preferredJob;
 
 
@@ -92,10 +92,6 @@ public class User {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<UserJob> userJob;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Observation> observations;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",

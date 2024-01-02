@@ -64,17 +64,6 @@ public class UserJobController {
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
     }
 
-    @PutMapping("/disponibilidad-laboral")
-    public ResponseEntity<?> actualizarDisponibilidadLaboral(@RequestBody Map<String, String> request,
-                                                             @RequestHeader("Authorization") String jwt) {
-        try {
-            String disponibilidadLaboral = request.get("disponibilidadLaboral");
-            Boolean result = cargoService.actualizarDisponibilidadLaboral(disponibilidadLaboral, jwt);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
+    
 
 }

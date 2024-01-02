@@ -22,7 +22,6 @@ public interface QuestionService {
 
     Question obtenerPregunta(Long preguntaId);
 
-    List<Question> obtenerPreguntasDelExamen(Exam exam);
 
     void eliminarPregunta(Long preguntaId);
 

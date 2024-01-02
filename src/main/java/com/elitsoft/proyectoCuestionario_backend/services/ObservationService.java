@@ -23,10 +23,6 @@ public interface ObservationService {
 
     List<CatObservacionDTO> findCatObservacionUsuarioDetails(Long usr_id);
 
-    Boolean guardarObservacionCat(Observation observation, Long userId, Long catObsId, Long usr_id_obs, Long usr_id_obs_mod); // mio
-
-
-    Observation actualizarObservacionCat(Long obs_id, Long catObsId, Observation observationActualizada2, Long usr_id_obs_mod); //mio
 
 
 }

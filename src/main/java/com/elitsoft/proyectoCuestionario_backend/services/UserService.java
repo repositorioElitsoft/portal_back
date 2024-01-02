@@ -50,10 +50,6 @@ public interface UserService {
 
     void eliminarUsuarioId (Long usr_id);
 
-    public User guardarAdmin(User user) throws Exception;
-
-    public User guardarRec(User user) throws Exception;
-
     public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException;
 
     public void eliminarCVByUserId (Long userId) throws IOException;

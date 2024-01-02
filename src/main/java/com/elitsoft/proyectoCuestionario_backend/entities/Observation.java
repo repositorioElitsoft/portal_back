@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,17 +23,20 @@ public class Observation {
     @Column(name = "obs_desc")
     private String description;
     @Column(name = "obs_date")
+
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private String createdAt;
+    private Date createdAt;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usr_id")
     @JsonBackReference
     private UserJob userJob;
     @Column(name = "usr_id_obs_cre")
     private Long responsibleId;
+
     @OneToMany(mappedBy = "observation", cascade = CascadeType.ALL)
-    @JoinColumn(name = "obs_id")
     @JsonIgnore
     private List<ObservationUpdate> updates;
 

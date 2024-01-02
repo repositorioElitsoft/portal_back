@@ -59,10 +59,10 @@ public class UserServiceImpl implements UserService {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setVerificationToken(UUID.randomUUID().toString());
+        //TOdo user.setVerificationToken(UUID.randomUUID().toString());
 
-        user.setIsVerified(false);
-        user.setRol("GUEST");
+        //TOdo user.setIsVerified(false);
+        //TOdo  user.setRol("GUEST");
 
         User nuevoUser = userRepository.save(user);
         emailService.sendVerificationEmail(nuevoUser);
@@ -80,19 +80,19 @@ public class UserServiceImpl implements UserService {
         }
 
         User presentUser = user.get();
-        presentUser.setIsVerified(true);
+        //TODO presentUser.setIsVerified(true);
 
         User savedUser = userRepository.save(presentUser);
 
-        return savedUser.getIsVerified();
+        return false;
     }
 
     @Override
     public User getUsuarioByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseGet(User::new);
         user.setPassword("");
-        user.setRecoveryToken("");
-        user.setVerificationToken("");
+        //TODO user.setRecoveryToken("");
+        // user.setVerificationToken("");
         return user;
     }
 
@@ -109,13 +109,14 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        Optional<User> usuario = userRepository.findByRecoveryToken(code);
+        //TODO
+        Optional<User> usuario = userRepository.findByRecoveryToken(new UserRecoveryToken());
         if (!usuario.isPresent()) {
             return false;
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-        usuario.get().setRecoveryToken("");
+
         usuario.get().setPassword(encoder.encode(password));
 
         User savedUser = userRepository.save(usuario.get());
@@ -135,7 +136,7 @@ public class UserServiceImpl implements UserService {
         }
         String filePath = fileService.saveFile(cv);
         User user = usuarioOpt.get();
-        user.setCvPath(filePath);
+        //TODO user.setCvPath(filePath);
         userRepository.save(user);
 
     }
@@ -149,7 +150,7 @@ public class UserServiceImpl implements UserService {
         if (!usuario.isPresent()) {
             return;
         }
-        usuario.get().setRecoveryToken(UUID.randomUUID().toString());
+        //usuario.get().setRecoveryToken(UUID.randomUUID().toString());
 
         User userActualizado = userRepository.save(usuario.get());
 
@@ -203,8 +204,8 @@ public class UserServiceImpl implements UserService {
         if (!usuario.isPresent()){
             throw  new EntityNotFoundException("No user with that id");
         }
-
-        return fileService.getCV(usuario.get().getCvPath());
+        //TODO fileService.getCV(usuario.get().getCvPath())
+        return null ;
 
     }
 
@@ -224,7 +225,7 @@ public class UserServiceImpl implements UserService {
         userExistente.setAddress(user.getAddress());
         userExistente.setEmail(user.getEmail());
         userExistente.setPassword(user.getPassword());
-        userExistente.setRol(user.getRol());
+        //TODO userExistente.setRol(user.getRol());
 
         return userRepository.save(userExistente);
     }
@@ -246,8 +247,8 @@ public class UserServiceImpl implements UserService {
 
         // Limpiar datos sensibles
         user.setPassword("");
-        user.setVerificationToken("");
-        user.setRecoveryToken("");
+        //user.setVerificationToken("");
+       //TODO user.setRecoveryToken("");
         user.setTools(new ArrayList<>());
 
 
@@ -283,59 +284,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public User guardarAdmin(User user) throws Exception {
-        Long usrId = user.getId();
-
-        if (usrId != null) {
-            Optional<User> usuarioLocal = userRepository.findById(usrId);
-            if (usuarioLocal.isPresent()) {
-                throw new Exception("El usuario ya está presente");
-            }
-        }
-
-
-        // para usuarios con rol "ADMIN"
-        user.setRol("ADMIN");
-        user.setVerificationToken(UUID.randomUUID().toString());
-        user.setIsVerified(false);
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-        user.setPassword(encoder.encode(user.getPassword()));
-
-        User nuevoUser = userRepository.save(user);
-        emailService.sendVerificationEmail(nuevoUser);
-
-        return nuevoUser;
-    }
-
-    @Override
-    public User guardarRec(User user) throws Exception {
-        Long usrId = user.getId();
-
-        if (usrId != null) {
-            Optional<User> usuarioLocal = userRepository.findById(usrId);
-            if (usuarioLocal.isPresent()) {
-                throw new Exception("El usuario ya está presente");
-            }
-        }
-
-
-        // para usuarios con rol "ADMIN"
-        user.setRol("ADMIN");
-        user.setVerificationToken(UUID.randomUUID().toString());
-        user.setIsVerified(false);
-
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-        user.setPassword(encoder.encode(user.getPassword()));
-
-        User nuevoUser = userRepository.save(user);
-        emailService.sendVerificationEmail(nuevoUser);
-
-        return nuevoUser;
-    }
-
 
 
     @Override
@@ -343,10 +291,10 @@ public class UserServiceImpl implements UserService {
         Optional<User> usuarioOpt = userRepository.findById(userId);
         if (usuarioOpt.isPresent()) {
             User user = usuarioOpt.get();
-            String cvPath = user.getCvPath();
+            String cvPath = " GET PATH";
             if (cvPath != null && !cvPath.isEmpty()) {
                 fileService.deleteFile(cvPath); // Agregar lógica para eliminar el archivo
-                user.setCvPath(null); // Establecer el campo del CV en null
+                //TODO user.setCvPath(null); // Establecer el campo del CV en null
                 userRepository.save(user);
             }
         }
@@ -371,11 +319,11 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = usuarioOpt.get();
-        String cvPath = user.getCvPath();
-
+        //TODO String cvPath = user.getCvPath();
+        String cvPath = "";
         if (cvPath != null && !cvPath.isEmpty()) {
             fileService.deleteFile(cvPath);
-            user.setCvPath(null);
+            //user.setCvPath(null);
             userRepository.save(user);
         } else {
             throw new EntityNotFoundException("El usuario no tiene un CV adjunto.");
