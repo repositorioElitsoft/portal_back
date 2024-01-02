@@ -25,22 +25,23 @@ public class Tool {
     private Long id;
     @Column(name = "tool_usr_yrs_exp")
     private Integer yearsOfExperience;
-    @Column(name = "tool_is_cert")
-    private Boolean isCertified;
 
-    @Column(name = "tool_lvl")
-    @Pattern(regexp = "\\b(?:alto|medio|bajo)\\b",
-            message = "Error valores solamente pueden ser alto, medio, or bajo.")
-    private String level;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id")
     @JsonBackReference
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vrs_prd_id", referencedColumnName = "vrs_id")
+    @JoinColumn(name = "vrs_id",)
     private ProductVersion productVersion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usr_cert_id")
+    private Certification certification;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usr_cert_id")
+    private Level level;
 
     @ManyToMany
     @JsonIgnore
