@@ -20,7 +20,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TBL_USR")
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "usr_id")
 public class User {
 
     @Id
@@ -97,6 +96,7 @@ public class User {
     @JoinTable(name = "tbl_user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnore
     private List<Role> roles;
 
 

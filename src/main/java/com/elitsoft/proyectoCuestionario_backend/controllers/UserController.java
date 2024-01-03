@@ -31,7 +31,7 @@ import javax.persistence.EntityNotFoundException;
  * @author Elitsoft83
  */
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/users")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     
@@ -55,7 +55,7 @@ public class UserController {
     @Autowired
     private ToolService toolService;
 
-    @GetMapping("/usuarios")
+    @GetMapping("/all")
     public List<User> obtenerUsuarios(){
         return userService.obtenerUsuario();
     }
