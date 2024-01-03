@@ -9,9 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,13 +25,15 @@ public class TokenUtils {
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
 
         //Se extraen los roles de granted authority
-        List<GrantedAuthority> newRoles = roles.stream().collect(Collectors.toList());
+        List<String> newRoles = roles.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+
+        System.out.println(newRoles);
 
         //Se construye el JWT añadiendo los roles
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(expirationDate)
-                .claim("roles", newRoles.get(0).getAuthority())
+                .claim("authorities",newRoles)
                 .signWith(Keys.hmacShaKeyFor(TOKEN_SECRET.getBytes()))
                 .compact();
     }
@@ -51,11 +51,19 @@ public class TokenUtils {
 
             //Se extrae el username y el rol
             String username = claims.getSubject();
-            String role = claims.get("roles", String.class);
+            //String role = claims.get("roles", String.class);
+            List<String> authorities = claims.get("authorities", List.class);
 
-            //Se hace conversión de tipos para adaptarla a las necesidades de la implementación
-            Collection<? extends  GrantedAuthority> roles = Stream.of(new SimpleGrantedAuthority(role))
+
+            authorities.forEach(a ->{
+                System.out.println("role "+ a);
+            });
+
+             Collection<? extends GrantedAuthority> roles = authorities.stream()
+                    .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
+
+
 
             return new UsernamePasswordAuthenticationToken(username,null,roles);
         }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -12,7 +13,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -55,14 +58,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 
 
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
 
         //Se preparan el header de HTTP para poder cargar el TOken
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(
                 "{\"" + "Authorization" + "\":\"" + "Bearer "+ token + "\"," +
-                        "\"Role\": \"" +role +"\"}"
+                        "\"Role\": \"" +roles +"\"}"
         );
         response.getWriter().flush();
         super.successfulAuthentication(request, response, chain, authResult);

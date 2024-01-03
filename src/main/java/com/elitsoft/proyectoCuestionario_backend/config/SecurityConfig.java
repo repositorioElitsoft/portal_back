@@ -30,8 +30,8 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
-    private final static String ADMIN = "ROLE_ADMIN";
-    private final static String GUEST = "ROLE_GUEST";
+    private final static String ADMIN = "admin";
+    private final static String GUEST = "admin_2";
     private final static String REC = "ROLE_REC";
     private final static String ENTR = "ROLE_ENTR";
 
@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/**/","POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**/","PUT")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/**/","DELETE")).permitAll()
+                //.requestMatchers(new AntPathRequestMatcher("/country/","GET")).hasAnyAuthority(GUEST)
                 //Permitir solamente métodos GETs autorizados con el rol de ADMIN
                 //.requestMatchers(HttpMethod.GET,"/**").hasAuthority(ADMIN)
                 /*

@@ -93,8 +93,8 @@ public class User {
     @JsonManagedReference
     private List<UserJob> userJob;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tbl_user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
