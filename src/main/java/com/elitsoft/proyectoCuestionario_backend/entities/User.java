@@ -31,7 +31,7 @@ public class User {
     @Column(name = "usr_name")
     private String name;
     @Column(name = "usr_fst_lst")
-    private String firstlastname;
+    private String firstLastname;
     @Column(name = "usr_scn_lst")
     private String secondLastname;
     @Column(name="usr_addr")
@@ -50,7 +50,7 @@ public class User {
     @JoinColumn(name = "recovery_tkn_id")
     private UserRecoveryToken recoveryToken;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "gen_id")
     private Gender gender;
 

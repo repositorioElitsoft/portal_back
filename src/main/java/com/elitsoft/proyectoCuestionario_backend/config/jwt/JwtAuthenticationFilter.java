@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(
                 "{\"" + "Authorization" + "\":\"" + "Bearer "+ token + "\"," +
-                        "\"Role\": \"" +roles +"\"}"
+                        "\"roles\": \"" +roles +"\"}"
         );
         response.getWriter().flush();
         super.successfulAuthentication(request, response, chain, authResult);

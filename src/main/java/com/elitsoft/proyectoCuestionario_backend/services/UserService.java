@@ -34,7 +34,7 @@ public interface UserService {
 
     void uploadUserCv(String jwt, MultipartFile cv) throws IOException;
 
-    public Boolean actualizarUsuario(User user, String jwt, Long cityId);
+    public Boolean updateUser(User user, String jwt);
 
     public Resource getCVByUser(Long userId) throws IOException, EntityNotFoundException;
 

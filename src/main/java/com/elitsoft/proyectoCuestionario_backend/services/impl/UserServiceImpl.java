@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Boolean actualizarUsuario(User user, String jwt, Long Id) {
+    public Boolean updateUser(User user, String jwt) {
         System.out.println("Iniciando actualización de usuario");
 
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
@@ -178,18 +178,21 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        User userExistente = usuarioOpt.get();
+        User userInDatabase = usuarioOpt.get();
 
-        userExistente.setSecondLastname(user.getSecondLastname());
-        userExistente.setFirstlastname(user.getFirstlastname());
-        userExistente.setName(user.getName());
-        userExistente.setRut(user.getRut());
-        userExistente.setPhone(user.getPhone());
-        userExistente.setCity(user.getCity());
-        userExistente.setAddress(user.getAddress());
+        userInDatabase.setSecondLastname(user.getSecondLastname());
+        userInDatabase.setFirstLastname(user.getFirstLastname());
+        userInDatabase.setName(user.getName());
+        userInDatabase.setRut(user.getRut());
+        userInDatabase.setPhone(user.getPhone());
+        userInDatabase.setCity(user.getCity());
+        userInDatabase.setAddress(user.getAddress());
+        userInDatabase.setGender(user.getGender());
+
+        System.out.println("this is the incoming gender: " + user.getGender());
 
 
-        User userActualizado = userRepository.save(userExistente);
+        User userActualizado = userRepository.save(userInDatabase);
         System.out.println("Usuario actualizado con éxito");
         return true;
     }
@@ -217,7 +220,7 @@ public class UserServiceImpl implements UserService {
 
 
         userExistente.setSecondLastname(user.getSecondLastname());
-        userExistente.setFirstlastname(user.getFirstlastname());
+        userExistente.setFirstLastname(user.getFirstLastname());
         userExistente.setName(user.getName());
         userExistente.setRut(user.getRut());
         userExistente.setPhone(user.getPhone());

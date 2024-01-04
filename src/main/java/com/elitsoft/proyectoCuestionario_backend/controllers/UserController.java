@@ -75,9 +75,9 @@ public class UserController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody User user, Long cityId, @RequestHeader("Authorization") String Jwt){
+    public ResponseEntity<?> updateUser(@RequestBody User user, @RequestHeader("Authorization") String Jwt){
         try {
-            userService.actualizarUsuario(user, Jwt, cityId);
+            userService.updateUser(user, Jwt);
             System.out.println(user);
         }
         catch (DataAccessException ex){
