@@ -29,10 +29,8 @@ public class ProductServiceImpl implements ProductService {
     
    
     @Override
-    public List<Product> findByCategoriaId(Long cat_prod_id) {
-        ProductCategory categoriaProducto = productCategoryRepository.findById(cat_prod_id)
-                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada con el ID: " + cat_prod_id));
-        return productRepository.findByCat_prod_id_Id(cat_prod_id);
+    public List<Product> findByCategoriaId(Long categoryId) {
+        return productRepository.findOfficialProductsByCategory(categoryId);
     }
 
 

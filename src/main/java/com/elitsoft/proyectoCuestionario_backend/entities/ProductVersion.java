@@ -15,7 +15,7 @@ public class ProductVersion {
     private Long id;
     @Column(name = "vrs_name")
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "prd_id")
     private Product product;
 

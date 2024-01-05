@@ -1,8 +1,13 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
+import com.elitsoft.proyectoCuestionario_backend.entities.Product;
+import com.elitsoft.proyectoCuestionario_backend.entities.ProductCategory;
 import com.elitsoft.proyectoCuestionario_backend.entities.Tool;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
+import com.elitsoft.proyectoCuestionario_backend.repositories.ProductRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositories.ProductVersionRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.ToolRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
@@ -24,21 +29,37 @@ import javax.persistence.EntityNotFoundException;
 @Service
 public class ToolServiceImpl implements ToolService {
 
-    private final ToolRepository toolRepository;
-    private final UserRepository userRepository;
+    @Autowired
+    private ToolRepository toolRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProductVersionRepository productVersionRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
-    @Autowired
-    public ToolServiceImpl(ToolRepository toolRepository, UserRepository userRepository, UserService userService) {
-        this.toolRepository = toolRepository;
-        this.userRepository = userRepository;
-        this.userService = userService;
+
+    @Override
+    public Boolean deleteUserTool(Long toolId, String jwt) {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return false;
+        }
+        Optional<User> usuarioOpt = userRepository.findByEmail(token.getPrincipal().toString());
+
+        if (!usuarioOpt.isPresent()){
+            return false;
+        }
+        //TODO check that user is tool's owner
+        toolRepository.deleteById(toolId);
+        return true;
     }
 
     @Override
-    public Boolean guardarHerramientas(List<Tool> tools, String Jwt) throws Exception {
+    public Boolean createTool(CreateToolDTO toolDTO, String Jwt) throws Exception {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(Jwt);
         if (token == null){
             return false;
@@ -50,28 +71,34 @@ public class ToolServiceImpl implements ToolService {
             return false;
         }
 
+        Tool newTool = new Tool();
+        newTool.setUser(usuarioOpt.get());
+        newTool.setLevel(toolDTO.getLevel());
+        newTool.setYearsOfExperience(toolDTO.getYearsOfExperience());
+
+        System.out.println("incoming tool "+ toolDTO);
 
 
-        List<Tool> herramientasAntiguas = toolRepository.findByUser(usuarioOpt.get());
+        //Categoría será siempre desde base de datos, fija
+        ProductCategory category = new ProductCategory();
+        category.setId(toolDTO.getCategoryId());
+        toolDTO.getProduct().setProductCategory(category);
 
-        Set<Long> idsEncontradas = new HashSet<>();
-
-        for (Tool tool : tools){
-            tool.setUser(usuarioOpt.get());
-            toolRepository.save(tool);
-            idsEncontradas.add(tool.getId());
+        if(toolDTO.getProduct().getId() == 0){
+            toolDTO.getProduct().setId(null);
+            toolDTO.setProduct(productRepository.save(toolDTO.getProduct()));
         }
 
-        for (Tool toolAntigua : herramientasAntiguas){
-                if(!idsEncontradas.contains(toolAntigua.getId())){
-                    toolRepository.deleteLaboralHerramientaReferences(toolAntigua.getId());
-                    toolRepository.delete(toolAntigua);
-                }
+        if(toolDTO.getVersion().getId() == 0){
+            toolDTO.getVersion().setId(null);
+            toolDTO.getVersion().setProduct(toolDTO.getProduct());
+            toolDTO.setVersion(productVersionRepository.save(toolDTO.getVersion()));
         }
+        newTool.setProductVersion(toolDTO.getVersion());
+        newTool.getProductVersion().setProduct(toolDTO.getProduct());
 
 
-
-
+        toolRepository.save(newTool);
         return true;
     }
 

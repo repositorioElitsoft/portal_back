@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.services;
 
 import com.elitsoft.proyectoCuestionario_backend.entities.Tool;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
 
 import java.util.List;
 
@@ -10,8 +11,9 @@ import java.util.List;
  * @author Maeva Martínez
  */
 public interface ToolService {
-    
-    Boolean guardarHerramientas(List<Tool> tools, String Jwt) throws Exception;
+
+    Boolean deleteUserTool(Long toolId, String jwt);
+    Boolean createTool(CreateToolDTO tool, String Jwt) throws Exception;
 
     List<Tool> obtenerListaHerramientasPorUsuario(String jwt);
 

@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface ProductVersionRepository extends JpaRepository<ProductVersion, Long> {
 
-    @Query("SELECT p FROM ProductVersion p WHERE p.id = :prd_id")
-    List<ProductVersion> findByProd_Id(@Param("prd_id") Long prd_id);
+    @Query("SELECT v FROM ProductVersion v WHERE v.id <= 48 AND v.product.id = :productId")
+    List<ProductVersion> findOfficialVersionsByProduct(@Param("productId") Long productId);
 
     @Query("SELECT v FROM ProductVersion v WHERE v.name = :vrsName AND v.product = :producto")
     Optional<ProductVersion> findByVrsNameAndPrd(@Param("vrsName") String vrsName, @Param("producto") Product product);
