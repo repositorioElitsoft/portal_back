@@ -1,6 +1,8 @@
 
 package com.elitsoft.proyectoCuestionario_backend.repositories;
 
+import com.elitsoft.proyectoCuestionario_backend.entities.Level;
+import com.elitsoft.proyectoCuestionario_backend.entities.Product;
 import com.elitsoft.proyectoCuestionario_backend.entities.Question;
 
 import java.util.List;
@@ -23,5 +25,17 @@ public interface QuestionRepository extends JpaRepository <Question, Long>{
     @Transactional
     @Query(value = "DELETE FROM tbl_qst WHERE qst_id = :id", nativeQuery = true)
     void eliminarPregunta(@Param("id") Long id);
+
+    /**
+     * Busca preguntas por dificultad de Level y id de Product.
+     *
+     * @param difficulty Dificultad de Level.
+     * @param productId   Id de Product.
+     * @return Lista de preguntas que coinciden con los criterios de búsqueda.
+     */
+    List<Question> findByLevelAndProduct(Level level, Product product);
+
+    // Otros métodos si es necesario
+
 
 }

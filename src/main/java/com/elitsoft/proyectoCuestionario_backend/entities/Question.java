@@ -30,8 +30,6 @@ public class Question {
     private String option4;
     @Column(name = "qst_ans")
     private String answer;
-    @Column(name = "qst_pts")
-    private Integer points;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prd_id")
     private Product product;
