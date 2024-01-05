@@ -22,7 +22,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "prd_id")
     private Long id;
-    @Column(name = "prd_nam")
+    @Column(name = "prd_nom")
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cat_prod_id") // Nombre de la columna que será clave foránea hacia la tabla de cat_prod

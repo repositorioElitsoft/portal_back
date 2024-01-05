@@ -31,7 +31,7 @@ public class Tool {
     @JsonBackReference
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "vrs_id")
     private ProductVersion productVersion;
 

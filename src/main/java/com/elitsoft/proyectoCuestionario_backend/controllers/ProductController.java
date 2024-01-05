@@ -35,9 +35,9 @@ public class ProductController {
     }
 
     // Endpoint para obtener los productos por categoría
-    @GetMapping("/producto-por-categoria/{cat_prod_id}")
-    public ResponseEntity<List<Product>> obtenerProductosPorCategoria(@PathVariable Long cat_prod_id) {
-        List<Product> products = productService.findByCategoriaId(cat_prod_id);
+    @GetMapping("/producto-por-categoria/{categoryId}")
+    public ResponseEntity<List<Product>> obtenerProductosPorCategoria(@PathVariable Long categoryId) {
+        List<Product> products = productService.findByCategoriaId(categoryId);
         return ResponseEntity.ok(products);
     }
     
