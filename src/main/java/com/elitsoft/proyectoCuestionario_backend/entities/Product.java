@@ -25,7 +25,7 @@ public class Product {
     @Column(name = "prd_nom")
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cat_prod_id") // Nombre de la columna que será clave foránea hacia la tabla de cat_prod
+    @JoinColumn(name = "cat_prod_id")
     private ProductCategory productCategory;
 
 
