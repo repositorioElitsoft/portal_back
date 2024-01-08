@@ -45,4 +45,20 @@ public class QuestionController {
         questionService.eliminarPregunta(preguntaId);
     }
 
+    @GetMapping("/generarExamen")
+    public ResponseEntity<List<Question>> generarExamen(
+            @RequestParam String description,
+            @RequestParam Long productId
+    ) {
+        List<Question> examQuestions = questionService.generarExamen(description, productId);
+        return ResponseEntity.ok(examQuestions);
+    }
+
+
+
+
+
+
+
+
 }

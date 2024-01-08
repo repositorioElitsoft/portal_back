@@ -1,7 +1,9 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
+import com.elitsoft.proyectoCuestionario_backend.entities.Employment;
 import com.elitsoft.proyectoCuestionario_backend.entities.Tool;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
 import com.elitsoft.proyectoCuestionario_backend.services.EmploymentService;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,11 @@ public class ToolController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarHerramientas(
-            @RequestBody List<Tool> tools,
+    public ResponseEntity<?> createTool(
+            @RequestBody CreateToolDTO tool,
             @RequestHeader("Authorization") String Jwt) throws Exception {
         try {
-            toolService.guardarHerramientas(tools, Jwt);
+            toolService.createTool(tool, Jwt);
         }
         catch (ConstraintViolationException exception){
             return new ResponseEntity<>(exception.getMessage(),HttpStatus.CONFLICT);
@@ -50,6 +52,13 @@ public class ToolController {
         return new ResponseEntity<>(tools, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{toolId}")
+    public ResponseEntity<?> actualizarLaboral(
+            @PathVariable Long toolId,
+            @RequestHeader("Authorization") String jwt
+    ){
+        return new ResponseEntity<>(toolService.deleteUserTool(toolId, jwt), HttpStatus.OK);
+    }
 
 }
 

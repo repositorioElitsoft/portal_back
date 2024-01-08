@@ -11,14 +11,14 @@ import java.util.List;
 
 /**
  *
- * @author Maeva Martínez 
+ * @author Maeva Martínez
  */
 @Entity
 @Table(name = "TBL_TOOL_USR")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 public class Tool {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tool_usr_id")
@@ -31,7 +31,7 @@ public class Tool {
     @JsonBackReference
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "vrs_id")
     private ProductVersion productVersion;
 

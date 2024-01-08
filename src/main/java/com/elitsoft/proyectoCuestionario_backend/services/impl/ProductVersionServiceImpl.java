@@ -23,10 +23,7 @@ public class ProductVersionServiceImpl implements ProductVersionService {
     }
 
     @Override
-    public List<ProductVersion> findByProductoId(Long prod_id) throws Exception{
-        Product product = productRepository.findById(prod_id)
-                .orElseThrow(() -> new IllegalArgumentException("Proudcto no encontrada con el ID: " + prod_id));
-
-        return productVersionRepository.findByProd_Id(prod_id);
+    public List<ProductVersion> findByProductoId(Long productId) throws Exception{
+        return productVersionRepository.findOfficialVersionsByProduct(productId);
     }
 }
