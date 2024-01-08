@@ -68,10 +68,10 @@ public class EmploymentServiceImpl implements EmploymentService {
             return false;
         }
         employment.setUser(userOptional.get());
-            employment.getEmploymentReferences().forEach(r ->{
-                System.out.println(r.toString());
+            //employment.getEmploymentReferences().forEach(r ->{
+               /* System.out.println(r.toString());
 
-            });
+            });*/
 
         employmentRepository.save(employment);
         return true;
