@@ -1,10 +1,13 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
+import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
+import com.elitsoft.proyectoCuestionario_backend.entities.UserJob;
 import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 import com.elitsoft.proyectoCuestionario_backend.entities.Observation;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import com.elitsoft.proyectoCuestionario_backend.services.ObservationService;
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataAccessException;
 
@@ -15,11 +18,10 @@ public class ObservationServiceImpl implements ObservationService {
 
     @Autowired
     private ObservationRepository observationRepository;
-
     @Autowired
     private UserRepository userRepository;
-
-
+    @Autowired
+    private UserJobRepository userJobRepository;
     @Autowired
     private UserService userService;
 
@@ -73,9 +75,22 @@ public class ObservationServiceImpl implements ObservationService {
 
 
     @Override
-    public Observation crearObservacion(Observation observation) {
+    public Observation crearObservacion(Observation observation, Long jobUserId, String jwt) {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return null;
+        }
+        Optional<User> usuarioRec = userRepository.findByEmail(token.getPrincipal().toString());
+        if (!usuarioRec.isPresent()){
+            return null;
+        }
+        Optional<UserJob> userJobOptional = userJobRepository.findById(jobUserId);
+        if (!userJobOptional.isPresent()){
+            return null;
+        }
+        observation.setResponsibleId(usuarioRec.get().getId());
+        observation.setUserJob(userJobOptional.get());
         try {
-            // Asegúrate de asignar cualquier valor predeterminado o realizar cualquier comprobación necesaria aquí
             return observationRepository.save(observation);
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -84,6 +99,7 @@ public class ObservationServiceImpl implements ObservationService {
             e.printStackTrace();
             throw new RuntimeException("Error desconocido al crear la observación.", e);
         }
+
     }
 
     @Override

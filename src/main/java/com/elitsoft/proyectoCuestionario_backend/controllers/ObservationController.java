@@ -1,8 +1,10 @@
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
+import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.CatObservacionDTO;
 import com.elitsoft.proyectoCuestionario_backend.entities.Observation;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.ObservacionDTO;
+import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.ObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/observaciones")
@@ -17,6 +20,8 @@ import java.util.List;
 public class ObservationController {
     @Autowired
     private ObservationService observationService;
+    @Autowired
+    private UserRepository userRepository;
 
 
 
@@ -37,10 +42,12 @@ public class ObservationController {
         }
     }
 
-    @PostMapping("/crear")
-    public ResponseEntity<?> crearObservacion(@RequestBody Observation observation) {
+    @PostMapping("/{jobUserId}")
+    public ResponseEntity<?> createObs(@RequestBody Observation observation, @PathVariable Long jobUserId,@RequestHeader ("Authorization")
+            String jwt) {
+
         try {
-            Observation nuevaObservacion = observationService.crearObservacion(observation);
+            Observation nuevaObservacion = observationService.crearObservacion(observation, jobUserId, jwt );
             return new ResponseEntity<>(nuevaObservacion, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,7 +64,7 @@ public class ObservationController {
     }
 
     @GetMapping("/consultar/{id}")
-    public ResponseEntity<?> consultarObservacion(@PathVariable Long id) {
+    public ResponseEntity<?> getObs(@PathVariable Long id) {
         Observation observacion = observationService.consultarObservacion(id);
         if (observacion != null) {
             return new ResponseEntity<>(observacion, HttpStatus.OK);

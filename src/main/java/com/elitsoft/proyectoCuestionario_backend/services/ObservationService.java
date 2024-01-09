@@ -15,7 +15,7 @@ public interface ObservationService {
     Observation actualizarObservacionRec(Long obs_id, Observation observationActualizada, Long usr_id_obs_mod); //felipe
 
     // Método para crear una nueva observación
-    Observation crearObservacion(Observation observation);
+    Observation crearObservacion(Observation observation, Long jobUserId, String jwt);
 
     // Método para listar todas las observaciones
     List<Observation> listarObservaciones();
