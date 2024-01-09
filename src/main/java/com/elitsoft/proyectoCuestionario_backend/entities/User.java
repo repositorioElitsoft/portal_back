@@ -88,7 +88,7 @@ public class User {
     @JsonManagedReference
     private List<Academical> academicalList;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<UserJob> userJob;
 

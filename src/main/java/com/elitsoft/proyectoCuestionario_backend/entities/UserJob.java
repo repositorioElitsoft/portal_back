@@ -24,6 +24,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TBL_JOB_USR")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserJob {
     
     @Id
@@ -46,7 +47,7 @@ public class UserJob {
     @JoinColumn(name = "job_pos_id")
     private JobPosition jobPosition;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "availability_usr_id")
     private UserJobAvailability availability;
 
