@@ -24,6 +24,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TBL_JOB_USR")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserJob {
     
     @Id

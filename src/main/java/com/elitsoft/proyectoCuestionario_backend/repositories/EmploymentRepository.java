@@ -5,7 +5,11 @@ import com.elitsoft.proyectoCuestionario_backend.entities.Employment;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
 
 /**
  *
@@ -22,4 +26,8 @@ public interface EmploymentRepository extends JpaRepository <Employment, Long>{
 
     List<Employment> findByUser(User user);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM tbl_tools_emp WHERE tool_usr_id = :toolId", nativeQuery = true)
+    void deleteToolsAssociation(Long toolId);
 }

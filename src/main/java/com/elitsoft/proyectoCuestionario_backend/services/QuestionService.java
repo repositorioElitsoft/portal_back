@@ -30,5 +30,5 @@ public interface QuestionService {
     List<Question> generarExamen(String description, Long productId);
 
 
-
+    List<Question> obtenerPreguntasPorProducto(Long productoId);
 }

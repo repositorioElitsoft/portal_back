@@ -7,12 +7,15 @@ import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
 import com.elitsoft.proyectoCuestionario_backend.services.EmploymentService;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -58,6 +61,38 @@ public class ToolController {
             @RequestHeader("Authorization") String jwt
     ){
         return new ResponseEntity<>(toolService.deleteUserTool(toolId, jwt), HttpStatus.OK);
+    }
+
+    @PostMapping("/{toolId}/certification")
+    public ResponseEntity<?> uploadCertification(@RequestParam("file") MultipartFile certification,
+                                                   @PathVariable("toolId") Long toolId,
+                                                   @RequestHeader("Authorization") String jwt){
+        Tool tool = new Tool();
+        try {
+            tool = toolService.addToolCertification(toolId,certification, jwt);
+        }
+        catch (DataAccessException | IOException ex){
+            return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(tool,HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{toolId}/certification/{certId}")
+    public ResponseEntity<?> uploadCertification(
+                                                 @PathVariable("certId") Long certId,
+                                                 @PathVariable("toolId") Long toolId,
+                                                 @RequestHeader("Authorization") String jwt){
+
+        try {
+            toolService.deleteToolCertification(toolId, certId, jwt);
+        }
+        catch (DataAccessException | IOException ex){
+            return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(true,HttpStatus.OK);
     }
 
 }
