@@ -19,8 +19,9 @@ public interface FileService {
     public String deletefile(String filename);
 
 
-    public void deleteFile(String filePath) throws IOException;
+    public Boolean deleteFile(String filePath) throws IOException;
 
+    String saveCertification(MultipartFile file) throws IOException;
 
     String saveFile(MultipartFile file) throws IOException;
     Resource getCV(String fileName) throws IOException;
