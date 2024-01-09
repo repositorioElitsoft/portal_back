@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -55,5 +57,8 @@ public class UserJob {
     @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserJobApproval> approvals;
 
+    @OneToMany(mappedBy="userJob", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Observation> observations;
 
 }
