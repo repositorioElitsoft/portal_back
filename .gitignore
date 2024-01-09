@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 cvs/
+certs/
 
 ### STS ###
 .apt_generated
