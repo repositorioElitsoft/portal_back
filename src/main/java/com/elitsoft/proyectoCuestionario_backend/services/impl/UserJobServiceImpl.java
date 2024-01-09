@@ -37,22 +37,30 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public Boolean guardarCargo(UserJob cargo, String jwt, Date fechaPostulacion) throws Exception {
+    public Boolean guardarCargo(UserJob cargo, String jwt, Date applicationDate) throws Exception {
 
         Optional<User> usuarioOptional = userService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
             return false;
         }
-        cargo.setUser(usuarioOptional.get());
 
-        cargo.setApplicationDate(fechaPostulacion);
+        User usuario = usuarioOptional.get();
 
-        cargoRepository.findByUser(usuarioOptional.get())
-                .forEach((cargoRepository::delete));
+        cargo.setUser(usuario);
 
+        cargo.setApplicationDate(applicationDate);
 
-        cargoRepository.save(cargo);
+        // Obtener la lista actual de cargos del usuario
+        List<UserJob> cargosActuales = cargoRepository.findByUser(usuario);
+
+        // Agregar el nuevo cargo a la lista
+        cargosActuales.add(cargo);
+
+        // Guardar la lista actualizada de cargos
+        cargoRepository.saveAll(cargosActuales);
+
         return true;
+
     }
 
 
