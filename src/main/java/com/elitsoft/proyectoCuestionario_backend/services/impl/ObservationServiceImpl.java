@@ -1,7 +1,4 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
-import com.elitsoft.proyectoCuestionario_backend.entities.*;
-import com.elitsoft.proyectoCuestionario_backend.entities.dto.CatObservacionDTO;
-import com.elitsoft.proyectoCuestionario_backend.entities.dto.ObservacionDTO;
 import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 import com.elitsoft.proyectoCuestionario_backend.entities.Observation;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
@@ -71,6 +68,56 @@ public class ObservationServiceImpl implements ObservationService {
         } catch (Exception e) {
             e.printStackTrace(); // Considera manejar esta excepción de manera más específica.
             return null;
+        }
+    }
+
+
+    @Override
+    public Observation crearObservacion(Observation observation) {
+        try {
+            // Asegúrate de asignar cualquier valor predeterminado o realizar cualquier comprobación necesaria aquí
+            return observationRepository.save(observation);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar la observación en la base de datos.", e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error desconocido al crear la observación.", e);
+        }
+    }
+
+    @Override
+    public List<Observation> listarObservaciones() {
+        try {
+            return observationRepository.findAll();
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener la lista de observaciones.", e);
+        }
+    }
+
+    @Override
+    public Observation consultarObservacion(Long id) {
+        try {
+            return observationRepository.findById(id).orElse(null);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al consultar la observación con ID: " + id, e);
+        }
+    }
+
+    @Override
+    public boolean eliminarObservacion(Long id) {
+        try {
+            if (observationRepository.existsById(id)) {
+                observationRepository.deleteById(id);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al eliminar la observación con ID: " + id, e);
         }
     }
 }

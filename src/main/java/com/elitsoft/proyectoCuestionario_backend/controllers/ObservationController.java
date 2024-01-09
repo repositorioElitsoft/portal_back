@@ -37,8 +37,50 @@ public class ObservationController {
         }
     }
 
+    @PostMapping("/crear")
+    public ResponseEntity<?> crearObservacion(@RequestBody Observation observation) {
+        try {
+            Observation nuevaObservacion = observationService.crearObservacion(observation);
+            return new ResponseEntity<>(nuevaObservacion, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @GetMapping("/listar")
+    public ResponseEntity<List<Observation>> listarObservaciones() {
+        List<Observation> observaciones = observationService.listarObservaciones();
+        if (observaciones.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(observaciones, HttpStatus.OK);
+    }
 
+    @GetMapping("/consultar/{id}")
+    public ResponseEntity<?> consultarObservacion(@PathVariable Long id) {
+        Observation observacion = observationService.consultarObservacion(id);
+        if (observacion != null) {
+            return new ResponseEntity<>(observacion, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Observación no encontrada con ID: " + id, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<?> eliminarObservacion(@PathVariable Long id) {
+        try {
+            boolean eliminado = observationService.eliminarObservacion(id);
+            if (eliminado) {
+                return new ResponseEntity<>("Observación eliminada con éxito", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("No se encontró la observación con el ID: " + id, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
+
+
 
 
