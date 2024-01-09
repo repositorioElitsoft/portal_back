@@ -106,4 +106,8 @@ public class QuestionServiceImpl implements QuestionService {
         Collections.shuffle(allQuestions);
         return allQuestions.stream().limit(count).collect(Collectors.toList());
     }
+    public List<Question> obtenerPreguntasPorProducto(Long productoId) {
+        return questionRepository.findByProduct(productoId);
+    }
+
 }
