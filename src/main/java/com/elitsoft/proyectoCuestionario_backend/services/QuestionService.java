@@ -27,4 +27,8 @@ public interface QuestionService {
 
     Question listarPregunta(Long preguntaId);
 
+    List<Question> generarExamen(String description, Long productId);
+
+
+    List<Question> obtenerPreguntasPorProducto(Long productoId);
 }

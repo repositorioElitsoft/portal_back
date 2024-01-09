@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.UserJobService;
@@ -100,6 +101,30 @@ public class UserJobServiceImpl implements UserJobService {
             cargoRepository.deleteAll(cargos);
         }
     }
+
+    @Override
+    public boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception{
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()) {
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<UserJob> cargoOld = cargoRepository.findById(postulacionId);
+        if (!cargoOld.isPresent()) {
+            throw new EntityNotFoundException("No se encontró el cargo");
+        }
+
+        if (!cargoOld.get().getUser().getId().equals(userOptional.get().getId())) {
+            throw new AccessDeniedException("Este usuario no está autorizado para eliminar este cargo");
+        }
+
+        cargoRepository.deleteById(postulacionId);
+        return true;
+    }
+
+
+
+
 
 
 }

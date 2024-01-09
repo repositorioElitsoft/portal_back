@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.elitsoft.proyectoCuestionario_backend.services.UserJobService;
-import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -18,14 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @author Maeva Martinez
  */
 @RestController
-@RequestMapping("/cargos")
+@RequestMapping("/userjob")
 public class UserJobController {
     
     @Autowired
-    private final UserJobService cargoService;
+    private final UserJobService userJobService;
 
-    public UserJobController(UserJobService cargoService) {
-        this.cargoService = cargoService;
+    public UserJobController(UserJobService userJobService) {
+        this.userJobService = userJobService;
     }
 
 
@@ -34,8 +33,10 @@ public class UserJobController {
     public ResponseEntity<?> guardarCargo(@RequestBody UserJob cargo,
                                           @RequestHeader("Authorization") String jwt) {
         try {
+
             Date applicationDate = new Date();
-            Boolean result = cargoService.guardarCargo(cargo, jwt, applicationDate);
+            Boolean result = userJobService.guardarCargo(cargo, jwt, applicationDate);
+
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -46,7 +47,7 @@ public class UserJobController {
 
     @GetMapping("/")
     public ResponseEntity<UserJob> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
-        UserJob userJob = cargoService.obtenerCargoUsuario(jwt);
+        UserJob userJob = userJobService.obtenerCargoUsuario(jwt);
         return new ResponseEntity<>(userJob,HttpStatus.OK);
     }
 
@@ -54,23 +55,35 @@ public class UserJobController {
     public ResponseEntity<List<UserJob>> obtenerCargosPorUsuario(@PathVariable Long usuarioId) {
         User user = new User();
         user.setId(usuarioId);
-        List<UserJob> cargos = cargoService.obtenerCargosPorUsuario(user);
+        List<UserJob> cargos = userJobService.obtenerCargosPorUsuario(user);
         return new ResponseEntity<>(cargos, HttpStatus.OK);
     }
 
     @GetMapping("/listar")
     public ResponseEntity<List<UserJob>> obtenerListaCargos() {
-        List<UserJob> herramientas = cargoService.obtenerListaCargos();
+        List<UserJob> herramientas = userJobService.obtenerListaCargos();
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
     }
     @DeleteMapping("/eliminar/{usuarioId}")
     public ResponseEntity<?> eliminarCargosPorUsuario(@PathVariable Long usuarioId) {
         try {
-            cargoService.eliminarCargoPorUsuario(usuarioId);
+            userJobService.eliminarCargoPorUsuario(usuarioId);
             return new ResponseEntity<>("Cargos eliminados exitosamente", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error al eliminar los cargos", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/eliminar-postulacion/{postulacionId}")
+    public ResponseEntity<Boolean> eliminarPostulacionPorId(@PathVariable Long postulacionId,
+                                                            @RequestHeader("Authorization") String jwt) {
+        try {
+            boolean eliminacionExitosa = userJobService.eliminarPostulacionPorId(postulacionId, jwt);
+            return new ResponseEntity<>(eliminacionExitosa, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Maeva Martinez
  */
 @RestController
-@RequestMapping("/laboral")
+@RequestMapping("/employment")
 public class EmploymentController {
 
     @Autowired

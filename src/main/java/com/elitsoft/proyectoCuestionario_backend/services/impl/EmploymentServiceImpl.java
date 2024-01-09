@@ -68,10 +68,10 @@ public class EmploymentServiceImpl implements EmploymentService {
             return false;
         }
         employment.setUser(userOptional.get());
-            employment.getEmploymentReferences().forEach(r ->{
-                System.out.println(r.toString());
+            //employment.getEmploymentReferences().forEach(r ->{
+               /* System.out.println(r.toString());
 
-            });
+            });*/
 
         employmentRepository.save(employment);
         return true;
@@ -84,6 +84,9 @@ public class EmploymentServiceImpl implements EmploymentService {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 // TODO: 15-12-2023 Verificar que efectivamente esto pertenezca al usuario:
+
+
+
         employment.setId(laboralId);
         employment.setUser(userOptional.get());
         employmentRepository.save(employment);
