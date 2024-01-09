@@ -24,4 +24,5 @@ public interface QuestionRepository extends JpaRepository <Question, Long>{
     @Query(value = "DELETE FROM tbl_qst WHERE qst_id = :id", nativeQuery = true)
     void eliminarPregunta(@Param("id") Long id);
     List<Question> findByLevelAndProduct(Level level, Product product);
+    List<Question> findByProduct(Long productoId);
 }

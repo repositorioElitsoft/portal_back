@@ -17,7 +17,6 @@ import java.util.*;
 @RequestMapping("/pregunta")
 @CrossOrigin("*")
 public class QuestionController {
-
     @Autowired
     private QuestionService questionService;
 
@@ -25,16 +24,11 @@ public class QuestionController {
     public ResponseEntity<Question> guardarPregunta(@RequestBody Question question){
         return ResponseEntity.ok(questionService.agregarPregunta(question));
     }
-
     @PutMapping("/actualizar/{preguntaId}")
     public ResponseEntity<Question> actualizarPregunta(@PathVariable Long preguntaId, @RequestBody Question question){
         Question questionActualizada = questionService.actualizarPreguntaId(preguntaId, question);
         return ResponseEntity.ok(questionActualizada);
     }
-
-
-
-
     @GetMapping("/{preguntaId}")
     public Question listarPreguntaPorId(@PathVariable("preguntaId") Long preguntaId){
         return questionService.obtenerPregunta(preguntaId);
@@ -52,6 +46,12 @@ public class QuestionController {
     ) {
         List<Question> examQuestions = questionService.generarExamen(description, productId);
         return ResponseEntity.ok(examQuestions);
+    }
+
+    @GetMapping("/por-producto/{productoId}")
+    public ResponseEntity<List<Question>> obtenerPreguntasPorProducto(@PathVariable Long productoId) {
+        List<Question> preguntas = questionService.obtenerPreguntasPorProducto(productoId);
+        return ResponseEntity.ok(preguntas);
     }
 
 
