@@ -21,7 +21,7 @@ public class EmailRController {
             // Llamar al método enviarCorreo del servicio
             emailRService.enviarCorreo(massiveEmailRequestDTO);
 
-            return new ResponseEntity<String>("Ok, enviados correctamente", HttpStatus.OK);
+            return new ResponseEntity<String>("{\"mensaje\":\"Ok, enviados correctamente\"}", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("Error al enviar el correo: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
