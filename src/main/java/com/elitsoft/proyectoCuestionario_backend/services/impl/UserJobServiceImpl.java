@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.UserJobService;
@@ -37,22 +38,30 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public Boolean guardarCargo(UserJob cargo, String jwt, Date fechaPostulacion) throws Exception {
+    public Boolean guardarCargo(UserJob cargo, String jwt, Date applicationDate) throws Exception {
 
         Optional<User> usuarioOptional = userService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
             return false;
         }
-        cargo.setUser(usuarioOptional.get());
 
-        cargo.setApplicationDate(fechaPostulacion);
+        User usuario = usuarioOptional.get();
 
-        cargoRepository.findByUser(usuarioOptional.get())
-                .forEach((cargoRepository::delete));
+        cargo.setUser(usuario);
 
+        cargo.setApplicationDate(applicationDate);
 
-        cargoRepository.save(cargo);
+        // Obtener la lista actual de cargos del usuario
+        List<UserJob> cargosActuales = cargoRepository.findByUser(usuario);
+
+        // Agregar el nuevo cargo a la lista
+        cargosActuales.add(cargo);
+
+        // Guardar la lista actualizada de cargos
+        cargoRepository.saveAll(cargosActuales);
+
         return true;
+
     }
 
 
@@ -92,6 +101,30 @@ public class UserJobServiceImpl implements UserJobService {
             cargoRepository.deleteAll(cargos);
         }
     }
+
+    @Override
+    public boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception{
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()) {
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<UserJob> cargoOld = cargoRepository.findById(postulacionId);
+        if (!cargoOld.isPresent()) {
+            throw new EntityNotFoundException("No se encontró el cargo");
+        }
+
+        if (!cargoOld.get().getUser().getId().equals(userOptional.get().getId())) {
+            throw new AccessDeniedException("Este usuario no está autorizado para eliminar este cargo");
+        }
+
+        cargoRepository.deleteById(postulacionId);
+        return true;
+    }
+
+
+
+
 
 
 }

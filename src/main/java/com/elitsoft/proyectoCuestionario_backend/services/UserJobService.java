@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface UserJobService {
 
-    Boolean guardarCargo(UserJob cargo, String jwt, Date fechaPostulacion) throws Exception;
+    Boolean guardarCargo(UserJob cargo, String jwt, Date applicationDate) throws Exception;
     List<UserJob> obtenerCargosPorUsuario(User user);
     
     List<UserJob> obtenerListaCargos();
@@ -20,6 +20,8 @@ public interface UserJobService {
     UserJob obtenerCargoUsuario(String jwt) throws Exception;
 
     void eliminarCargoPorUsuario(Long usuarioId);
+
+    boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception;;
 
 
 }
