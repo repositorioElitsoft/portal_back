@@ -76,7 +76,7 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public UserJob obtenerCargoUsuario(String jwt) throws Exception {
+    public List<UserJob> obtenerCargoUsuario(String jwt) throws Exception {
         Optional<User> userOptional = userService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
@@ -87,10 +87,10 @@ public class UserJobServiceImpl implements UserJobService {
             throw new EntityNotFoundException();
         }
         if(userJob.isEmpty()){
-            return new UserJob();
+            return null;
         }
 
-        return userJob.get(0);
+        return userJob;
     }
 
     @Override

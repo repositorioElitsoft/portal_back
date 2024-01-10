@@ -17,7 +17,7 @@ public interface UserJobService {
     
     List<UserJob> obtenerListaCargos();
 
-    UserJob obtenerCargoUsuario(String jwt) throws Exception;
+    List<UserJob> obtenerCargoUsuario(String jwt) throws Exception;
 
     void eliminarCargoPorUsuario(Long usuarioId);
 

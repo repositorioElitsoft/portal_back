@@ -46,8 +46,8 @@ public class UserJobController {
 
 
     @GetMapping("/")
-    public ResponseEntity<UserJob> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
-        UserJob userJob = userJobService.obtenerCargoUsuario(jwt);
+    public ResponseEntity<List<UserJob>> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
+        List <UserJob> userJob = (List<UserJob>) userJobService.obtenerCargoUsuario(jwt);
         return new ResponseEntity<>(userJob,HttpStatus.OK);
     }
 
