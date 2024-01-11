@@ -57,8 +57,6 @@ public class UserJob {
     @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserJobApproval> approvals;
 
-    @OneToMany(mappedBy="userJob", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Observation> observations;
+
 
 }

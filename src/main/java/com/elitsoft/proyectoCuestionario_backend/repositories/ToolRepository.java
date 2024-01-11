@@ -38,7 +38,6 @@ public interface ToolRepository extends JpaRepository <Tool, Long>{
 
 
 
-
     @Query("SELECT h FROM Tool h " +
        "WHERE h.user.id = :usuarioId")
     List<Tool> obtenerHerramientasConProductosPorUsuario(@Param("usuarioId") Long usuarioId);

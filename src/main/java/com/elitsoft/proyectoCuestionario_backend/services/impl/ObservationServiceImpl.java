@@ -1,6 +1,9 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
+import com.elitsoft.proyectoCuestionario_backend.entities.ObservationUpdate;
 import com.elitsoft.proyectoCuestionario_backend.entities.UserJob;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.ObservationDTO;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.ResponsibleDTO;
 import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 import com.elitsoft.proyectoCuestionario_backend.entities.Observation;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
@@ -12,12 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.dao.DataAccessException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ObservationServiceImpl implements ObservationService {
 
     @Autowired
     private ObservationRepository observationRepository;
+    @Autowired
+    private ObservationUpdateRepository observationUpdateRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -27,55 +33,7 @@ public class ObservationServiceImpl implements ObservationService {
 
 
     @Override
-    public Boolean guardarObservacionRec(Observation observation, Long userId, Long usr_id_obs, Long usr_id_obs_mod) {
-        try {
-
-            if (!usr_id_obs.equals(usr_id_obs_mod)) {
-                throw new IllegalArgumentException("El usuario que crea y modifica la observación debe ser el mismo.");
-            }
-
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + userId));
-
-              observationRepository.save(observation);
-
-            return true;
-        } catch (DataAccessException e) {
-
-            e.printStackTrace();
-            throw new RuntimeException("Error al guardar la observación en la base de datos.", e);
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            throw new RuntimeException("Error desconocido al guardar la observación.", e);
-        }
-    }
-
-
-
-    @Override
-    public Observation actualizarObservacionRec(Long obs_id, Observation observationActualizada, Long usr_id_obs_mod) {
-        try {
-            Optional<Observation> observacionOptional = observationRepository.findById(obs_id);
-            if (observacionOptional.isPresent()) {
-                Observation observationExistente = observacionOptional.get();
-
-
-                observationExistente.setDescription(observationActualizada.getDescription());
-
-                return observationRepository.save(observationExistente);
-            } else {
-                throw new IllegalArgumentException("La observación con ID " + obs_id + " no existe.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Considera manejar esta excepción de manera más específica.
-            return null;
-        }
-    }
-
-
-    @Override
-    public Observation crearObservacion(Observation observation, Long jobUserId, String jwt) {
+    public Observation createObservation(Observation observation, String jwt) {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null){
             return null;
@@ -84,46 +42,90 @@ public class ObservationServiceImpl implements ObservationService {
         if (!usuarioRec.isPresent()){
             return null;
         }
-        Optional<UserJob> userJobOptional = userJobRepository.findById(jobUserId);
-        if (!userJobOptional.isPresent()){
+
+        Observation newObservation = observationRepository.save(observation);
+        ObservationUpdate observationUpdate = new ObservationUpdate();
+        observationUpdate.setObservation(newObservation);
+        observationUpdate.setDescription(newObservation.getDescription());
+        observationUpdate.setResponsibleId(usuarioRec.get().getId());
+        observationUpdateRepository.save(observationUpdate);
+        return newObservation;
+    }
+
+    @Override
+    public Observation updateObservation(Long observationId,Observation newObservation, String jwt) {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
             return null;
         }
-        observation.setResponsibleId(usuarioRec.get().getId());
-        observation.setUserJob(userJobOptional.get());
-        try {
-            return observationRepository.save(observation);
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al guardar la observación en la base de datos.", e);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error desconocido al crear la observación.", e);
+        Optional<User> usuarioRec = userRepository.findByEmail(token.getPrincipal().toString());
+        if (!usuarioRec.isPresent()){
+            return null;
+        }
+        Optional<Observation> oldObservation = observationRepository.findById(observationId);
+        if(!oldObservation.isPresent()){
+            return null;
         }
 
+        newObservation.setId(oldObservation.get().getId());
+        newObservation.setUserJob(oldObservation.get().getUserJob());
+
+        Observation updatedObservation = observationRepository.save(newObservation);
+
+        ObservationUpdate observationUpdate = new ObservationUpdate();
+        observationUpdate.setObservation(updatedObservation);
+        observationUpdate.setDescription(updatedObservation.getDescription());
+        observationUpdate.setResponsibleId(usuarioRec.get().getId());
+        observationUpdateRepository.save(observationUpdate);
+        return updatedObservation;
+    }
+
+
+    @Override
+    public List<ObservationDTO> getObservationsByUserJob(Long userJobId) {
+        List<Observation> observations = observationRepository.findAllByUserJobId(userJobId).orElse(null);
+        List<ObservationDTO> observationDTOS = Objects.requireNonNull(observations).stream().map(observation -> {
+            ObservationDTO newObs = new ObservationDTO();
+            newObs.setId(observation.getId());
+            newObs.setDescription(observation.getDescription());
+
+            ObservationUpdate oldest = observationUpdateRepository.findFirstRecord(observation.getId()).orElse(null);
+            ObservationUpdate recent = observationUpdateRepository.findMostRecentRecord(observation.getId()).orElse(null);
+
+            User authorUser = userRepository.findById(Objects.requireNonNull(oldest).getResponsibleId()).orElse(null);
+            User modifierUser = userRepository.findById(Objects.requireNonNull(recent).getResponsibleId()).orElse(null);
+
+            ResponsibleDTO author = new ResponsibleDTO();
+            author.setEmail(authorUser.getEmail());
+            author.setName(authorUser.getName());
+            author.setFirstLastname(authorUser.getFirstLastname());
+            author.setSecondLastname(authorUser.getSecondLastname());
+
+            ResponsibleDTO modifier = new ResponsibleDTO();
+            modifier.setEmail(modifierUser.getEmail());
+            modifier.setName(modifierUser.getName());
+            modifier.setFirstLastname(modifierUser.getFirstLastname());
+            modifier.setSecondLastname(modifierUser.getSecondLastname());
+
+            author.setDate(oldest.getUpdatedAt());
+            modifier.setDate(recent.getUpdatedAt());
+
+            newObs.setAuthor(author);
+            newObs.setLastUpdateResponsible(modifier);
+
+            return newObs;
+        }).collect(Collectors.toList());
+
+        try {
+            return observationDTOS;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al consultar la observación con ID: " + userJobId, e);
+        }
     }
 
     @Override
-    public List<Observation> listarObservaciones() {
-        try {
-            return observationRepository.findAll();
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al obtener la lista de observaciones.", e);
-        }
-    }
-
-    @Override
-    public Observation consultarObservacion(Long id) {
-        try {
-            return observationRepository.findById(id).orElse(null);
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al consultar la observación con ID: " + id, e);
-        }
-    }
-
-    @Override
-    public boolean eliminarObservacion(Long id) {
+    public boolean deleteObservation(Long id) {
         try {
             if (observationRepository.existsById(id)) {
                 observationRepository.deleteById(id);
