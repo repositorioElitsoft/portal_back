@@ -351,5 +351,11 @@ public class UserServiceImpl implements UserService {
         return newUser.getPreferredJob();
     }
 
+    @Override
+    public UserPreferredJob getPreferredJob(String jwt) {
+        Optional<User> user = this.getUsuarioByToken(jwt);
+        return user.map(User::getPreferredJob).orElse(null);
+    }
+
 
 }
