@@ -339,8 +339,16 @@ public class UserServiceImpl implements UserService {
         if (!user.isPresent()){
             return null;
         }
-        userPreferredJob.setId(user.get().getId());
-        return userPreferredJobRepository.save(userPreferredJob);
+        User oldUser = user.get();
+        if(oldUser.getPreferredJob() == null){
+            UserPreferredJob createdJob = userPreferredJobRepository.save(userPreferredJob);
+            oldUser.setPreferredJob(createdJob);
+            userRepository.save(oldUser);
+            return createdJob;
+        }
+        oldUser.getPreferredJob().setDescription(userPreferredJob.getDescription());
+        User newUser = userRepository.save(oldUser);
+        return newUser.getPreferredJob();
     }
 
 

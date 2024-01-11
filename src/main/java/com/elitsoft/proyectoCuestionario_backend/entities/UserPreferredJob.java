@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,4 +16,5 @@ public class UserPreferredJob {
     private Long id;
     @Column(name = "pref_job_usr_desc")
     private String description;
+
 }

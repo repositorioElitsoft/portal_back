@@ -196,16 +196,13 @@ public class UserController {
         return userService.obtenerUsuarioId(usuarioId);
     }
 
-    @PostMapping
-    public ResponseEntity<UserPreferredJob> createOrUpdatePreferredJob(@RequestBody UserPreferredJob userPreferredJob,
+    @PostMapping("/preferred")
+    public ResponseEntity<?> createOrUpdatePreferredJob(@RequestBody UserPreferredJob userPreferredJob,
                                                                        @RequestHeader("Authorization") String jwt){
-        try {
-            UserPreferredJob createdJob = userService.createOrUpdatePreferredJob(userPreferredJob, jwt);
-            return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
-        }
-        catch(Exception e){
-            return new ResponseEntity<>(new UserPreferredJob(), HttpStatus.NOT_ACCEPTABLE);
-        }
+
+        UserPreferredJob createdJob = userService.createOrUpdatePreferredJob(userPreferredJob, jwt);
+        return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
+
     }
 
 
