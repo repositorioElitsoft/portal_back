@@ -29,6 +29,8 @@ public interface ToolService {
     Tool addToolCertification(Long toolId, MultipartFile certification, String jwt) throws IOException;
 
     Boolean deleteToolCertification(Long toolId, Long certId, String jwt) throws IOException;
+
+    List<Tool> getToolsForExams(String jwt);
     
 }
         

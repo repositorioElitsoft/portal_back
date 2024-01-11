@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
+import com.elitsoft.proyectoCuestionario_backend.entities.UserPreferredJob;
 import com.elitsoft.proyectoCuestionario_backend.exceptions.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import com.elitsoft.proyectoCuestionario_backend.services.*;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.function.EntityResponse;
 
 
 import javax.mail.MessagingException;
@@ -194,6 +196,14 @@ public class UserController {
         return userService.obtenerUsuarioId(usuarioId);
     }
 
+    @PostMapping("/preferred")
+    public ResponseEntity<?> createOrUpdatePreferredJob(@RequestBody UserPreferredJob userPreferredJob,
+                                                                       @RequestHeader("Authorization") String jwt){
+
+        UserPreferredJob createdJob = userService.createOrUpdatePreferredJob(userPreferredJob, jwt);
+        return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
+
+    }
 
 
 }

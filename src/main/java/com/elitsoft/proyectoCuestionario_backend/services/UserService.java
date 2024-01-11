@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.services;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
+import com.elitsoft.proyectoCuestionario_backend.entities.UserPreferredJob;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,5 +58,7 @@ public interface UserService {
     public void deleteFile(String filePath);
 
     public void eliminarCVByUser(Long userId) ;
+
+    UserPreferredJob createOrUpdatePreferredJob(UserPreferredJob userPreferredJob, String jwt);
 
 }

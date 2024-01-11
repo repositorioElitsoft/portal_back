@@ -196,6 +196,17 @@ public class ToolServiceImpl implements ToolService {
         return fileService.deleteFile(certificationOptional.get().getUrl());
     }
 
+    @Override
+    public List<Tool> getToolsForExams(String jwt) {
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        toolRepository.findByUser(userOptional.get());
+        return null;
+    }
+
 
 }
 

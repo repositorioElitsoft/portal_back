@@ -66,7 +66,7 @@ public class User {
     @JoinColumn(name = "usr_city_id")
     private City city;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "pref_job_usr_id")
     private UserPreferredJob preferredJob;
 
