@@ -46,20 +46,14 @@ public class UserJobServiceImpl implements UserJobService {
         }
 
         User usuario = usuarioOptional.get();
-
         cargo.setUser(usuario);
-
         cargo.setApplicationDate(applicationDate);
-
         // Obtener la lista actual de cargos del usuario
         List<UserJob> cargosActuales = cargoRepository.findByUser(usuario);
-
         // Agregar el nuevo cargo a la lista
         cargosActuales.add(cargo);
-
         // Guardar la lista actualizada de cargos
         cargoRepository.saveAll(cargosActuales);
-
         return true;
 
     }
