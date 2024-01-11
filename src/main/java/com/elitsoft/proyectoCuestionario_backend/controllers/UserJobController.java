@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/userjob")
 public class UserJobController {
-    
+
     @Autowired
     private final UserJobService userJobService;
 
@@ -85,5 +85,20 @@ public class UserJobController {
         }
     }
 
-
-}
+    @PutMapping("/{positionId}")
+    public ResponseEntity<String> actualizarCargo(
+            @PathVariable Long positionId,
+            @RequestBody UserJob cargo,
+            @RequestHeader("Authorization") String jwt
+    ) {
+        try {
+            Boolean resultado = userJobService.actualizarCargo(positionId, cargo, jwt);
+            if (resultado) {
+                return ResponseEntity.ok("{\"message\": \"Cargo actualizado con éxito\"}");
+            } else {
+                return ResponseEntity.badRequest().body("{\"message\": \"No se pudo actualizar el cargo\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al actualizar el cargo\"}");
+        }
+    }}
