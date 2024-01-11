@@ -70,7 +70,7 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public UserJob obtenerCargoUsuario(String jwt) throws Exception {
+    public List<UserJob> obtenerCargoUsuario(String jwt) throws Exception {
         Optional<User> userOptional = userService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
@@ -81,10 +81,10 @@ public class UserJobServiceImpl implements UserJobService {
             throw new EntityNotFoundException();
         }
         if(userJob.isEmpty()){
-            return new UserJob();
+            return null;
         }
 
-        return userJob.get(0);
+        return userJob;
     }
 
     @Override
@@ -116,9 +116,22 @@ public class UserJobServiceImpl implements UserJobService {
         return true;
     }
 
-
-
-
-
-
+    @Override
+    public Boolean actualizarCargo(Long positionId, UserJob cargo, String jwt ) throws Exception{
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+        Optional <UserJob> userJobOptional = cargoRepository.findById(positionId);
+        if (!userJobOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el userjob");
+        }
+        UserJob userJob = userJobOptional.get();
+        userJob.setSalary(cargo.getSalary());
+        userJob.setAvailability(cargo.getAvailability());
+        System.out.println("Pase por aqui");
+        System.out.println("Pase por aqui  position Id"+positionId.toString());
+        cargoRepository.save(userJob);;
+        return true;
+    }
 }

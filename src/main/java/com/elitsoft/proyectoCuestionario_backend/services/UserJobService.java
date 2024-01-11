@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.services;
 
+import com.elitsoft.proyectoCuestionario_backend.entities.Academical;
 import com.elitsoft.proyectoCuestionario_backend.entities.UserJob;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 
@@ -13,11 +14,12 @@ import java.util.List;
 public interface UserJobService {
 
     Boolean guardarCargo(UserJob cargo, String jwt, Date applicationDate) throws Exception;
+    Boolean actualizarCargo(Long positionId, UserJob cargo, String jwt ) throws Exception;
     List<UserJob> obtenerCargosPorUsuario(User user);
     
     List<UserJob> obtenerListaCargos();
 
-    UserJob obtenerCargoUsuario(String jwt) throws Exception;
+    List<UserJob> obtenerCargoUsuario(String jwt) throws Exception;
 
     void eliminarCargoPorUsuario(Long usuarioId);
 
