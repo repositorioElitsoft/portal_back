@@ -95,6 +95,11 @@ public class ToolController {
         return new ResponseEntity<>(true,HttpStatus.OK);
     }
 
+    @GetMapping("/exams")
+    public ResponseEntity<?> getToolsForExams(@RequestHeader("Authorization") String jwt){
+        List<Tool> tools = toolService.getToolsForExams(jwt);
+        return new ResponseEntity<List<Tool>>(tools, HttpStatus.OK);
+    }
 
 }
 

@@ -199,10 +199,14 @@ public class UserController {
     @PostMapping("/preferred")
     public ResponseEntity<?> createOrUpdatePreferredJob(@RequestBody UserPreferredJob userPreferredJob,
                                                                        @RequestHeader("Authorization") String jwt){
-
         UserPreferredJob createdJob = userService.createOrUpdatePreferredJob(userPreferredJob, jwt);
         return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
+    }
 
+    @GetMapping("/preferred")
+    public ResponseEntity<?> getPreferredJob(@RequestHeader("Authorization") String jwt){
+        UserPreferredJob job = userService.getPreferredJob(jwt);
+        return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
 

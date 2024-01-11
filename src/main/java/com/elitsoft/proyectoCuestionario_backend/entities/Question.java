@@ -33,7 +33,7 @@ public class Question {
     private String option4;
     @Column(name = "qst_ans")
     private String answer;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prd_id")
     @JsonIgnore
     private Product product;
