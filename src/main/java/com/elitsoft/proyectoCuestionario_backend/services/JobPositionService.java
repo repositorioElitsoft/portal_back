@@ -2,6 +2,8 @@
 package com.elitsoft.proyectoCuestionario_backend.services;
 
 import com.elitsoft.proyectoCuestionario_backend.entities.JobPosition;
+import com.elitsoft.proyectoCuestionario_backend.entities.UserJob;
+
 import java.util.List;
 
 /**
@@ -11,7 +13,6 @@ import java.util.List;
 public interface JobPositionService {
     
     List<JobPosition> obtenerListaCargosElitsoft();
-
 
     public Boolean guardar_cargos(JobPosition cargo);
 
