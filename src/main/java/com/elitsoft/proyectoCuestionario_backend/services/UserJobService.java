@@ -23,7 +23,9 @@ public interface UserJobService {
 
     void eliminarCargoPorUsuario(Long usuarioId);
 
-    boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception;;
+    boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception;
+
+
 
 
 }

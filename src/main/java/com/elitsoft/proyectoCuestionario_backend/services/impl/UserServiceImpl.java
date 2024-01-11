@@ -4,6 +4,7 @@ package com.elitsoft.proyectoCuestionario_backend.services.impl;
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
 import com.elitsoft.proyectoCuestionario_backend.repositories.CityRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositories.UserPreferredJobRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.FileService;
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
@@ -36,13 +37,12 @@ public class UserServiceImpl implements UserService {
     private EmailServiceImpl emailService;
     @Autowired
     private UserRepository userRepository;
-
-
     @Autowired
     private CityRepository cityRepository;
-
     @Autowired
     private FileService fileService;
+    @Autowired
+    private UserPreferredJobRepository userPreferredJobRepository;
 
     @Override
     public User guardarUsuario(User user, Long cityId) throws Exception {
@@ -331,6 +331,24 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new EntityNotFoundException("El usuario no tiene un CV adjunto.");
         }
+    }
+
+    @Override
+    public UserPreferredJob createOrUpdatePreferredJob(UserPreferredJob userPreferredJob, String jwt){
+        Optional<User> user = this.getUsuarioByToken(jwt);
+        if (!user.isPresent()){
+            return null;
+        }
+        User oldUser = user.get();
+        if(oldUser.getPreferredJob() == null){
+            UserPreferredJob createdJob = userPreferredJobRepository.save(userPreferredJob);
+            oldUser.setPreferredJob(createdJob);
+            userRepository.save(oldUser);
+            return createdJob;
+        }
+        oldUser.getPreferredJob().setDescription(userPreferredJob.getDescription());
+        User newUser = userRepository.save(oldUser);
+        return newUser.getPreferredJob();
     }
 
 

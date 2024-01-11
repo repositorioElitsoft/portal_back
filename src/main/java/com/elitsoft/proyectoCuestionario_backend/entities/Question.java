@@ -1,6 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tbl_qst")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Question {
 
     @Id
@@ -32,6 +35,7 @@ public class Question {
     private String answer;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prd_id")
+    @JsonIgnore
     private Product product;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "level_id")
