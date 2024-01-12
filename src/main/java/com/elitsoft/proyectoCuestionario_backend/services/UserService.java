@@ -61,4 +61,6 @@ public interface UserService {
 
     UserPreferredJob createOrUpdatePreferredJob(UserPreferredJob userPreferredJob, String jwt);
 
+    UserPreferredJob getPreferredJob(String jwt);
+
 }

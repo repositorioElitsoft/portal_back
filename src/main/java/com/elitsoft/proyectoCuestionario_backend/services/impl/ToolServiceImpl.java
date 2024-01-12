@@ -9,6 +9,8 @@ import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,8 +205,14 @@ public class ToolServiceImpl implements ToolService {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
 
-        toolRepository.findByUser(userOptional.get());
-        return null;
+        List<Tool> tools = toolRepository.findByUser(userOptional.get());
+
+
+        List<Tool> toolsWithQuestions =  tools.stream().filter(tool -> {
+            return !tool.getProductVersion().getProduct().getQuestions().isEmpty();
+        }).collect(Collectors.toList());
+
+        return toolsWithQuestions;
     }
 
 
