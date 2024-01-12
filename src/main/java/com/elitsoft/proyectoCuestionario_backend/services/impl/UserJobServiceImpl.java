@@ -1,15 +1,17 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
+import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobApprovalRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.UserJobService;
@@ -26,6 +28,8 @@ public class UserJobServiceImpl implements UserJobService {
     private final UserRepository userRepository;
     private final UserJobRepository cargoRepository;
 
+    @Autowired
+    private UserJobApprovalRepository userJobApprovalRepository;
     @Autowired
     private final UserService userService;
 
@@ -115,6 +119,44 @@ public class UserJobServiceImpl implements UserJobService {
         cargoRepository.deleteById(postulacionId);
         return true;
     }
+
+    @Override
+    public UserJobApproval approveUserJob(Long userJobId, String jwt) {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return null;
+        }
+        Optional<User> usuarioRec = userRepository.findByEmail(token.getPrincipal().toString());
+        if (!usuarioRec.isPresent()){
+            return null;
+        }
+
+        Optional<UserJob> oldUserJob = cargoRepository.findById(userJobId);
+        if(!oldUserJob.isPresent()){
+            return null;
+        }
+
+        Set<String> roles = usuarioRec.get().getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+
+        Approval approval = new Approval();
+        //Relaciona aprobaciones con roles.
+
+
+        if(roles.contains("ROLE_GUEST")){
+            approval.setId(1L);
+        }
+
+
+        UserJobApproval userJobApproval = new UserJobApproval();
+        UserJobApprovalId userJobApprovalId = new UserJobApprovalId();
+        userJobApprovalId.setApproval(approval);
+        userJobApprovalId.setUserJob(oldUserJob.get());
+        userJobApproval.setId(userJobApprovalId);
+
+
+        return userJobApprovalRepository.save(userJobApproval);
+    }
+
 
     @Override
     public Boolean actualizarCargo(Long positionId, UserJob cargo, String jwt ) throws Exception{

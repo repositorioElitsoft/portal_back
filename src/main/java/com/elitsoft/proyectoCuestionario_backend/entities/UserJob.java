@@ -53,9 +53,8 @@ public class UserJob {
     @JoinColumn(name = "availability_usr_id")
     private UserJobAvailability availability;
 
-
-    @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserJobApproval> approvals;
+    @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserJobApproval> approvals;
 
 
 

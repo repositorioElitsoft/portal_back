@@ -81,6 +81,7 @@ public class ObservationServiceImpl implements ObservationService {
     }
 
 
+
     @Override
     public List<ObservationDTO> getObservationsByUserJob(Long userJobId) {
         List<Observation> observations = observationRepository.findAllByUserJobId(userJobId).orElse(null);
