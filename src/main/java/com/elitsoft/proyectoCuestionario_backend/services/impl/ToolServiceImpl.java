@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.services.impl;
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.FileContentDTO;
 import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 import com.elitsoft.proyectoCuestionario_backend.services.FileService;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -213,6 +215,19 @@ public class ToolServiceImpl implements ToolService {
         }).collect(Collectors.toList());
 
         return toolsWithQuestions;
+    }
+
+    @Override
+    public FileContentDTO downloadCertification(Long certId) throws IOException, EntityNotFoundException {
+        Optional<Certification> certification = certificationRepository.findById(certId);
+        if(!certification.isPresent()){
+            return null;
+        }
+
+        FileContentDTO fileContent = new FileContentDTO();
+        fileContent.setFileName(certification.get().getUrl());
+        fileContent.setResource(fileService.getCertification(certification.get().getUrl()));
+        return fileContent;
     }
 
 

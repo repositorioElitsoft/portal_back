@@ -63,4 +63,5 @@ public interface UserService {
 
     UserPreferredJob getPreferredJob(String jwt);
 
+
 }
