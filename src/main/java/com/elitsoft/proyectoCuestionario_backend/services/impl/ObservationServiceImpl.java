@@ -81,6 +81,7 @@ public class ObservationServiceImpl implements ObservationService {
     }
 
 
+
     @Override
     public List<ObservationDTO> getObservationsByUserJob(Long userJobId) {
         // Obtén la lista de observaciones o devuelve una lista vacía si es nulo

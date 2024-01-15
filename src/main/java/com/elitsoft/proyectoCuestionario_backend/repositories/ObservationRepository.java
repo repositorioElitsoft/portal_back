@@ -13,4 +13,5 @@ public interface ObservationRepository extends JpaRepository <Observation, Long>
 
 
     Optional<List<Observation>> findAllByUserJobId(Long userJobId);
+
 }

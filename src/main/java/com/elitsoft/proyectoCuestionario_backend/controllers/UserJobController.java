@@ -101,4 +101,11 @@ public class UserJobController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al actualizar el cargo\"}");
         }
-    }}
+    }
+
+    @PostMapping("/{userJobId}/approve")
+    public ResponseEntity<?> approveObservation(@RequestHeader("Authorization") String jwt,
+                                                @PathVariable Long userJobId){
+        return new ResponseEntity<>(userJobService.approveUserJob(userJobId, jwt),HttpStatus.ACCEPTED);
+    }
+}

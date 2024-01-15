@@ -1,6 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
@@ -9,6 +11,8 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
+@Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserJobApprovalId implements Serializable {
 
     @ManyToOne
