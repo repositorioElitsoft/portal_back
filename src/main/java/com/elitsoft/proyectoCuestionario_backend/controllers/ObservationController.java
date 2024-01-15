@@ -33,9 +33,6 @@ public class ObservationController {
     @GetMapping("/user-job/{userJobId}")
     public ResponseEntity<List<ObservationDTO>> getObservationsByUserJob(@PathVariable Long userJobId) {
         List<ObservationDTO> observations = observationService.getObservationsByUserJob(userJobId);
-        if (observations.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         return new ResponseEntity<>(observations, HttpStatus.OK);
     }
     @PutMapping("/{observationId}")
@@ -58,9 +55,9 @@ public class ObservationController {
         try {
             boolean eliminado = observationService.deleteObservation(id);
             if (eliminado) {
-                return new ResponseEntity<>("Observación eliminada con éxito", HttpStatus.OK);
+                return new ResponseEntity<>("{\"message\": \"Observación eliminada con éxito\"}", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("No se encontró la observación con el ID: " + id, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("{\"message\": \"No se encontró la observación con el ID: " + id + "\"}", HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
