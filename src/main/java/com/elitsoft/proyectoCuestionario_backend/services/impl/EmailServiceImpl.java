@@ -42,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
         String messageBody =
                 "Gracias por registrarte en la plataforma de Elitsoft."
                 + "Para verificar tu email haz click en el siguiente link: <br>"
-                //TODO + "<a href='"+ verificationRoute + user.getVerificationUrl() +"'> Verificar email </a>  <br>"
+                + "<a href='"+ verificationRoute + user.getVerification().getCode() +"'> Verificar email </a>  <br>"
                 + "Si no te has registrado y ignora este email.";
 
         helper.setFrom(senderEmail, "Equipo Elitsoft");
@@ -65,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
 
         String messageBody =
                         "Para restaurar tu contraseña haz click en el siguiente link: <br>"
-                        + "<a href='"+ restaurarRoute + user.getRecoveryToken() +"'> Restaurar contraseña </a>  <br>"
+                        + "<a href='"+ restaurarRoute + user.getRecoveryToken().getToken() +"'> Restaurar contraseña </a>  <br>"
                         + "Si no te has registrado y ignora este email.";
 
         helper.setFrom(senderEmail, "Equipo Elitsoft");

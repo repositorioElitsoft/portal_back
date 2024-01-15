@@ -164,7 +164,6 @@ public class FileServiceImpl implements FileService {
     public Resource getCV(String fileName) throws IOException {
 
         Path filePath = Paths.get(CV_DIRECTORY +"/"+fileName); // Change the path accordingly
-
         Resource cv = new UrlResource(filePath.toUri());
         if (cv.exists() && cv.isReadable()) {
             return cv;
@@ -173,6 +172,17 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
+    public Resource getCertification(String certUrl) throws IOException {
+        Path filePath = Paths.get(CERT_DIRECTORY +"/"+certUrl); // Change the path accordingly
+        Resource cv = new UrlResource(filePath.toUri());
+        System.out.println("File from"+ filePath.toString());
+        if (cv.exists() && cv.isReadable()) {
+            return cv;
+        } else {
+            throw new IOException("File not found");
+        }
+    }
 
 
     private boolean isPDF(MultipartFile file) {

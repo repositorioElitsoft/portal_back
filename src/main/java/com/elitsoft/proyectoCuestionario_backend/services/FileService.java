@@ -26,7 +26,7 @@ public interface FileService {
     String saveFile(MultipartFile file) throws IOException;
     Resource getCV(String fileName) throws IOException;
 
-
+    Resource getCertification(String certUrl) throws IOException;
 
 
 

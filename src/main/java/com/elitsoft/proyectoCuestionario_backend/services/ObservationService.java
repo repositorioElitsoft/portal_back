@@ -17,4 +17,5 @@ public interface ObservationService {
     boolean deleteObservation(Long id);
 
     Observation updateObservation(Long observationId,Observation newObservation, String jwt);
+
 }

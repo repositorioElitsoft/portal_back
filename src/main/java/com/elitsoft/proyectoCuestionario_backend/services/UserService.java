@@ -2,6 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.services;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import com.elitsoft.proyectoCuestionario_backend.entities.UserPreferredJob;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.VerifyDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,7 @@ public interface UserService {
 
     public User obtenerUsuarioId(Long usr_id)throws Exception ;
 
-    public Boolean verificarUsuario(Map<String,String> body);
+    public Boolean verificarUsuario(VerifyDTO body);
     public User getUsuarioByEmail(String email);
 
     public Optional<User> getUsuarioByToken(String jwt);
@@ -62,5 +63,6 @@ public interface UserService {
     UserPreferredJob createOrUpdatePreferredJob(UserPreferredJob userPreferredJob, String jwt);
 
     UserPreferredJob getPreferredJob(String jwt);
+
 
 }

@@ -2,6 +2,7 @@
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
 import com.elitsoft.proyectoCuestionario_backend.entities.UserPreferredJob;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.VerifyDTO;
 import com.elitsoft.proyectoCuestionario_backend.exceptions.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import com.elitsoft.proyectoCuestionario_backend.services.*;
@@ -64,14 +65,14 @@ public class UserController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarUsuario(@RequestBody User user, Long cityId) throws Exception{
+    public ResponseEntity<?> saveUser(@RequestBody User user, Long cityId) throws Exception{
         try{
             userService.guardarUsuario(user, cityId);
         }
         catch (DataAccessException ex){
             CustomError error = new CustomError();
             error.setError("El usuario ya existe.");
-            return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex, HttpStatus.CONFLICT);
         }
         return new ResponseEntity<Boolean>(true ,HttpStatus.CREATED);
     }
@@ -122,8 +123,8 @@ public class UserController {
         return userService.obtenerDatosUsuario(jwt);
     }
 
-    @PostMapping("/verificar")
-    public ResponseEntity<Boolean> verificarUsuario(@RequestBody Map<String, String> requestData){
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verificarUsuario(@RequestBody VerifyDTO requestData){
         if(userService.verificarUsuario(requestData)){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
