@@ -139,17 +139,13 @@ public class UserServiceImpl implements UserService {
         if (code.isEmpty()) {
             return false;
         }
-
-        //TODO
-        Optional<User> usuario = userRepository.findByRecoveryToken(new UserRecoveryToken());
+        Optional<User> usuario = userRepository.findByRecoveryTokenToken(code);
         if (!usuario.isPresent()) {
             return false;
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-
         usuario.get().setPassword(encoder.encode(password));
-
         User savedUser = userRepository.save(usuario.get());
         return true;
     }
@@ -181,7 +177,10 @@ public class UserServiceImpl implements UserService {
         if (!usuario.isPresent()) {
             return;
         }
-        //usuario.get().setRecoveryToken(UUID.randomUUID().toString());
+
+        UserRecoveryToken userRecoveryToken = new UserRecoveryToken();
+        userRecoveryToken.setToken(UUID.randomUUID().toString());
+        usuario.get().setRecoveryToken(userRecoveryToken);
 
         User userActualizado = userRepository.save(usuario.get());
 

@@ -65,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
 
         String messageBody =
                         "Para restaurar tu contraseña haz click en el siguiente link: <br>"
-                        + "<a href='"+ restaurarRoute + user.getRecoveryToken() +"'> Restaurar contraseña </a>  <br>"
+                        + "<a href='"+ restaurarRoute + user.getRecoveryToken().getToken() +"'> Restaurar contraseña </a>  <br>"
                         + "Si no te has registrado y ignora este email.";
 
         helper.setFrom(senderEmail, "Equipo Elitsoft");

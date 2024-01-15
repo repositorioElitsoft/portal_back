@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     
     Optional <User> findById(Long usr_id);
 
-    Optional<User> findByRecoveryToken(UserRecoveryToken token);
+    Optional<User> findByRecoveryTokenToken(String token);
     Optional<User> findByVerificationCode(String verificationCode);
     Optional<User> findByEmail(String email);
 
