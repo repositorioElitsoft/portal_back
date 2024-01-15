@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.entities;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public class UserAuditory {
     @Column(name = "adt_usr_upd_id")
     private Long id;
 
-    @UpdateTimestamp
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;

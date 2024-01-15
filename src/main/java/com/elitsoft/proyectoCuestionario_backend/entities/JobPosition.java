@@ -20,6 +20,4 @@ public class JobPosition {
     private Long id;
     @Column(name = "job_pos_nom")
     private String name;
-
-    
 }

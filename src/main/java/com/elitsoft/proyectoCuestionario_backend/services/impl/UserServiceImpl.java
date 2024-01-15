@@ -3,14 +3,15 @@ package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
-import com.elitsoft.proyectoCuestionario_backend.repositories.CityRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositories.UserPreferredJobRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.VerifyDTO;
+import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 import com.elitsoft.proyectoCuestionario_backend.services.FileService;
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +43,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private FileService fileService;
     @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
     private UserPreferredJobRepository userPreferredJobRepository;
+    @Autowired
+    private UserAuditoryRepository userAuditoryRepository;
 
     @Override
     public User guardarUsuario(User user, Long cityId) throws Exception {
@@ -60,31 +65,57 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         user.setPassword(encoder.encode(user.getPassword()));
         //TOdo user.setVerificationToken(UUID.randomUUID().toString());
+        String token = UUID.randomUUID().toString();
+        UserVerification userVerification = new UserVerification();
+        userVerification.setIsVerified(false);
+        userVerification.setCode(token);
+        user.setVerification(userVerification);
 
         //TOdo user.setIsVerified(false);
         //TOdo  user.setRol("GUEST");
+        //System.out.println("llegué aquí");
+
+        Optional<Role> role = roleRepository.findByName("ROLE_GUEST");
+        if(!role.isPresent()){
+            throw new EntityNotFoundException("there's no role guest in db");
+        }
+        if(user.getRoles() == null){
+            user.setRoles(new ArrayList<>());
+        }
+        user.getRoles().add(role.get());
 
         User nuevoUser = userRepository.save(user);
+
+
+        UserAuditory userAuditory = new UserAuditory();
+        userAuditory.setUser(nuevoUser);
+        userAuditory.setResponsibleId(nuevoUser.getId());
+        userAuditoryRepository.save(userAuditory);
+
         emailService.sendVerificationEmail(nuevoUser);
 
         return nuevoUser;
     }
 
     @Override
-    public Boolean verificarUsuario(Map<String, String> body) {
+    public Boolean verificarUsuario(VerifyDTO body) {
 
-        Optional<User> user = userRepository.findByVerification(new UserVerification());
 
+        Optional<User> user = userRepository.findByVerificationCode(body.getCode());
         if (!user.isPresent()) {
             return false;
         }
 
         User presentUser = user.get();
-        //TODO presentUser.setIsVerified(true);
+        presentUser.getVerification().setIsVerified(true);
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Date currentDateAndTime = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        presentUser.getVerification().setVerificationDate(currentDateAndTime);
 
         User savedUser = userRepository.save(presentUser);
 
-        return false;
+        return true;
     }
 
     @Override

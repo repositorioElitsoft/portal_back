@@ -214,6 +214,9 @@ public class ToolServiceImpl implements ToolService {
             return !tool.getProductVersion().getProduct().getQuestions().isEmpty();
         }).collect(Collectors.toList());
 
+
+        Map<String,Long> maxDifficultLevel = new HashMap<>();
+
         return toolsWithQuestions;
     }
 

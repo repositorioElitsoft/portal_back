@@ -58,7 +58,7 @@ public class User {
     @JoinColumn(name = "usr_cv_id")
     private UserCV cv;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "usr_ver_id")
     private UserVerification verification;
 
