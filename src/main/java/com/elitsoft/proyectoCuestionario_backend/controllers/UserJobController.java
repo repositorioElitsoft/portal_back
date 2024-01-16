@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/userjob")
 public class UserJobController {
-    
+
     @Autowired
     private final UserJobService userJobService;
 
@@ -33,8 +33,10 @@ public class UserJobController {
     public ResponseEntity<?> guardarCargo(@RequestBody UserJob cargo,
                                           @RequestHeader("Authorization") String jwt) {
         try {
-            Date fechaPostulacion = new Date();
-            Boolean result = userJobService.guardarCargo(cargo, jwt, fechaPostulacion);
+
+            Date applicationDate = new Date();
+            Boolean result = userJobService.guardarCargo(cargo, jwt, applicationDate);
+
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -44,8 +46,8 @@ public class UserJobController {
 
 
     @GetMapping("/")
-    public ResponseEntity<UserJob> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
-        UserJob userJob = userJobService.obtenerCargoUsuario(jwt);
+    public ResponseEntity<List<UserJob>> obtenerUnCargoPorUsuario(@RequestHeader("Authorization") String jwt) throws Exception {
+        List <UserJob> userJob = (List<UserJob>) userJobService.obtenerCargoUsuario(jwt);
         return new ResponseEntity<>(userJob,HttpStatus.OK);
     }
 
@@ -62,7 +64,48 @@ public class UserJobController {
         List<UserJob> herramientas = userJobService.obtenerListaCargos();
         return new ResponseEntity<>(herramientas, HttpStatus.OK);
     }
+    @DeleteMapping("/eliminar/{usuarioId}")
+    public ResponseEntity<?> eliminarCargosPorUsuario(@PathVariable Long usuarioId) {
+        try {
+            userJobService.eliminarCargoPorUsuario(usuarioId);
+            return new ResponseEntity<>("Cargos eliminados exitosamente", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al eliminar los cargos", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-    
+    @DeleteMapping("/eliminar-postulacion/{postulacionId}")
+    public ResponseEntity<Boolean> eliminarPostulacionPorId(@PathVariable Long postulacionId,
+                                                            @RequestHeader("Authorization") String jwt) {
+        try {
+            boolean eliminacionExitosa = userJobService.eliminarPostulacionPorId(postulacionId, jwt);
+            return new ResponseEntity<>(eliminacionExitosa, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @PutMapping("/{positionId}")
+    public ResponseEntity<String> actualizarCargo(
+            @PathVariable Long positionId,
+            @RequestBody UserJob cargo,
+            @RequestHeader("Authorization") String jwt
+    ) {
+        try {
+            Boolean resultado = userJobService.actualizarCargo(positionId, cargo, jwt);
+            if (resultado) {
+                return ResponseEntity.ok("{\"message\": \"Cargo actualizado con éxito\"}");
+            } else {
+                return ResponseEntity.badRequest().body("{\"message\": \"No se pudo actualizar el cargo\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al actualizar el cargo\"}");
+        }
+    }
+
+    @PostMapping("/{userJobId}/approve")
+    public ResponseEntity<?> approveObservation(@RequestHeader("Authorization") String jwt,
+                                                @PathVariable Long userJobId){
+        return new ResponseEntity<>(userJobService.approveUserJob(userJobId, jwt),HttpStatus.ACCEPTED);
+    }
 }

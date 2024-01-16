@@ -10,7 +10,7 @@ public interface ExamResultService {
     List<ExamResult> obtenerResultados();
     List<ExamResult> obtenerResultadosByUser(String userId);
 
-    public Boolean guardarResultados(ExamResult examResult, String jwt);
+    public ExamResult guardarResultados(ExamResult examResult, String jwt);
 
     void eliminarResultadosPorUsuario(Long usuarioId);
 

@@ -33,10 +33,9 @@ public class ExamResultController {
     }
 
     @PostMapping("/")
-    public Boolean guardarResultados (@RequestBody ExamResult examResult,
+    public ResponseEntity<?> guardarResultados (@RequestBody ExamResult examResult,
                                       @RequestHeader("Authorization") String jwt)  {
-        examResultService.guardarResultados(examResult, jwt);
-        return true;
+        return new ResponseEntity<>(examResultService.guardarResultados(examResult, jwt), HttpStatus.OK);
     }
 
 

@@ -10,4 +10,5 @@ public interface ExamResultRepository extends JpaRepository <ExamResult, Long> {
 
     List<ExamResult> findByUser(User user);
 
+
 }

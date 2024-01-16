@@ -1,14 +1,17 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
+import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
+import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobApprovalRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.UserJobService;
@@ -26,6 +29,8 @@ public class UserJobServiceImpl implements UserJobService {
     private final UserJobRepository cargoRepository;
 
     @Autowired
+    private UserJobApprovalRepository userJobApprovalRepository;
+    @Autowired
     private final UserService userService;
 
     public UserJobServiceImpl(UserRepository userRepository,
@@ -37,22 +42,24 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public Boolean guardarCargo(UserJob cargo, String jwt, Date fechaPostulacion) throws Exception {
+    public Boolean guardarCargo(UserJob cargo, String jwt, Date applicationDate) throws Exception {
 
         Optional<User> usuarioOptional = userService.getUsuarioByToken(jwt);
         if(!usuarioOptional.isPresent()){
             return false;
         }
-        cargo.setUser(usuarioOptional.get());
 
-        cargo.setApplicationDate(fechaPostulacion);
-
-        cargoRepository.findByUser(usuarioOptional.get())
-                .forEach((cargoRepository::delete));
-
-
-        cargoRepository.save(cargo);
+        User usuario = usuarioOptional.get();
+        cargo.setUser(usuario);
+        cargo.setApplicationDate(applicationDate);
+        // Obtener la lista actual de cargos del usuario
+        List<UserJob> cargosActuales = cargoRepository.findByUser(usuario);
+        // Agregar el nuevo cargo a la lista
+        cargosActuales.add(cargo);
+        // Guardar la lista actualizada de cargos
+        cargoRepository.saveAll(cargosActuales);
         return true;
+
     }
 
 
@@ -67,7 +74,7 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public UserJob obtenerCargoUsuario(String jwt) throws Exception {
+    public List<UserJob> obtenerCargoUsuario(String jwt) throws Exception {
         Optional<User> userOptional = userService.getUsuarioByToken(jwt);
         if (!userOptional.isPresent()){
             throw new EntityNotFoundException("No se encontró el usuario");
@@ -78,10 +85,10 @@ public class UserJobServiceImpl implements UserJobService {
             throw new EntityNotFoundException();
         }
         if(userJob.isEmpty()){
-            return new UserJob();
+            return null;
         }
 
-        return userJob.get(0);
+        return userJob;
     }
 
     @Override
@@ -93,5 +100,80 @@ public class UserJobServiceImpl implements UserJobService {
         }
     }
 
+    @Override
+    public boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception{
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()) {
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
 
+        Optional<UserJob> cargoOld = cargoRepository.findById(postulacionId);
+        if (!cargoOld.isPresent()) {
+            throw new EntityNotFoundException("No se encontró el cargo");
+        }
+
+        if (!cargoOld.get().getUser().getId().equals(userOptional.get().getId())) {
+            throw new AccessDeniedException("Este usuario no está autorizado para eliminar este cargo");
+        }
+
+        cargoRepository.deleteById(postulacionId);
+        return true;
+    }
+
+    @Override
+    public UserJobApproval approveUserJob(Long userJobId, String jwt) {
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null){
+            return null;
+        }
+        Optional<User> usuarioRec = userRepository.findByEmail(token.getPrincipal().toString());
+        if (!usuarioRec.isPresent()){
+            return null;
+        }
+
+        Optional<UserJob> oldUserJob = cargoRepository.findById(userJobId);
+        if(!oldUserJob.isPresent()){
+            return null;
+        }
+
+        Set<String> roles = usuarioRec.get().getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+
+        Approval approval = new Approval();
+        //Relaciona aprobaciones con roles.
+
+
+        if(roles.contains("ROLE_GUEST")){
+            approval.setId(1L);
+        }
+
+
+        UserJobApproval userJobApproval = new UserJobApproval();
+        UserJobApprovalId userJobApprovalId = new UserJobApprovalId();
+        userJobApprovalId.setApproval(approval);
+        userJobApprovalId.setUserJob(oldUserJob.get());
+        userJobApproval.setId(userJobApprovalId);
+
+
+        return userJobApprovalRepository.save(userJobApproval);
+    }
+
+
+    @Override
+    public Boolean actualizarCargo(Long positionId, UserJob cargo, String jwt ) throws Exception{
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+        Optional <UserJob> userJobOptional = cargoRepository.findById(positionId);
+        if (!userJobOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el userjob");
+        }
+        UserJob userJob = userJobOptional.get();
+        userJob.setSalary(cargo.getSalary());
+        userJob.setAvailability(cargo.getAvailability());
+        System.out.println("Pase por aqui");
+        System.out.println("Pase por aqui  position Id"+positionId.toString());
+        cargoRepository.save(userJob);;
+        return true;
+    }
 }

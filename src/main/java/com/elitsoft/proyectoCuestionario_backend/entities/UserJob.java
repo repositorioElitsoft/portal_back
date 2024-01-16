@@ -3,6 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -24,6 +26,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TBL_JOB_USR")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserJob {
     
     @Id
@@ -50,9 +53,9 @@ public class UserJob {
     @JoinColumn(name = "availability_usr_id")
     private UserJobAvailability availability;
 
+    @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserJobApproval> approvals;
 
-    @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserJobApproval> approvals;
 
 
 }

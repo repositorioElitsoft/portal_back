@@ -35,9 +35,9 @@ public class Tool {
     @JoinColumn(name = "vrs_id")
     private ProductVersion productVersion;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "usr_cert_id")
-    private Certification certification;
+    private List<Certification> certifications;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "level_id")

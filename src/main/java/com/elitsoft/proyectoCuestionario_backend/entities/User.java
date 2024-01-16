@@ -46,7 +46,7 @@ public class User {
     @Column(name = "usr_url_link")
     private String linkedin;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "recovery_tkn_id")
     private UserRecoveryToken recoveryToken;
 
@@ -58,7 +58,7 @@ public class User {
     @JoinColumn(name = "usr_cv_id")
     private UserCV cv;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "usr_ver_id")
     private UserVerification verification;
 
@@ -66,7 +66,7 @@ public class User {
     @JoinColumn(name = "usr_city_id")
     private City city;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "pref_job_usr_id")
     private UserPreferredJob preferredJob;
 

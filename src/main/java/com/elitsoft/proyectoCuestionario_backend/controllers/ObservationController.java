@@ -1,8 +1,8 @@
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
-import com.elitsoft.proyectoCuestionario_backend.entities.dto.CatObservacionDTO;
+
 import com.elitsoft.proyectoCuestionario_backend.entities.Observation;
-import com.elitsoft.proyectoCuestionario_backend.entities.dto.ObservacionDTO;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.ObservationDTO;
 import com.elitsoft.proyectoCuestionario_backend.services.ObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,35 +10,63 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/observaciones")
+@RequestMapping("/observations")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ObservationController {
     @Autowired
     private ObservationService observationService;
 
-
-
-    @PutMapping("/actualizar/{observacionId}/{usr_id_obs_mod}")
-    public ResponseEntity<?> actualizarObservacion(@PathVariable Long observacionId, @RequestBody Observation observation, @PathVariable Long usr_id_obs_mod) {
+    @PostMapping("/")
+    public ResponseEntity<?> createObs(@RequestBody Observation observation, @RequestHeader ("Authorization")
+            String jwt) {
         try {
-            Observation observationActualizada = observationService.actualizarObservacionRec(observacionId, observation, usr_id_obs_mod);
-            if (observationActualizada != null) {
-                return ResponseEntity.ok(observationActualizada);
+            Observation nuevaObservacion = observationService.createObservation(observation, jwt );
+            return new ResponseEntity<>(nuevaObservacion, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/user-job/{userJobId}")
+    public ResponseEntity<List<ObservationDTO>> getObservationsByUserJob(@PathVariable Long userJobId) {
+        List<ObservationDTO> observations = observationService.getObservationsByUserJob(userJobId);
+        return new ResponseEntity<>(observations, HttpStatus.OK);
+    }
+    @PutMapping("/{observationId}")
+    public ResponseEntity<?> updateObservation(@PathVariable Long observationId,
+                                                         @RequestBody Observation observation,
+                                                         @RequestHeader("Authorization") String jwt){
+        try {
+            Observation updatedObservation = observationService.updateObservation(observationId, observation,jwt);
+            return new ResponseEntity<Observation>(updatedObservation, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Exception>(e, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarObservacion(@PathVariable Long id) {
+        try {
+            boolean eliminado = observationService.deleteObservation(id);
+            if (eliminado) {
+                return new ResponseEntity<>("{\"message\": \"Observación eliminada con éxito\"}", HttpStatus.OK);
             } else {
-                // Aquí puedes manejar el caso en el que la actualización no arroje un error pero tampoco retorne un resultado
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró la observación con el ID especificado para actualizar.");
+                return new ResponseEntity<>("{\"message\": \"No se encontró la observación con el ID: " + id + "\"}", HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            // Aquí manejas la excepción, e.g., imprimir la pila de llamadas o registrar el error
-            // Puedes personalizar el mensaje de error según el tipo de excepción y la información que desees exponer
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la observación: " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
-
 }
+
+
 
 

@@ -55,9 +55,6 @@ public class TokenUtils {
             List<String> authorities = claims.get("authorities", List.class);
 
 
-            authorities.forEach(a ->{
-                System.out.println("role "+ a);
-            });
 
              Collection<? extends GrantedAuthority> roles = authorities.stream()
                     .map(SimpleGrantedAuthority::new)

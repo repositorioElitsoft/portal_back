@@ -1,25 +1,27 @@
 package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
-import com.elitsoft.proyectoCuestionario_backend.entities.Product;
-import com.elitsoft.proyectoCuestionario_backend.entities.ProductCategory;
-import com.elitsoft.proyectoCuestionario_backend.entities.Tool;
-import com.elitsoft.proyectoCuestionario_backend.entities.User;
+import com.elitsoft.proyectoCuestionario_backend.entities.*;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
-import com.elitsoft.proyectoCuestionario_backend.repositories.ProductRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositories.ProductVersionRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositories.ToolRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.FileContentDTO;
+import com.elitsoft.proyectoCuestionario_backend.repositories.*;
+import com.elitsoft.proyectoCuestionario_backend.services.FileService;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -37,11 +39,17 @@ public class ToolServiceImpl implements ToolService {
     private ProductVersionRepository productVersionRepository;
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private FileService fileService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CertificationRepository certificationRepository;
+    @Autowired
+    private EmploymentRepository employmentRepository;
 
 
+    @Transactional
     @Override
     public Boolean deleteUserTool(Long toolId, String jwt) {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
@@ -53,7 +61,9 @@ public class ToolServiceImpl implements ToolService {
         if (!usuarioOpt.isPresent()){
             return false;
         }
-        //TODO check that user is tool's owner
+
+        employmentRepository.deleteToolsAssociation(toolId);
+
         toolRepository.deleteById(toolId);
         return true;
     }
@@ -139,7 +149,91 @@ public class ToolServiceImpl implements ToolService {
         }
     }
 
-   
+    @Override
+    public Tool addToolCertification(Long toolId, MultipartFile certification, String jwt) throws IOException {
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        Optional<Tool> toolOptional = toolRepository.findById(toolId);
+        if (!toolOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró la herramienta");
+        }
+
+
+        //TODO check if user owns tool
+        String filePath = fileService.saveCertification(certification);
+        User user = userOptional.get();
+
+        Tool tool = toolOptional.get();
+        Certification newCertification = new Certification();
+        newCertification.setUrl(filePath);
+        tool.getCertifications().add(newCertification);
+
+        //save certification
+        return toolRepository.save(tool);
+    }
+
+    @Override
+    public Boolean deleteToolCertification(Long toolId, Long certId, String jwt) throws IOException {
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+        Optional<Tool> toolOptional = toolRepository.findById(toolId);
+        if(!toolOptional.isPresent()){
+            throw new EntityNotFoundException();
+        }
+
+        if(userOptional.get().getTools().stream().noneMatch(tool -> tool.getId().equals(toolId))){
+            return false;
+        }
+        // TODO QUE SE ELIMINEN DE LAS CARPETAS System.out.println("is qeauql");
+
+        Optional<Certification> certificationOptional = toolOptional.get().getCertifications().stream()
+                .filter(cert -> cert.getId().equals(certId)).findFirst();
+        if (!certificationOptional.isPresent()){
+            return false;
+        }
+        certificationRepository.deleteById(certificationOptional.get().getId());
+        return fileService.deleteFile(certificationOptional.get().getUrl());
+    }
+
+    @Override
+    public List<Tool> getToolsForExams(String jwt) {
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            throw new EntityNotFoundException("No se encontró el usuario");
+        }
+
+        List<Tool> tools = toolRepository.findByUser(userOptional.get());
+
+
+        List<Tool> toolsWithQuestions =  tools.stream().filter(tool -> {
+            return !tool.getProductVersion().getProduct().getQuestions().isEmpty();
+        }).collect(Collectors.toList());
+
+
+        Map<String,Long> maxDifficultLevel = new HashMap<>();
+
+        return toolsWithQuestions;
+    }
+
+    @Override
+    public FileContentDTO downloadCertification(Long certId) throws IOException, EntityNotFoundException {
+        Optional<Certification> certification = certificationRepository.findById(certId);
+        if(!certification.isPresent()){
+            return null;
+        }
+
+        FileContentDTO fileContent = new FileContentDTO();
+        fileContent.setFileName(certification.get().getUrl());
+        fileContent.setResource(fileService.getCertification(certification.get().getUrl()));
+        return fileContent;
+    }
+
+
 }
 
 

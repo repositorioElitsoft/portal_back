@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "TBL_OBS")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Observation {
 
     @Id
@@ -22,23 +23,17 @@ public class Observation {
     private Long id;
     @Column(name = "obs_desc")
     private String description;
-    @Column(name = "obs_date")
 
-
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "usr_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_usr_id")
     @JsonBackReference
     private UserJob userJob;
-    @Column(name = "usr_id_obs_cre")
-    private Long responsibleId;
 
     @OneToMany(mappedBy = "observation", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ObservationUpdate> updates;
+
+
 
 
 

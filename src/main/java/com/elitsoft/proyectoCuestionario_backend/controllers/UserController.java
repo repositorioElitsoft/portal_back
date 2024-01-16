@@ -1,6 +1,8 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
+import com.elitsoft.proyectoCuestionario_backend.entities.UserPreferredJob;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.VerifyDTO;
 import com.elitsoft.proyectoCuestionario_backend.exceptions.CustomError;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import com.elitsoft.proyectoCuestionario_backend.services.*;
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.function.EntityResponse;
 
 
 import javax.mail.MessagingException;
@@ -62,14 +65,14 @@ public class UserController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarUsuario(@RequestBody User user, Long cityId) throws Exception{
+    public ResponseEntity<?> saveUser(@RequestBody User user, Long cityId) throws Exception{
         try{
             userService.guardarUsuario(user, cityId);
         }
         catch (DataAccessException ex){
             CustomError error = new CustomError();
             error.setError("El usuario ya existe.");
-            return new ResponseEntity<CustomError>(error, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex, HttpStatus.CONFLICT);
         }
         return new ResponseEntity<Boolean>(true ,HttpStatus.CREATED);
     }
@@ -120,8 +123,8 @@ public class UserController {
         return userService.obtenerDatosUsuario(jwt);
     }
 
-    @PostMapping("/verificar")
-    public ResponseEntity<Boolean> verificarUsuario(@RequestBody Map<String, String> requestData){
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verificarUsuario(@RequestBody VerifyDTO requestData){
         if(userService.verificarUsuario(requestData)){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
@@ -194,6 +197,18 @@ public class UserController {
         return userService.obtenerUsuarioId(usuarioId);
     }
 
+    @PostMapping("/preferred")
+    public ResponseEntity<?> createOrUpdatePreferredJob(@RequestBody UserPreferredJob userPreferredJob,
+                                                                       @RequestHeader("Authorization") String jwt){
+        UserPreferredJob createdJob = userService.createOrUpdatePreferredJob(userPreferredJob, jwt);
+        return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/preferred")
+    public ResponseEntity<?> getPreferredJob(@RequestHeader("Authorization") String jwt){
+        UserPreferredJob job = userService.getPreferredJob(jwt);
+        return new ResponseEntity<>(job, HttpStatus.OK);
+    }
 
 
 }

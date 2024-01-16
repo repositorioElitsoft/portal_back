@@ -20,7 +20,8 @@ import java.util.stream.Stream;
 @Service
 public class FileServiceImpl implements FileService {
 
-    private final String uploadDirectory = "./cvs";
+    private final String CV_DIRECTORY = "./cvs";
+    private final String CERT_DIRECTORY = "./certs";
 
     private final Path root = Paths.get("uploads");
 
@@ -104,9 +105,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteFile(String filePath) throws IOException {
+    public Boolean deleteFile(String filePath) throws IOException {
         Path path = Paths.get(filePath);
-        Files.deleteIfExists(path);
+        return Files.deleteIfExists(path);
     }
 
 
@@ -117,7 +118,7 @@ public class FileServiceImpl implements FileService {
             throw new IOException("File is not PDF");
         }
 
-        Path uploadPath = Paths.get(uploadDirectory).toAbsolutePath().normalize();
+        Path uploadPath = Paths.get(CV_DIRECTORY).toAbsolutePath().normalize();
         File uploadDir = new File(uploadPath.toString());
         if (!uploadDir.exists()) {
             if(!uploadDir.mkdirs()){
@@ -135,10 +136,34 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public String saveCertification(MultipartFile certification) throws IOException {
+
+        //if (!isPDF(file)){
+        //    throw new IOException("File is not PDF");
+       // } TODO determine certification allowed extensions
+
+        Path uploadPath = Paths.get(CERT_DIRECTORY).toAbsolutePath().normalize();
+        File uploadDir = new File(uploadPath.toString());
+        if (!uploadDir.exists()) {
+            if(!uploadDir.mkdirs()){
+                throw new IOException("Couldn't make folder in path: "+ uploadPath.toString());
+            }
+        }
+
+        // Generate a unique file name
+        String fileName = UUID.randomUUID().toString() + "_" + certification.getOriginalFilename();
+        Path targetLocation = uploadPath.resolve(fileName);
+
+        // Save the file to the server
+        certification.transferTo(targetLocation.toFile());
+        return fileName;
+    }
+
+
+    @Override
     public Resource getCV(String fileName) throws IOException {
 
-        Path filePath = Paths.get(uploadDirectory +"/"+fileName); // Change the path accordingly
-
+        Path filePath = Paths.get(CV_DIRECTORY +"/"+fileName); // Change the path accordingly
         Resource cv = new UrlResource(filePath.toUri());
         if (cv.exists() && cv.isReadable()) {
             return cv;
@@ -147,6 +172,17 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
+    public Resource getCertification(String certUrl) throws IOException {
+        Path filePath = Paths.get(CERT_DIRECTORY +"/"+certUrl); // Change the path accordingly
+        Resource cv = new UrlResource(filePath.toUri());
+        System.out.println("File from"+ filePath.toString());
+        if (cv.exists() && cv.isReadable()) {
+            return cv;
+        } else {
+            throw new IOException("File not found");
+        }
+    }
 
 
     private boolean isPDF(MultipartFile file) {
