@@ -7,6 +7,7 @@ import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 import com.elitsoft.proyectoCuestionario_backend.services.FileService;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -21,9 +22,18 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
+import org.springframework.web.multipart.MultipartFile;
+
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  *
- * @author Maeva Martinez
+ * @author
  */
 
 @Service
@@ -214,7 +224,6 @@ public class ToolServiceImpl implements ToolService {
 
         return toolsWithQuestions;
     }
-
 
 }
 
