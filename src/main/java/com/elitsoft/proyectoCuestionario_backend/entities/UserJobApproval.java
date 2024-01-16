@@ -12,14 +12,15 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "tlb_apr_job")
+@Table(name = "tbl_apr_job")
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserJobApproval {
 
     @EmbeddedId
     private UserJobApprovalId id;
-
+    @Column(name = "apr_job_is_apr")
+    private Boolean isApproved;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "apr_job_date")

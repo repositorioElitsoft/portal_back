@@ -2,6 +2,8 @@ package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.UserJobApprovalDTO;
+import com.elitsoft.proyectoCuestionario_backend.repositories.ApprovalRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobApprovalRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 
@@ -30,6 +32,8 @@ public class UserJobServiceImpl implements UserJobService {
 
     @Autowired
     private UserJobApprovalRepository userJobApprovalRepository;
+    @Autowired
+    private ApprovalRepository approvalRepository;
     @Autowired
     private final UserService userService;
 
@@ -121,7 +125,7 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public UserJobApproval approveUserJob(Long userJobId, String jwt) {
+    public UserJobApproval approveUserJob(Long userJobId, String jwt, UserJobApprovalDTO userJobApprovalDTO) {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null){
             return null;
@@ -142,8 +146,14 @@ public class UserJobServiceImpl implements UserJobService {
         //Relaciona aprobaciones con roles.
 
 
-        if(roles.contains("ROLE_GUEST")){
-            approval.setId(1L);
+        if(roles.contains("ENTR_TEC")){
+            approval = approvalRepository.findById(1L).orElseGet(null);
+        }
+        if(roles.contains("ENTR_GER")){
+            approval = approvalRepository.findById(2L).orElseGet(null);
+        }
+        if(roles.contains("ENTR_OPER")){
+            approval = approvalRepository.findById(3L).orElseGet(null);
         }
 
 
@@ -152,6 +162,7 @@ public class UserJobServiceImpl implements UserJobService {
         userJobApprovalId.setApproval(approval);
         userJobApprovalId.setUserJob(oldUserJob.get());
         userJobApproval.setId(userJobApprovalId);
+       // userJobApproval.setIsApproved(userJobApprovalDTO.getIsApproved());
 
 
         return userJobApprovalRepository.save(userJobApproval);
