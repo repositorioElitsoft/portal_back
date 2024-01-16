@@ -4,13 +4,14 @@ package com.elitsoft.proyectoCuestionario_backend.controllers;
 import com.elitsoft.proyectoCuestionario_backend.entities.Employment;
 import com.elitsoft.proyectoCuestionario_backend.entities.Tool;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.FileContentDTO;
 import com.elitsoft.proyectoCuestionario_backend.services.EmploymentService;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,6 +90,25 @@ public class ToolController {
 
         return new ResponseEntity<>(tool,HttpStatus.OK);
     }
+
+    @GetMapping("/certification/{certId}")
+    public ResponseEntity<?> downloadToolCertification(
+                                                 @PathVariable("certId") Long certId,
+                                                 @RequestHeader("Authorization") String jwt){
+        try {
+            FileContentDTO fileContent = toolService.downloadCertification(certId);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/octet-stream"));
+            headers.setPragma(fileContent.getFileName());
+
+            return new ResponseEntity<>(fileContent.getResource(),headers,HttpStatus.OK);
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>("err",HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
     @DeleteMapping("/{toolId}/certification/{certId}")

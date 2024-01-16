@@ -37,17 +37,16 @@ public class ExamResultServiceImpl implements ExamResultService {
     }
 
     @Override
-    public Boolean guardarResultados(ExamResult examResult, String jwt){
+    public ExamResult guardarResultados(ExamResult examResult, String jwt){
         Optional<User> userOptional = userService.getUsuarioByToken(jwt);
 
         if (!userOptional.isPresent()){
-            return false;
+            return null;
         }
         examResult.setUser(userOptional.get());
-        ExamResult createdExamResult = examResultRepository.save(examResult);
 
 
-        return true;
+        return examResultRepository.save(examResult);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.elitsoft.proyectoCuestionario_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "tbl_tp_apr")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Approval {
 
     @Id

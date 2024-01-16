@@ -3,11 +3,11 @@ package com.elitsoft.proyectoCuestionario_backend.services.impl;
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.CreateToolDTO;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.FileContentDTO;
 import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 import com.elitsoft.proyectoCuestionario_backend.services.FileService;
 import com.elitsoft.proyectoCuestionario_backend.services.ToolService;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,18 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-
-import org.springframework.web.multipart.MultipartFile;
-
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 /**
  *
- * @author
+ * @author Maeva Martinez
  */
 
 @Service
@@ -222,8 +214,25 @@ public class ToolServiceImpl implements ToolService {
             return !tool.getProductVersion().getProduct().getQuestions().isEmpty();
         }).collect(Collectors.toList());
 
+
+        Map<String,Long> maxDifficultLevel = new HashMap<>();
+
         return toolsWithQuestions;
     }
+
+    @Override
+    public FileContentDTO downloadCertification(Long certId) throws IOException, EntityNotFoundException {
+        Optional<Certification> certification = certificationRepository.findById(certId);
+        if(!certification.isPresent()){
+            return null;
+        }
+
+        FileContentDTO fileContent = new FileContentDTO();
+        fileContent.setFileName(certification.get().getUrl());
+        fileContent.setResource(fileService.getCertification(certification.get().getUrl()));
+        return fileContent;
+    }
+
 
 }
 

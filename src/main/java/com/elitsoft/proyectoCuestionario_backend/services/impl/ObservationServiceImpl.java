@@ -81,10 +81,15 @@ public class ObservationServiceImpl implements ObservationService {
     }
 
 
+
     @Override
     public List<ObservationDTO> getObservationsByUserJob(Long userJobId) {
-        List<Observation> observations = observationRepository.findAllByUserJobId(userJobId).orElse(null);
-        List<ObservationDTO> observationDTOS = Objects.requireNonNull(observations).stream().map(observation -> {
+        // Obtén la lista de observaciones o devuelve una lista vacía si es nulo
+        List<Observation> observations = observationRepository.findAllByUserJobId(userJobId).orElse(new ArrayList<>());
+        if (observations.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<ObservationDTO> observationDTOS = observations.stream().map(observation -> {
             ObservationDTO newObs = new ObservationDTO();
             newObs.setId(observation.getId());
             newObs.setDescription(observation.getDescription());
@@ -92,23 +97,34 @@ public class ObservationServiceImpl implements ObservationService {
             ObservationUpdate oldest = observationUpdateRepository.findFirstRecord(observation.getId()).orElse(null);
             ObservationUpdate recent = observationUpdateRepository.findMostRecentRecord(observation.getId()).orElse(null);
 
-            User authorUser = userRepository.findById(Objects.requireNonNull(oldest).getResponsibleId()).orElse(null);
-            User modifierUser = userRepository.findById(Objects.requireNonNull(recent).getResponsibleId()).orElse(null);
+            User authorUser = null;
+            User modifierUser = null;
+
+            if (oldest != null) {
+                authorUser = userRepository.findById(oldest.getResponsibleId()).orElse(null);
+            }
+
+            if (recent != null) {
+                modifierUser = userRepository.findById(recent.getResponsibleId()).orElse(null);
+            }
 
             ResponsibleDTO author = new ResponsibleDTO();
-            author.setEmail(authorUser.getEmail());
-            author.setName(authorUser.getName());
-            author.setFirstLastname(authorUser.getFirstLastname());
-            author.setSecondLastname(authorUser.getSecondLastname());
+            if (authorUser != null) {
+                author.setEmail(authorUser.getEmail());
+                author.setName(authorUser.getName());
+                author.setFirstLastname(authorUser.getFirstLastname());
+                author.setSecondLastname(authorUser.getSecondLastname());
+                author.setDate(oldest.getUpdatedAt());
+            }
 
             ResponsibleDTO modifier = new ResponsibleDTO();
-            modifier.setEmail(modifierUser.getEmail());
-            modifier.setName(modifierUser.getName());
-            modifier.setFirstLastname(modifierUser.getFirstLastname());
-            modifier.setSecondLastname(modifierUser.getSecondLastname());
-
-            author.setDate(oldest.getUpdatedAt());
-            modifier.setDate(recent.getUpdatedAt());
+            if (modifierUser != null) {
+                modifier.setEmail(modifierUser.getEmail());
+                modifier.setName(modifierUser.getName());
+                modifier.setFirstLastname(modifierUser.getFirstLastname());
+                modifier.setSecondLastname(modifierUser.getSecondLastname());
+                modifier.setDate(recent.getUpdatedAt());
+            }
 
             newObs.setAuthor(author);
             newObs.setLastUpdateResponsible(modifier);
@@ -116,13 +132,9 @@ public class ObservationServiceImpl implements ObservationService {
             return newObs;
         }).collect(Collectors.toList());
 
-        try {
-            return observationDTOS;
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al consultar la observación con ID: " + userJobId, e);
-        }
+        return observationDTOS;
     }
+
 
     @Override
     public boolean deleteObservation(Long id) {
