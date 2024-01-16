@@ -43,7 +43,7 @@ public class QuestionServiceImpl implements QuestionService {
                 () -> new NoSuchElementException("La pregunta con ID " + preguntaId + " no se encontro.")
         );
 
-        questionExistente.setContenido(question.getContenido());
+        questionExistente.setContent(question.getContent());
         questionExistente.setOption1(question.getOption1());
         questionExistente.setOption2(question.getOption2());
         questionExistente.setOption3(question.getOption3());
@@ -72,27 +72,24 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> generarExamen(String description, Long productId) {
         Product product = new Product();
         product.setId(productId);
-        Level level = new Level();
-
-
+        System.out.printf("description"+description);
+        System.out.printf("productoId"+productId);
         int totalQuestions = 10;
         int hardQuestionsCount = 0;
         int mediumQuestionsCount = 0;
         int easyQuestionsCount = 0;
-        if ("alto".equals(description)) {
+        if ("Alto".equals(description)) {
             hardQuestionsCount = (int) Math.round(totalQuestions * 0.7);
-            level.setId(1L);
             mediumQuestionsCount = (int) Math.round(totalQuestions * 0.2);
             easyQuestionsCount = totalQuestions - hardQuestionsCount - mediumQuestionsCount;
-        } else if ("medio".equals(description)) {
+        } else if ("Medio".equals(description)) {
             mediumQuestionsCount = (int) Math.round(totalQuestions * 0.8);
-            level.setId(2L);
             easyQuestionsCount = totalQuestions - mediumQuestionsCount;
-        } else if ("bajo".equals(description)) {
+        } else if ("Bajo".equals(description)) {
             easyQuestionsCount = totalQuestions;
-            level.setId(3L);
+
         }
-        List<Question> allQuestions = new ArrayList<>(questionRepository.findByLevelAndProduct(level, product));
+        List<Question> allQuestions = new ArrayList<>(questionRepository.findByLevelDescriptionAndProduct(description, product));
         List<Question> hardQuestions = getRandomQuestions(allQuestions, hardQuestionsCount);
         List<Question> mediumQuestions = getRandomQuestions(allQuestions, mediumQuestionsCount);
         List<Question> easyQuestions = getRandomQuestions(allQuestions, easyQuestionsCount);
@@ -107,7 +104,7 @@ public class QuestionServiceImpl implements QuestionService {
         return allQuestions.stream().limit(count).collect(Collectors.toList());
     }
     public List<Question> obtenerPreguntasPorProducto(Long productoId) {
-        return questionRepository.findByProduct(productoId);
+        return questionRepository.findByProductId(productoId);
     }
 
 }

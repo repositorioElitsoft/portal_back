@@ -16,7 +16,7 @@ public class ExamResultController {
     @Autowired
     private ExamResultService examResultService;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<?>> obtenerResultados(){
         List<ExamResult> resultados= examResultService.obtenerResultados();
         return new ResponseEntity<>(resultados, HttpStatus.OK);
@@ -25,9 +25,9 @@ public class ExamResultController {
 
 
 
-    @GetMapping("/{idUser}")
-    public ResponseEntity<List<?>> obtenerResultadosByUser(@PathVariable Long idUser){
-        List<ExamResult> resultados = examResultService.obtenerResultadosByUser(idUser);
+    @GetMapping("/")
+    public ResponseEntity<List<?>> obtenerResultadosByUser(@RequestHeader("Authorization") String jwt){
+        List<ExamResult> resultados = examResultService.obtenerResultadosByUser(jwt);
         return new ResponseEntity<>(resultados, HttpStatus.OK);
 
     }

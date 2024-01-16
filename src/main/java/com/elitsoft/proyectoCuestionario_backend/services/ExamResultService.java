@@ -8,7 +8,7 @@ import java.util.List;
 public interface ExamResultService {
 
     List<ExamResult> obtenerResultados();
-    List<ExamResult> obtenerResultadosByUser(Long userId);
+    List<ExamResult> obtenerResultadosByUser(String userId);
 
     public Boolean guardarResultados(ExamResult examResult, String jwt);
 

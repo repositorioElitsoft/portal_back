@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "tbl_res")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ExamResult {
 
     @Id
@@ -29,8 +31,6 @@ public class ExamResult {
     @JoinColumn(name = "usr_id")
     @JsonBackReference
     private User user;
-    @Column(name = "res_score_max")
-    private Integer maxScore;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prd_id")
     private Product product;

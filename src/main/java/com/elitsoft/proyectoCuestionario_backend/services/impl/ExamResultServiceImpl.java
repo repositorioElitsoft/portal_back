@@ -18,22 +18,20 @@ public class ExamResultServiceImpl implements ExamResultService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserService userService;
-
     @Override
     public List<ExamResult> obtenerResultados() {
         List<ExamResult>resultados = examResultRepository.findAll();
         return resultados;
-
     }
-
     @Override
-    public List<ExamResult> obtenerResultadosByUser(Long userId) {
-        User user = new User();
-        user.setId(userId);
-        return examResultRepository.findByUser(user);
+    public List<ExamResult> obtenerResultadosByUser(String jwt) {
+        Optional<User> userOptional = userService.getUsuarioByToken(jwt);
+        if (!userOptional.isPresent()){
+            return null;
+        }
+        return examResultRepository.findByUser(userOptional.get());
     }
 
     @Override
