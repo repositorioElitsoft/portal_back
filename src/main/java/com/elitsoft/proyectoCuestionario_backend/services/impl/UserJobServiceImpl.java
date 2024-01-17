@@ -125,7 +125,7 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public UserJobApproval approveUserJob(Long userJobId, String jwt, UserJobApprovalDTO userJobApprovalDTO) {
+    public List <UserJobApproval>approveUserJob(Long userJobId, String jwt, UserJobApprovalDTO userJobApprovalDTO) {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null){
             return null;
@@ -147,25 +147,31 @@ public class UserJobServiceImpl implements UserJobService {
 
 
         if(roles.contains("ENTR_TEC")){
-            approval = approvalRepository.findById(1L).orElseGet(null);
+            approval.setId(1L);
         }
         if(roles.contains("ENTR_GER")){
-            approval = approvalRepository.findById(2L).orElseGet(null);
+            approval.setId(2L);
         }
         if(roles.contains("ENTR_OPER")){
-            approval = approvalRepository.findById(3L).orElseGet(null);
+            approval.setId(3L);
         }
-
+        if(approval.getId() == null){
+            throw new AccessDeniedException("User doesn't have the necessary roles for approving user jobs:");
+        }
 
         UserJobApproval userJobApproval = new UserJobApproval();
         UserJobApprovalId userJobApprovalId = new UserJobApprovalId();
         userJobApprovalId.setApproval(approval);
         userJobApprovalId.setUserJob(oldUserJob.get());
         userJobApproval.setId(userJobApprovalId);
-       // userJobApproval.setIsApproved(userJobApprovalDTO.getIsApproved());
+       userJobApproval.setIsApproved(userJobApprovalDTO.getIsApproved());
+        userJobApprovalRepository.save(userJobApproval);
+        Optional<UserJob> newUserJob = cargoRepository.findById(userJobId);
+        if(!newUserJob.isPresent()){
+            return null;
+        }
 
-
-        return userJobApprovalRepository.save(userJobApproval);
+        return newUserJob.get().getApprovals();
     }
 
 

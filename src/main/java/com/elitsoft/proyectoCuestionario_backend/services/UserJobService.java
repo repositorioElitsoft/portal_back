@@ -28,7 +28,7 @@ public interface UserJobService {
     boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception;
 
 
-    UserJobApproval approveUserJob(Long userJobId, String jwt, UserJobApprovalDTO userJobApprovalDTO);
+    List<UserJobApproval> approveUserJob(Long userJobId, String jwt, UserJobApprovalDTO userJobApprovalDTO);
 
 
 }
