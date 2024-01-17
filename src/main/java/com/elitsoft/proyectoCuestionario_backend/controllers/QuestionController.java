@@ -42,9 +42,9 @@ public class QuestionController {
     @GetMapping("/generarExamen")
     public ResponseEntity<List<Question>> generarExamen(
             @RequestParam String description,
-            @RequestParam Long productId
+            @RequestParam Long productid
     ) {
-        List<Question> examQuestions = questionService.generarExamen(description, productId);
+        List<Question> examQuestions = questionService.generarExamen(description, productid);
         return ResponseEntity.ok(examQuestions);
     }
 

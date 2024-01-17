@@ -211,7 +211,7 @@ public class ToolServiceImpl implements ToolService {
 
 
         List<Tool> toolsWithQuestions =  tools.stream().filter(tool -> {
-            return !tool.getProductVersion().getProduct().getQuestions().isEmpty();
+            return tool.getProductVersion().getProduct().getQuestions().size() >= 10;
         }).collect(Collectors.toList());
 
 

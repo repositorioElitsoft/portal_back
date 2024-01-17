@@ -4,9 +4,11 @@ import com.elitsoft.proyectoCuestionario_backend.entities.Academical;
 import com.elitsoft.proyectoCuestionario_backend.entities.UserJob;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
 import com.elitsoft.proyectoCuestionario_backend.entities.UserJobApproval;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.UserJobApprovalDTO;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -27,7 +29,7 @@ public interface UserJobService {
     boolean eliminarPostulacionPorId(Long postulacionId, String jwt) throws Exception;
 
 
-    UserJobApproval approveUserJob(Long userJobId, String jwt);
+    List<UserJobApproval> approveUserJob(Long userJobId, String jwt, UserJobApprovalDTO userJobApprovalDTO);
 
 
 }

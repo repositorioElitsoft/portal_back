@@ -5,6 +5,8 @@ import com.elitsoft.proyectoCuestionario_backend.entities.User;
 
 import java.util.Date;
 import java.util.List;
+
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.UserJobApprovalDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,7 +107,8 @@ public class UserJobController {
 
     @PostMapping("/{userJobId}/approve")
     public ResponseEntity<?> approveObservation(@RequestHeader("Authorization") String jwt,
+                                                @RequestBody UserJobApprovalDTO userJobApprovalDTO,
                                                 @PathVariable Long userJobId){
-        return new ResponseEntity<>(userJobService.approveUserJob(userJobId, jwt),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(userJobService.approveUserJob(userJobId, jwt, userJobApprovalDTO),HttpStatus.ACCEPTED);
     }
 }
