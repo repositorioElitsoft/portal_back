@@ -53,7 +53,7 @@ public class UserJob {
     @JoinColumn(name = "availability_usr_id")
     private UserJobAvailability availability;
 
-    @OneToMany(mappedBy = "id.userJob", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id.userJob", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserJobApproval> approvals;
 
 
