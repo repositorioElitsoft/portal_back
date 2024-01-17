@@ -8,6 +8,7 @@ import com.elitsoft.proyectoCuestionario_backend.entities.dto.UserJobApprovalDTO
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
