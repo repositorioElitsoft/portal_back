@@ -387,5 +387,18 @@ public class UserServiceImpl implements UserService {
         return user.map(User::getPreferredJob).orElse(null);
     }
 
+    @Override
+    public UserJobAvailability updateAvailability(UserJobAvailability userJobAvailability,String jwt) {
+        Optional<User> user = this.getUsuarioByToken(jwt);
+        if (!user.isPresent()){
+            return null;
+        }
+        User oldUser = user.get();
+
+        oldUser.setAvailability(userJobAvailability);
+        User updatedUser = userRepository.save(oldUser);
+        return updatedUser.getAvailability();
+    }
+
 
 }

@@ -90,7 +90,6 @@ public class SecurityConfig {
                 //.requestMatchers(new AntPathRequestMatcher("/usuarios/","PUT")).hasAnyAuthority(ADMIN,GUEST)
 
                 //.requestMatchers(new AntPathRequestMatcher("/laboral/**","DELETE")).hasAnyAuthority(ADMIN,GUEST)
-
                 */
 
                 .anyRequest()

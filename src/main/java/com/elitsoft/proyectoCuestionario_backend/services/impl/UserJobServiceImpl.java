@@ -194,7 +194,6 @@ public class UserJobServiceImpl implements UserJobService {
         }
         UserJob userJob = userJobOptional.get();
         userJob.setSalary(cargo.getSalary());
-        userJob.setAvailability(cargo.getAvailability());
         System.out.println("Pase por aqui");
         System.out.println("Pase por aqui  position Id"+positionId.toString());
         cargoRepository.save(userJob);;
