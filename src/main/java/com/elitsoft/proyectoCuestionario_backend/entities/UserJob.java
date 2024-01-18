@@ -49,9 +49,6 @@ public class UserJob {
     @JoinColumn(name = "job_pos_id")
     private JobPosition jobPosition;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "availability_usr_id")
-    private UserJobAvailability availability;
 
     @OneToMany(mappedBy = "id.userJob", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserJobApproval> approvals;
