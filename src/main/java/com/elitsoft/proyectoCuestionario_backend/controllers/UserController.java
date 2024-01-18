@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.controllers;
 
+import com.elitsoft.proyectoCuestionario_backend.entities.UserJobAvailability;
 import com.elitsoft.proyectoCuestionario_backend.entities.UserPreferredJob;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.VerifyDTO;
 import com.elitsoft.proyectoCuestionario_backend.exceptions.CustomError;
@@ -208,6 +209,13 @@ public class UserController {
     public ResponseEntity<?> getPreferredJob(@RequestHeader("Authorization") String jwt){
         UserPreferredJob job = userService.getPreferredJob(jwt);
         return new ResponseEntity<>(job, HttpStatus.OK);
+    }
+
+    @PostMapping("/availability")
+    public ResponseEntity<?> getPreferredJob(@RequestHeader("Authorization") String jwt,
+                                             @RequestBody UserJobAvailability userJobAvailability){
+        UserJobAvailability availability = userService.updateAvailability(userJobAvailability,jwt);
+        return new ResponseEntity<>(availability, HttpStatus.OK);
     }
 
 

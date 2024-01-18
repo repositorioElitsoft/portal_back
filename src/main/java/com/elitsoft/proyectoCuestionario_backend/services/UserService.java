@@ -1,6 +1,7 @@
 
 package com.elitsoft.proyectoCuestionario_backend.services;
 import com.elitsoft.proyectoCuestionario_backend.entities.User;
+import com.elitsoft.proyectoCuestionario_backend.entities.UserJobAvailability;
 import com.elitsoft.proyectoCuestionario_backend.entities.UserPreferredJob;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.VerifyDTO;
 import org.springframework.core.io.Resource;
@@ -64,5 +65,5 @@ public interface UserService {
 
     UserPreferredJob getPreferredJob(String jwt);
 
-
+    UserJobAvailability updateAvailability(UserJobAvailability userJobAvailability, String jwt);
 }
