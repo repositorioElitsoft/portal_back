@@ -99,6 +99,8 @@ public class User {
     @JsonIgnore
     private List<Role> roles;
 
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "availability_usr_id")
+    private UserJobAvailability availability;
 
 }
