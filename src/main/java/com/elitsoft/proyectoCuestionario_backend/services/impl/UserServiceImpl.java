@@ -49,6 +49,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserAuditoryRepository userAuditoryRepository;
 
+    @Autowired
+    private GenderRepository genderRepository;
+
     @Override
     public User guardarUsuario(User user, Long cityId) throws Exception {
         Long usrId = user.getId();
@@ -202,14 +205,34 @@ public class UserServiceImpl implements UserService {
         }
 
         Optional<User> usuarioOpt = userRepository.findByEmail(token.getPrincipal().toString());
-
         if (!usuarioOpt.isPresent()) {
             System.out.println("Usuario no encontrado en la base de datos");
             return false;
         }
 
         User userInDatabase = usuarioOpt.get();
+        // Establecer género basado en el ID o nombre
+        if (user.getGender() != null) {
+            Gender genderToUpdate = user.getGender();
+            Optional<Gender> existingGender = Optional.empty();
 
+            if (genderToUpdate.getId() != null) {
+                existingGender = genderRepository.findById(genderToUpdate.getId());
+            } else if (genderToUpdate.getName() != null) {
+                existingGender = genderRepository.findByName(genderToUpdate.getName());
+            }
+
+            if (existingGender.isPresent()) {
+                userInDatabase.setGender(existingGender.get());
+            } else {
+                Gender newGender = new Gender();
+                newGender.setName(genderToUpdate.getName());
+                newGender = genderRepository.save(newGender);
+                userInDatabase.setGender(newGender);
+            }
+        }
+
+        // Actualizar otros campos
         userInDatabase.setSecondLastname(user.getSecondLastname());
         userInDatabase.setFirstLastname(user.getFirstLastname());
         userInDatabase.setName(user.getName());
@@ -217,15 +240,14 @@ public class UserServiceImpl implements UserService {
         userInDatabase.setPhone(user.getPhone());
         userInDatabase.setCity(user.getCity());
         userInDatabase.setAddress(user.getAddress());
-        userInDatabase.setGender(user.getGender());
 
-        System.out.println("this is the incoming gender: " + user.getGender());
-
+        System.out.println("Género asignado: " + userInDatabase.getGender());
 
         User userActualizado = userRepository.save(userInDatabase);
         System.out.println("Usuario actualizado con éxito");
         return true;
     }
+
 
 
     @Override
