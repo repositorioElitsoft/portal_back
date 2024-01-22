@@ -62,18 +62,15 @@ public class UserServiceImpl implements UserService {
         }
 
 
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         user.setPassword(encoder.encode(user.getPassword()));
-        //TOdo user.setVerificationToken(UUID.randomUUID().toString());
+
         String token = UUID.randomUUID().toString();
         UserVerification userVerification = new UserVerification();
         userVerification.setIsVerified(false);
         userVerification.setCode(token);
         user.setVerification(userVerification);
-
-        //TOdo user.setIsVerified(false);
-        //TOdo  user.setRol("GUEST");
-        //System.out.println("llegué aquí");
 
         Optional<Role> role = roleRepository.findByName("ROLE_GUEST");
         if(!role.isPresent()){
@@ -209,7 +206,6 @@ public class UserServiceImpl implements UserService {
         }
 
         User userInDatabase = usuarioOpt.get();
-
         userInDatabase.setSecondLastname(user.getSecondLastname());
         userInDatabase.setFirstLastname(user.getFirstLastname());
         userInDatabase.setName(user.getName());
@@ -218,9 +214,7 @@ public class UserServiceImpl implements UserService {
         userInDatabase.setCity(user.getCity());
         userInDatabase.setAddress(user.getAddress());
         userInDatabase.setGender(user.getGender());
-
         System.out.println("this is the incoming gender: " + user.getGender());
-
 
         User userActualizado = userRepository.save(userInDatabase);
         System.out.println("Usuario actualizado con éxito");
@@ -231,8 +225,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource getCVByUser(Long userId) throws IOException,
             EntityNotFoundException {
-
-
         Optional<User> usuario = userRepository.findById(userId);
         if (!usuario.isPresent()){
             throw  new EntityNotFoundException("No user with that id");
@@ -246,9 +238,6 @@ public class UserServiceImpl implements UserService {
         User userExistente = userRepository.findById(usuarioId).orElseThrow(
                 () -> new NoSuchElementException("El user con ID " + usuarioId + " no se encontro.")
         );
-
-
-
         userExistente.setSecondLastname(user.getSecondLastname());
         userExistente.setFirstLastname(user.getFirstLastname());
         userExistente.setName(user.getName());
@@ -259,12 +248,17 @@ public class UserServiceImpl implements UserService {
         userExistente.setEmail(user.getEmail());
         userExistente.setPassword(user.getPassword());
         //TODO userExistente.setRol(user.getRol());
-
         return userRepository.save(userExistente);
     }
 
-    public List<User> listarUsuarios(){
+    @Override
+    public List<User> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> getGuestUsers(){
+        return userRepository.findUsersByRole("ROLE_GUEST");
     }
 
     @Override
@@ -275,16 +269,11 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userOptional.get();
-
-
-
         // Limpiar datos sensibles
         user.setPassword("");
         //user.setVerificationToken("");
        //TODO user.setRecoveryToken("");
         user.setTools(new ArrayList<>());
-
-
         return user;
     }
 
@@ -297,60 +286,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(token.getPrincipal().toString());
     }
 
-    @Override
-    public List<User> obtenerUsuario() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public List<User> listarUsuariosConHerramientas() {
-        return userRepository.findAll();
-    }
 
 
     @Override
     public void eliminarUsuarioId(Long usuarioId) {
-
         User user = new User();
         user.setId(usuarioId);
         userRepository.delete(user);
-
     }
 
-
-
-    @Override
-    public void eliminarCVByUserId(Long userId) throws IOException {
-        Optional<User> usuarioOpt = userRepository.findById(userId);
-        if (usuarioOpt.isPresent()) {
-            User user = usuarioOpt.get();
-            String cvPath = " GET PATH";
-            if (cvPath != null && !cvPath.isEmpty()) {
-                fileService.deleteFile(cvPath); // Agregar lógica para eliminar el archivo
-                //TODO user.setCvPath(null); // Establecer el campo del CV en null
-                userRepository.save(user);
-            }
-        }
-    }
-
-    @Override
-    public void deleteFile(String filePath) {
-        // Agrega la lógica para eliminar el archivo en el sistema de archivos
-        // Esto dependerá de cómo almacenas tus archivos, por ejemplo, usando java.io.File o algún otro enfoque.
-    }
-
-    @Override
-    public void eliminarCVByUser(Long userId) {
-
-    }
-
-    @Override
     public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException {
         Optional<User> usuarioOpt = userRepository.findById(usuarioId);
         if (!usuarioOpt.isPresent()) {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
-
         User user = usuarioOpt.get();
         //TODO String cvPath = user.getCvPath();
         String cvPath = "";
