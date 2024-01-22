@@ -10,6 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import org.springframework.core.io.Resource;
+
+import javax.persistence.EntityNotFoundException;
 
 
 /**
@@ -36,6 +39,7 @@ public interface ToolService {
     List<Tool> getToolsForExams(String jwt);
 
     FileContentDTO downloadCertification(Long certId) throws IOException, EntityNotFoundException;
+    
     
 }
         
