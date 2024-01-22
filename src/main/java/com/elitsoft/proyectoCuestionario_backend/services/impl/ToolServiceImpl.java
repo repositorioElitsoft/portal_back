@@ -210,14 +210,9 @@ public class ToolServiceImpl implements ToolService {
         List<Tool> tools = toolRepository.findByUser(userOptional.get());
 
 
-        List<Tool> toolsWithQuestions =  tools.stream().filter(tool -> {
-            return !tool.getProductVersion().getProduct().getQuestions().isEmpty();
+        return tools.stream().filter(tool -> {
+            return tool.getProductVersion().getProduct().getQuestions().size() >= 10;
         }).collect(Collectors.toList());
-
-
-        Map<String,Long> maxDifficultLevel = new HashMap<>();
-
-        return toolsWithQuestions;
     }
 
     @Override

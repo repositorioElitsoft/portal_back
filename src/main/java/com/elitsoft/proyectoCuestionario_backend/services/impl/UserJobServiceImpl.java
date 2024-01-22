@@ -2,6 +2,8 @@ package com.elitsoft.proyectoCuestionario_backend.services.impl;
 
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
+import com.elitsoft.proyectoCuestionario_backend.entities.dto.UserJobApprovalDTO;
+import com.elitsoft.proyectoCuestionario_backend.repositories.ApprovalRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobApprovalRepository;
 import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
 
@@ -17,6 +19,7 @@ import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.UserJobService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.swing.text.html.Option;
 
 /**
  *
@@ -30,6 +33,8 @@ public class UserJobServiceImpl implements UserJobService {
 
     @Autowired
     private UserJobApprovalRepository userJobApprovalRepository;
+    @Autowired
+    private ApprovalRepository approvalRepository;
     @Autowired
     private final UserService userService;
 
@@ -121,7 +126,7 @@ public class UserJobServiceImpl implements UserJobService {
     }
 
     @Override
-    public UserJobApproval approveUserJob(Long userJobId, String jwt) {
+    public List<UserJobApproval> approveUserJob(Long userJobId, String jwt, UserJobApprovalDTO userJobApprovalDTO) {
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null){
             return null;
@@ -139,11 +144,26 @@ public class UserJobServiceImpl implements UserJobService {
         Set<String> roles = usuarioRec.get().getRoles().stream().map(Role::getName).collect(Collectors.toSet());
 
         Approval approval = new Approval();
-        //Relaciona aprobaciones con roles.
 
 
-        if(roles.contains("ROLE_GUEST")){
+        if(roles.contains("ENTR_TEC")){
+            //approval = approvalRepository.findById(1L).orElse(null);
             approval.setId(1L);
+        }
+        if(roles.contains("ENTR_GER")){
+            //approval = approvalRepository.findById(2L).orElse(null);
+            approval.setId(2L);
+        }
+        if(roles.contains("ENTR_OPER")){
+            //approval = approvalRepository.findById(3L).orElse(null);
+            approval.setId(3L);
+        }
+
+        if(approval == null){
+            throw new EntityNotFoundException("Error locating approval table");
+        }
+        if(approval.getId() == null){
+            throw new AccessDeniedException("User doesn't have the necessary roles for approving user jobs:");
         }
 
 
@@ -151,10 +171,14 @@ public class UserJobServiceImpl implements UserJobService {
         UserJobApprovalId userJobApprovalId = new UserJobApprovalId();
         userJobApprovalId.setApproval(approval);
         userJobApprovalId.setUserJob(oldUserJob.get());
+
+        Optional<UserJobApproval> oldUserJobApproval = userJobApprovalRepository.findById(userJobApprovalId);
+        oldUserJobApproval.ifPresent(jobApproval -> userJobApproval.setDate(jobApproval.getDate()));
         userJobApproval.setId(userJobApprovalId);
+        userJobApproval.setIsApproved(userJobApprovalDTO.getIsApproved());
+        userJobApprovalRepository.save(userJobApproval);
 
-
-        return userJobApprovalRepository.save(userJobApproval);
+        return cargoRepository.findById(userJobId).get().getApprovals();
     }
 
 
@@ -170,7 +194,6 @@ public class UserJobServiceImpl implements UserJobService {
         }
         UserJob userJob = userJobOptional.get();
         userJob.setSalary(cargo.getSalary());
-        userJob.setAvailability(cargo.getAvailability());
         System.out.println("Pase por aqui");
         System.out.println("Pase por aqui  position Id"+positionId.toString());
         cargoRepository.save(userJob);;

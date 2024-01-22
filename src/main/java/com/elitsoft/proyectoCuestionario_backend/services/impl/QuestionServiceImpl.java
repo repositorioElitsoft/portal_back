@@ -24,6 +24,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question agregarPregunta(Question question) {
+        System.out.println(question);
         return questionRepository.save(question);
     }
 
