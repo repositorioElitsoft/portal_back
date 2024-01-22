@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/academicas")
 public class AcademicalController {
-    
+
     @Autowired
     private final AcademicalService academicalService;
 

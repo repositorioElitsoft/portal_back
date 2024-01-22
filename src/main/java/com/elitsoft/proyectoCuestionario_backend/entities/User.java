@@ -54,7 +54,7 @@ public class User {
     @JoinColumn(name = "gen_id")
     private Gender gender;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "usr_cv_id")
     private UserCV cv;
 
