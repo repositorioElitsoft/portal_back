@@ -3,9 +3,7 @@ package com.elitsoft.proyectoCuestionario_backend.services.impl;
 import com.elitsoft.proyectoCuestionario_backend.config.jwt.TokenUtils;
 import com.elitsoft.proyectoCuestionario_backend.entities.*;
 import com.elitsoft.proyectoCuestionario_backend.entities.dto.UserJobApprovalDTO;
-import com.elitsoft.proyectoCuestionario_backend.repositories.ApprovalRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobApprovalRepository;
-import com.elitsoft.proyectoCuestionario_backend.repositories.UserRepository;
+import com.elitsoft.proyectoCuestionario_backend.repositories.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-import com.elitsoft.proyectoCuestionario_backend.repositories.UserJobRepository;
 import com.elitsoft.proyectoCuestionario_backend.services.UserJobService;
 
 import javax.persistence.EntityNotFoundException;
@@ -35,6 +32,8 @@ public class UserJobServiceImpl implements UserJobService {
     private UserJobApprovalRepository userJobApprovalRepository;
     @Autowired
     private ApprovalRepository approvalRepository;
+    @Autowired
+    private ObservationRepository observationRepository;
     @Autowired
     private final UserService userService;
 
@@ -121,6 +120,8 @@ public class UserJobServiceImpl implements UserJobService {
             throw new AccessDeniedException("Este usuario no está autorizado para eliminar este cargo");
         }
 
+        Optional<List<Observation>> observationsUserJob = observationRepository.findAllByUserJobId(cargoOld.get().getId());
+        observationsUserJob.ifPresent(observations -> observationRepository.deleteAll(observations));
         cargoRepository.deleteById(postulacionId);
         return true;
     }
