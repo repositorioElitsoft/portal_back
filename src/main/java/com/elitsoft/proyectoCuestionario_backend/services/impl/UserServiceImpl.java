@@ -49,6 +49,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserAuditoryRepository userAuditoryRepository;
 
+    @Autowired
+    private GenderRepository genderRepository;
+
     @Override
     public User guardarUsuario(User user, Long cityId) throws Exception {
         Long usrId = user.getId();
@@ -192,20 +195,57 @@ public class UserServiceImpl implements UserService {
     public Boolean updateUser(User user, String jwt) {
         System.out.println("Iniciando actualización de usuario");
 
+        // Obtener la autenticación a partir del token JWT
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null) {
             System.out.println("Token JWT es nulo");
             return false;
         }
 
+        // Buscar al usuario en la base de datos por su correo electrónico
         Optional<User> usuarioOpt = userRepository.findByEmail(token.getPrincipal().toString());
-
         if (!usuarioOpt.isPresent()) {
             System.out.println("Usuario no encontrado en la base de datos");
             return false;
         }
 
         User userInDatabase = usuarioOpt.get();
+
+        // Actualizar género del usuario si se proporciona
+        if (user.getGender() != null) {
+            updateGender(user, userInDatabase);
+        }
+
+        // Actualizar otros campos del usuario
+        updateUserFields(user, userInDatabase);
+
+        // Guardar el usuario actualizado en la base de datos
+        User userActualizado = userRepository.save(userInDatabase);
+        System.out.println("Usuario actualizado con éxito");
+        return true;
+    }
+
+    private void updateGender(User user, User userInDatabase) {
+        Gender genderToUpdate = user.getGender();
+        Optional<Gender> existingGender = Optional.empty();
+
+        if (genderToUpdate.getId() != null) {
+            existingGender = genderRepository.findById(genderToUpdate.getId());
+        } else if (genderToUpdate.getName() != null) {
+            existingGender = genderRepository.findByName(genderToUpdate.getName());
+        }
+
+        if (existingGender.isPresent()) {
+            userInDatabase.setGender(existingGender.get());
+        } else {
+            Gender newGender = new Gender();
+            newGender.setName(genderToUpdate.getName());
+            newGender = genderRepository.save(newGender);
+            userInDatabase.setGender(newGender);
+        }
+    }
+
+    private void updateUserFields(User user, User userInDatabase) {
         userInDatabase.setSecondLastname(user.getSecondLastname());
         userInDatabase.setFirstLastname(user.getFirstLastname());
         userInDatabase.setName(user.getName());
@@ -213,12 +253,6 @@ public class UserServiceImpl implements UserService {
         userInDatabase.setPhone(user.getPhone());
         userInDatabase.setCity(user.getCity());
         userInDatabase.setAddress(user.getAddress());
-        userInDatabase.setGender(user.getGender());
-        System.out.println("this is the incoming gender: " + user.getGender());
-
-        User userActualizado = userRepository.save(userInDatabase);
-        System.out.println("Usuario actualizado con éxito");
-        return true;
     }
 
 
