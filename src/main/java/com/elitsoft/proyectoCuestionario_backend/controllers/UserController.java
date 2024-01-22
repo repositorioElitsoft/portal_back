@@ -60,8 +60,13 @@ public class UserController {
     private ToolService toolService;
 
     @GetMapping("/all")
-    public List<User> obtenerUsuarios(){
-        return userService.obtenerUsuario();
+    public List<User> getUsers(){
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/guest")
+    public List<User> getGuestUsers(){
+        return userService.getGuestUsers();
     }
 
 
@@ -141,12 +146,6 @@ public class UserController {
         return userService.cambiarPassword(rec_code, password.get("pass"));
     }
 
-    @GetMapping("/usuarios-herramientas")
-    public List<User> listarUsuariosConHerramientas(){
-        List<User> usuariosConHerramientas = userService.listarUsuariosConHerramientas();
-        return usuariosConHerramientas;
-    }
-
     @DeleteMapping("/eliminar/{usuarioId}")
     public ResponseEntity<Map<String, String>> eliminarUsuarioId(@PathVariable("usuarioId") Long usuarioId) {
         Map<String, String> response = new HashMap<>();
@@ -179,11 +178,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/lista-usuarios")
-    public ResponseEntity<List<User>> listarUsuarios(){
-        List<User> users = userService.listarUsuarios();
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
 
 
     @GetMapping("/email/{userEmail}")
@@ -212,7 +206,7 @@ public class UserController {
     }
 
     @PostMapping("/availability")
-    public ResponseEntity<?> getPreferredJob(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<?> saveAvailability(@RequestHeader("Authorization") String jwt,
                                              @RequestBody UserJobAvailability userJobAvailability){
         UserJobAvailability availability = userService.updateAvailability(userJobAvailability,jwt);
         return new ResponseEntity<>(availability, HttpStatus.OK);
