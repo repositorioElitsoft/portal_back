@@ -195,12 +195,14 @@ public class UserServiceImpl implements UserService {
     public Boolean updateUser(User user, String jwt) {
         System.out.println("Iniciando actualización de usuario");
 
+        // Obtener la autenticación a partir del token JWT
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null) {
             System.out.println("Token JWT es nulo");
             return false;
         }
 
+        // Buscar al usuario en la base de datos por su correo electrónico
         Optional<User> usuarioOpt = userRepository.findByEmail(token.getPrincipal().toString());
         if (!usuarioOpt.isPresent()) {
             System.out.println("Usuario no encontrado en la base de datos");
@@ -208,31 +210,42 @@ public class UserServiceImpl implements UserService {
         }
 
         User userInDatabase = usuarioOpt.get();
-<<<<<<< HEAD
-        // Establecer género basado en el ID o nombre
+
+        // Actualizar género del usuario si se proporciona
         if (user.getGender() != null) {
-            Gender genderToUpdate = user.getGender();
-            Optional<Gender> existingGender = Optional.empty();
-
-            if (genderToUpdate.getId() != null) {
-                existingGender = genderRepository.findById(genderToUpdate.getId());
-            } else if (genderToUpdate.getName() != null) {
-                existingGender = genderRepository.findByName(genderToUpdate.getName());
-            }
-
-            if (existingGender.isPresent()) {
-                userInDatabase.setGender(existingGender.get());
-            } else {
-                Gender newGender = new Gender();
-                newGender.setName(genderToUpdate.getName());
-                newGender = genderRepository.save(newGender);
-                userInDatabase.setGender(newGender);
-            }
+            updateGender(user, userInDatabase);
         }
 
-        // Actualizar otros campos
-=======
->>>>>>> 72b1cae4f267d3c5ebe4d7226a315d1977c2fa60
+        // Actualizar otros campos del usuario
+        updateUserFields(user, userInDatabase);
+
+        // Guardar el usuario actualizado en la base de datos
+        User userActualizado = userRepository.save(userInDatabase);
+        System.out.println("Usuario actualizado con éxito");
+        return true;
+    }
+
+    private void updateGender(User user, User userInDatabase) {
+        Gender genderToUpdate = user.getGender();
+        Optional<Gender> existingGender = Optional.empty();
+
+        if (genderToUpdate.getId() != null) {
+            existingGender = genderRepository.findById(genderToUpdate.getId());
+        } else if (genderToUpdate.getName() != null) {
+            existingGender = genderRepository.findByName(genderToUpdate.getName());
+        }
+
+        if (existingGender.isPresent()) {
+            userInDatabase.setGender(existingGender.get());
+        } else {
+            Gender newGender = new Gender();
+            newGender.setName(genderToUpdate.getName());
+            newGender = genderRepository.save(newGender);
+            userInDatabase.setGender(newGender);
+        }
+    }
+
+    private void updateUserFields(User user, User userInDatabase) {
         userInDatabase.setSecondLastname(user.getSecondLastname());
         userInDatabase.setFirstLastname(user.getFirstLastname());
         userInDatabase.setName(user.getName());
@@ -240,20 +253,7 @@ public class UserServiceImpl implements UserService {
         userInDatabase.setPhone(user.getPhone());
         userInDatabase.setCity(user.getCity());
         userInDatabase.setAddress(user.getAddress());
-<<<<<<< HEAD
-
-        System.out.println("Género asignado: " + userInDatabase.getGender());
-
-=======
-        userInDatabase.setGender(user.getGender());
-        System.out.println("this is the incoming gender: " + user.getGender());
-
->>>>>>> 72b1cae4f267d3c5ebe4d7226a315d1977c2fa60
-        User userActualizado = userRepository.save(userInDatabase);
-        System.out.println("Usuario actualizado con éxito");
-        return true;
     }
-
 
 
     @Override
