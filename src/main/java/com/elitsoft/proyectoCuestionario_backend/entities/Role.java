@@ -1,6 +1,7 @@
 package com.elitsoft.proyectoCuestionario_backend.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,6 +18,8 @@ public class Role {
     @Column(name = "role_name")
     private String name;
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private List<User> users;
+
 
 }
