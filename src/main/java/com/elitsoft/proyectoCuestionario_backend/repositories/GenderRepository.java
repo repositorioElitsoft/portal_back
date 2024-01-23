@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface GenderRepository extends JpaRepository<Gender, Long> {
-
+public interface GenderRepository extends JpaRepository<Gender,Long> {
     Optional<Gender> findByName(String name);
 
-    // Otros métodos personalizados si los necesitas
 }

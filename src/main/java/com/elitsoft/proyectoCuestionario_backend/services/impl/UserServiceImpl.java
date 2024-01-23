@@ -91,9 +91,7 @@ public class UserServiceImpl implements UserService {
         userAuditory.setUser(nuevoUser);
         userAuditory.setResponsibleId(nuevoUser.getId());
         userAuditoryRepository.save(userAuditory);
-
         emailService.sendVerificationEmail(nuevoUser);
-
         return nuevoUser;
     }
 
@@ -253,6 +251,32 @@ public class UserServiceImpl implements UserService {
         userInDatabase.setPhone(user.getPhone());
         userInDatabase.setCity(user.getCity());
         userInDatabase.setAddress(user.getAddress());
+
+        userInDatabase.setGender(user.getGender());
+        System.out.println("this is the incoming gender: " + user.getGender());
+
+        if(user.getGender().getId() == null){
+            System.out.println("Gender to save"+ user.getGender());
+            Gender newGender = genderRepository.save(user.getGender());
+            System.out.println("New gender to save "+ newGender);
+            userInDatabase.setGender(newGender);
+        }
+        else{
+            Optional<Gender> gender = genderRepository.findById(user.getGender().getId());
+            System.out.println("Optional gender:"+ gender);
+            if(!gender.isPresent()){
+                System.out.println("No se encontró gender con esa id");
+                return;
+            }
+            userInDatabase.setGender(gender.get());
+        }
+
+
+        User userActualizado = userRepository.save(userInDatabase);
+        System.out.println("This is the new gender" + userActualizado.getGender());
+        System.out.println("Usuario actualizado con éxito");
+        return;
+
     }
 
 
