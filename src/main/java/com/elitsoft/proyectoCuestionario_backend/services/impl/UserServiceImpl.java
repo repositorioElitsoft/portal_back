@@ -49,6 +49,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserAuditoryRepository userAuditoryRepository;
 
+    @Autowired
+    private GenderRepository genderRepository;
+
     @Override
     public User guardarUsuario(User user, Long cityId) throws Exception {
         Long usrId = user.getId();
@@ -62,18 +65,15 @@ public class UserServiceImpl implements UserService {
         }
 
 
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         user.setPassword(encoder.encode(user.getPassword()));
-        //TOdo user.setVerificationToken(UUID.randomUUID().toString());
+
         String token = UUID.randomUUID().toString();
         UserVerification userVerification = new UserVerification();
         userVerification.setIsVerified(false);
         userVerification.setCode(token);
         user.setVerification(userVerification);
-
-        //TOdo user.setIsVerified(false);
-        //TOdo  user.setRol("GUEST");
-        //System.out.println("llegué aquí");
 
         Optional<Role> role = roleRepository.findByName("ROLE_GUEST");
         if(!role.isPresent()){
@@ -91,9 +91,7 @@ public class UserServiceImpl implements UserService {
         userAuditory.setUser(nuevoUser);
         userAuditory.setResponsibleId(nuevoUser.getId());
         userAuditoryRepository.save(userAuditory);
-
         emailService.sendVerificationEmail(nuevoUser);
-
         return nuevoUser;
     }
 
@@ -195,14 +193,15 @@ public class UserServiceImpl implements UserService {
     public Boolean updateUser(User user, String jwt) {
         System.out.println("Iniciando actualización de usuario");
 
+        // Obtener la autenticación a partir del token JWT
         UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
         if (token == null) {
             System.out.println("Token JWT es nulo");
             return false;
         }
 
+        // Buscar al usuario en la base de datos por su correo electrónico
         Optional<User> usuarioOpt = userRepository.findByEmail(token.getPrincipal().toString());
-
         if (!usuarioOpt.isPresent()) {
             System.out.println("Usuario no encontrado en la base de datos");
             return false;
@@ -210,6 +209,41 @@ public class UserServiceImpl implements UserService {
 
         User userInDatabase = usuarioOpt.get();
 
+        // Actualizar género del usuario si se proporciona
+        if (user.getGender() != null) {
+            updateGender(user, userInDatabase);
+        }
+
+        // Actualizar otros campos del usuario
+        updateUserFields(user, userInDatabase);
+
+        // Guardar el usuario actualizado en la base de datos
+        User userActualizado = userRepository.save(userInDatabase);
+        System.out.println("Usuario actualizado con éxito");
+        return true;
+    }
+
+    private void updateGender(User user, User userInDatabase) {
+        Gender genderToUpdate = user.getGender();
+        Optional<Gender> existingGender = Optional.empty();
+
+        if (genderToUpdate.getId() != null) {
+            existingGender = genderRepository.findById(genderToUpdate.getId());
+        } else if (genderToUpdate.getName() != null) {
+            existingGender = genderRepository.findByName(genderToUpdate.getName());
+        }
+
+        if (existingGender.isPresent()) {
+            userInDatabase.setGender(existingGender.get());
+        } else {
+            Gender newGender = new Gender();
+            newGender.setName(genderToUpdate.getName());
+            newGender = genderRepository.save(newGender);
+            userInDatabase.setGender(newGender);
+        }
+    }
+
+    private void updateUserFields(User user, User userInDatabase) {
         userInDatabase.setSecondLastname(user.getSecondLastname());
         userInDatabase.setFirstLastname(user.getFirstLastname());
         userInDatabase.setName(user.getName());
@@ -217,22 +251,38 @@ public class UserServiceImpl implements UserService {
         userInDatabase.setPhone(user.getPhone());
         userInDatabase.setCity(user.getCity());
         userInDatabase.setAddress(user.getAddress());
-        userInDatabase.setGender(user.getGender());
 
+        userInDatabase.setGender(user.getGender());
         System.out.println("this is the incoming gender: " + user.getGender());
+
+        if(user.getGender().getId() == null){
+            System.out.println("Gender to save"+ user.getGender());
+            Gender newGender = genderRepository.save(user.getGender());
+            System.out.println("New gender to save "+ newGender);
+            userInDatabase.setGender(newGender);
+        }
+        else{
+            Optional<Gender> gender = genderRepository.findById(user.getGender().getId());
+            System.out.println("Optional gender:"+ gender);
+            if(!gender.isPresent()){
+                System.out.println("No se encontró gender con esa id");
+                return;
+            }
+            userInDatabase.setGender(gender.get());
+        }
 
 
         User userActualizado = userRepository.save(userInDatabase);
+        System.out.println("This is the new gender" + userActualizado.getGender());
         System.out.println("Usuario actualizado con éxito");
-        return true;
+        return;
+
     }
 
 
     @Override
     public Resource getCVByUser(Long userId) throws IOException,
             EntityNotFoundException {
-
-
         Optional<User> usuario = userRepository.findById(userId);
         if (!usuario.isPresent()){
             throw  new EntityNotFoundException("No user with that id");
@@ -246,9 +296,6 @@ public class UserServiceImpl implements UserService {
         User userExistente = userRepository.findById(usuarioId).orElseThrow(
                 () -> new NoSuchElementException("El user con ID " + usuarioId + " no se encontro.")
         );
-
-
-
         userExistente.setSecondLastname(user.getSecondLastname());
         userExistente.setFirstLastname(user.getFirstLastname());
         userExistente.setName(user.getName());
@@ -259,12 +306,17 @@ public class UserServiceImpl implements UserService {
         userExistente.setEmail(user.getEmail());
         userExistente.setPassword(user.getPassword());
         //TODO userExistente.setRol(user.getRol());
-
         return userRepository.save(userExistente);
     }
 
-    public List<User> listarUsuarios(){
+    @Override
+    public List<User> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> getGuestUsers(){
+        return userRepository.findUsersByRole("ROLE_GUEST");
     }
 
     @Override
@@ -275,16 +327,11 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userOptional.get();
-
-
-
         // Limpiar datos sensibles
         user.setPassword("");
         //user.setVerificationToken("");
        //TODO user.setRecoveryToken("");
         user.setTools(new ArrayList<>());
-
-
         return user;
     }
 
@@ -297,60 +344,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(token.getPrincipal().toString());
     }
 
-    @Override
-    public List<User> obtenerUsuario() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public List<User> listarUsuariosConHerramientas() {
-        return userRepository.findAll();
-    }
 
 
     @Override
     public void eliminarUsuarioId(Long usuarioId) {
-
         User user = new User();
         user.setId(usuarioId);
         userRepository.delete(user);
-
     }
 
-
-
-    @Override
-    public void eliminarCVByUserId(Long userId) throws IOException {
-        Optional<User> usuarioOpt = userRepository.findById(userId);
-        if (usuarioOpt.isPresent()) {
-            User user = usuarioOpt.get();
-            String cvPath = " GET PATH";
-            if (cvPath != null && !cvPath.isEmpty()) {
-                fileService.deleteFile(cvPath); // Agregar lógica para eliminar el archivo
-                //TODO user.setCvPath(null); // Establecer el campo del CV en null
-                userRepository.save(user);
-            }
-        }
-    }
-
-    @Override
-    public void deleteFile(String filePath) {
-        // Agrega la lógica para eliminar el archivo en el sistema de archivos
-        // Esto dependerá de cómo almacenas tus archivos, por ejemplo, usando java.io.File o algún otro enfoque.
-    }
-
-    @Override
-    public void eliminarCVByUser(Long userId) {
-
-    }
-
-    @Override
     public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException {
         Optional<User> usuarioOpt = userRepository.findById(usuarioId);
         if (!usuarioOpt.isPresent()) {
             throw new EntityNotFoundException("No se encontró el usuario");
         }
-
         User user = usuarioOpt.get();
         //TODO String cvPath = user.getCvPath();
         String cvPath = "";

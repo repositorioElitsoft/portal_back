@@ -43,23 +43,14 @@ public interface UserService {
 
     User actualizarUsuarioId(Long usr_id, User user);
 
-    public List<User> listarUsuarios();
 
     User obtenerDatosUsuario(String jwt) throws Exception;
 
-    public  List<User> obtenerUsuario();
+    public  List<User> getAllUsers();
 
-    public List<User> listarUsuariosConHerramientas();
+    public List<User> getGuestUsers();
 
     void eliminarUsuarioId (Long usr_id);
-
-    public void eliminarCV(Long usuarioId) throws IOException, EntityNotFoundException;
-
-    public void eliminarCVByUserId (Long userId) throws IOException;
-
-    public void deleteFile(String filePath);
-
-    public void eliminarCVByUser(Long userId) ;
 
     UserPreferredJob createOrUpdatePreferredJob(UserPreferredJob userPreferredJob, String jwt);
 
