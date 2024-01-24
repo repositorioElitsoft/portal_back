@@ -69,12 +69,12 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> generarExamen(String description, Long productId) {
         Product product = new Product();
         product.setId(productId);
-        System.out.printf("description" + description);
-        System.out.printf("productoId" + productId);
+
         int totalQuestions = 10;
         int hardQuestionsCount = 0;
         int mediumQuestionsCount = 0;
         int easyQuestionsCount = 0;
+
         if ("Alto".equals(description)) {
             hardQuestionsCount = (int) Math.round(totalQuestions * 0.7);
             mediumQuestionsCount = (int) Math.round(totalQuestions * 0.2);
@@ -91,33 +91,34 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> mediumQuestions = getRandomQuestions(allQuestions, mediumQuestionsCount);
         List<Question> easyQuestions = getRandomQuestions(allQuestions, easyQuestionsCount);
 
-        // Filtrar preguntas duplicadas
-        Set<Question> uniqueQuestions = new HashSet<>();
+
+        Set<Question> uniqueQuestions = new HashSet<>();    
         uniqueQuestions.addAll(hardQuestions);
         uniqueQuestions.addAll(mediumQuestions);
         uniqueQuestions.addAll(easyQuestions);
 
-        // Verificar si se alcanzó el número total de preguntas
         while (uniqueQuestions.size() < totalQuestions) {
-            // Buscar otra pregunta no duplicada y agregarla
-            Question randomQuestion = getRandomQuestion(allQuestions);
-            uniqueQuestions.add(randomQuestion);
+            List<Question> remainingQuestions = allQuestions.stream()
+                    .filter(question -> !uniqueQuestions.contains(question))
+                    .collect(Collectors.toList());
+
+            if (!remainingQuestions.isEmpty()) {
+                Collections.shuffle(remainingQuestions);
+                uniqueQuestions.add(remainingQuestions.get(0));
+            } else {
+                break;
+            }
         }
 
         List<Question> examQuestions = new ArrayList<>(uniqueQuestions);
         return examQuestions;
     }
 
-    private Question getRandomQuestion(List<Question> questions) {
-        Collections.shuffle(questions);
-        return questions.get(0);
-    }
-
-
     private List<Question> getRandomQuestions(List<Question> allQuestions, int count) {
         Collections.shuffle(allQuestions);
         return allQuestions.stream().limit(count).collect(Collectors.toList());
     }
+
     public List<Question> obtenerPreguntasPorProducto(Long productoId) {
         return questionRepository.findByProductId(productoId);
     }
