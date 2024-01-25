@@ -34,13 +34,22 @@ public class RoleController {
         return roleService.getRoleByName(name);
     }
 
-    @PostMapping("/")
-    public void saveOrUpdateRole(@RequestBody Role role) {
-        roleService.saveOrUpdateRole(role); // Ahora utiliza el método saveOrUpdateRole
+    @GetMapping("/{userId}/roles")
+    public List<Role> getRolesByUserId(@PathVariable Long userId) {
+        return roleService.getRolesByUserId(userId);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteRole(@PathVariable Long id) {
-        roleService.deleteRole(id);
+    @RequestMapping(value = "/", method = {RequestMethod.POST, RequestMethod.PUT})
+    public void saveOrUpdateRole(@RequestBody Role role, @RequestParam Long userId) {
+        roleService.saveOrUpdateRole(role, userId);
     }
+
+
+    @DeleteMapping("/{userId}/{roleId}")
+    public void deleteRole(@PathVariable Long userId, @PathVariable Long roleId) {
+        roleService.deleteRole(roleId, userId);
+    }
+
+
+
 }
