@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public interface UserService {
 
     public Resource getCVByUser(Long userId) throws IOException, EntityNotFoundException;
 
-    User actualizarUsuarioId(Long usr_id, User user);
+    User actualizarUsuarioId(Long usr_id, User user)throws SQLIntegrityConstraintViolationException;
 
 
     User obtenerDatosUsuario(String jwt) throws Exception;

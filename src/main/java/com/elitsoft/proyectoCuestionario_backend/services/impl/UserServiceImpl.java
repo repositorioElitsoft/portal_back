@@ -10,6 +10,7 @@ import com.elitsoft.proyectoCuestionario_backend.services.UserService;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -268,7 +269,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public User actualizarUsuarioId(Long usuarioId, User user){
+    public User actualizarUsuarioId(Long usuarioId, User user) throws SQLIntegrityConstraintViolationException {
         User userExistente = userRepository.findById(usuarioId).orElseThrow(
                 () -> new NoSuchElementException("El user con ID " + usuarioId + " no se encontro.")
         );
@@ -277,10 +278,7 @@ public class UserServiceImpl implements UserService {
         userExistente.setName(user.getName());
         userExistente.setRut(user.getRut());
         userExistente.setPhone(user.getPhone());
-        userExistente.setCity(user.getCity());
-        userExistente.setAddress(user.getAddress());
         userExistente.setEmail(user.getEmail());
-        userExistente.setPassword(user.getPassword());
         //TODO userExistente.setRol(user.getRol());
         return userRepository.save(userExistente);
     }
