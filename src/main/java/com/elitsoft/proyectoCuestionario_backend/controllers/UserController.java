@@ -10,6 +10,7 @@ import com.elitsoft.proyectoCuestionario_backend.services.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,10 +172,17 @@ public class UserController {
 
 
     @PutMapping("/actualizar/{usuarioId}")
-    public ResponseEntity<User> actualizarUsuarioId(@PathVariable Long usuarioId,
-                                                    @RequestBody User user){
-        User userActualizado = userService.actualizarUsuarioId(usuarioId, user);
-        return ResponseEntity.ok(userActualizado);
+    public ResponseEntity<?> actualizarUsuarioId(@PathVariable Long usuarioId, @RequestBody User user) {
+        try {
+            User userActualizado = userService.actualizarUsuarioId(usuarioId, user);
+            return ResponseEntity.ok(userActualizado);
+        } catch (SQLIntegrityConstraintViolationException e) {
+
+          return new ResponseEntity<>("Rol Duplicado", HttpStatus.CONFLICT);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
 
