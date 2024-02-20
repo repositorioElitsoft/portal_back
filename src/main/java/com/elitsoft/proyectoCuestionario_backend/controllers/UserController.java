@@ -125,6 +125,21 @@ public class UserController {
         return new ResponseEntity<>(true ,HttpStatus.OK);
     }
 
+
+    @DeleteMapping("/delete-cv")
+    public ResponseEntity<?> deleteUserCV(@RequestHeader("Authorization") String jwt){
+
+        try {
+            userService.deleteUserCV(jwt);
+        }
+        catch (DataAccessException | IOException ex){
+            return new ResponseEntity<>(ex.getMessage() ,HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(true ,HttpStatus.OK);
+    }
+
+
     @GetMapping("/")
     public User obtenerUsuario(@RequestHeader("Authorization") String jwt)throws Exception{
         return userService.obtenerDatosUsuario(jwt);
