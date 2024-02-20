@@ -108,7 +108,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Boolean deleteFile(String filePath) throws IOException {
-        Path path = Paths.get(filePath);
+        Path path = Paths.get(CV_DIRECTORY +"/"+ filePath);
         return Files.deleteIfExists(path);
     }
 

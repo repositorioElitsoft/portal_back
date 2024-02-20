@@ -58,4 +58,6 @@ public interface UserService {
     UserPreferredJob getPreferredJob(String jwt);
 
     UserJobAvailability updateAvailability(UserJobAvailability userJobAvailability, String jwt);
+
+    void deleteUserCV(String jwt) throws IOException;
 }
