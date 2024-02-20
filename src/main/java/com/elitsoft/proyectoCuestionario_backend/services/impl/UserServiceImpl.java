@@ -246,9 +246,9 @@ public class UserServiceImpl implements UserService {
         User userInDatabase = usuarioOpt.get();
 
         // Actualizar género del usuario si se proporciona
-        if (user.getGender() != null) {
-            updateGender(user, userInDatabase);
-        }
+        //if (user.getGender() != null) {
+        //    updateGender(user, userInDatabase);
+       // }
 
         // Actualizar otros campos del usuario
         updateUserFields(user, userInDatabase);
