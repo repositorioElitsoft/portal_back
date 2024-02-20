@@ -92,7 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> easyQuestions = getRandomQuestions(allQuestions, easyQuestionsCount);
 
 
-        Set<Question> uniqueQuestions = new HashSet<>();    
+        Set<Question> uniqueQuestions = new HashSet<>();
         uniqueQuestions.addAll(hardQuestions);
         uniqueQuestions.addAll(mediumQuestions);
         uniqueQuestions.addAll(easyQuestions);
