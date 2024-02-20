@@ -69,12 +69,12 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> generarExamen(String description, Long productId) {
         Product product = new Product();
         product.setId(productId);
-
+        System.out.println("description" + description);
+        System.out.println("productoId" + productId);
         int totalQuestions = 10;
         int hardQuestionsCount = 0;
         int mediumQuestionsCount = 0;
         int easyQuestionsCount = 0;
-
         if ("Alto".equals(description)) {
             hardQuestionsCount = (int) Math.round(totalQuestions * 0.7);
             mediumQuestionsCount = (int) Math.round(totalQuestions * 0.2);
@@ -86,39 +86,48 @@ public class QuestionServiceImpl implements QuestionService {
             easyQuestionsCount = totalQuestions;
         }
 
-        List<Question> allQuestions = new ArrayList<>(questionRepository.findByLevelDescriptionAndProduct(description, product));
-        List<Question> hardQuestions = getRandomQuestions(allQuestions, hardQuestionsCount);
-        List<Question> mediumQuestions = getRandomQuestions(allQuestions, mediumQuestionsCount);
-        List<Question> easyQuestions = getRandomQuestions(allQuestions, easyQuestionsCount);
+        List<Question> allHardQuestions = questionRepository.findByLevelDescriptionAndProduct("Alto", product);
+        List<Question> allMediumQuestions = questionRepository.findByLevelDescriptionAndProduct("Medio", product);
+        List<Question> allEasyQuestions = questionRepository.findByLevelDescriptionAndProduct("Bajo", product);
 
 
-        Set<Question> uniqueQuestions = new HashSet<>();    
+        Set<Question> hardQuestions = new HashSet<>();
+        Set<Question> mediumQuestions = new HashSet<>();
+        Set<Question> easyQuestions = new HashSet<>();
+
+        while(hardQuestions.size() < hardQuestionsCount){
+            Question question = getRandomQuestion(allHardQuestions);
+            hardQuestions.add(question);
+        }
+        while(mediumQuestions.size() < mediumQuestionsCount){
+            Question question = getRandomQuestion(allMediumQuestions);
+            mediumQuestions.add(question);
+        }
+        while(easyQuestions.size() < easyQuestionsCount){
+            Question question = getRandomQuestion(allEasyQuestions);
+            easyQuestions.add(question);
+        }
+
+
+        // Filtrar preguntas duplicadas
+        Set<Question> uniqueQuestions = new HashSet<>();
         uniqueQuestions.addAll(hardQuestions);
         uniqueQuestions.addAll(mediumQuestions);
         uniqueQuestions.addAll(easyQuestions);
-
-        while (uniqueQuestions.size() < totalQuestions) {
-            List<Question> remainingQuestions = allQuestions.stream()
-                    .filter(question -> !uniqueQuestions.contains(question))
-                    .collect(Collectors.toList());
-
-            if (!remainingQuestions.isEmpty()) {
-                Collections.shuffle(remainingQuestions);
-                uniqueQuestions.add(remainingQuestions.get(0));
-            } else {
-                break;
-            }
-        }
-
-        List<Question> examQuestions = new ArrayList<>(uniqueQuestions);
-        return examQuestions;
+        System.out.println("unique queetiosn "+uniqueQuestions);
+        return new ArrayList<>(uniqueQuestions);
     }
+
+    private Question getRandomQuestion(List<Question> questions) {
+        Collections.shuffle(questions);
+        return questions.get(0);
+    }
+
 
     private List<Question> getRandomQuestions(List<Question> allQuestions, int count) {
         Collections.shuffle(allQuestions);
         return allQuestions.stream().limit(count).collect(Collectors.toList());
     }
-
     public List<Question> obtenerPreguntasPorProducto(Long productoId) {
         return questionRepository.findByProductId(productoId);
     }

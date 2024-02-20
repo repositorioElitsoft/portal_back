@@ -53,6 +53,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GenderRepository genderRepository;
 
+    @Autowired
+    private UserCVRepository userCVRepository;
+
     @Override
     public User guardarUsuario(User user, Long cityId) throws Exception {
         Long usrId = user.getId();
@@ -162,8 +165,40 @@ public class UserServiceImpl implements UserService {
         }
         String filePath = fileService.saveFile(cv);
         User user = usuarioOpt.get();
-        //TODO user.setCvPath(filePath);
+
+        if(user.getCv() != null){
+            fileService.deleteFile(user.getCv().getPath());
+            userCVRepository.delete(user.getCv());
+        }
+
+        UserCV newCv = new UserCV();
+        newCv.setPath(filePath);
+        user.setCv(newCv);
         userRepository.save(user);
+
+    }
+
+    @Override
+    public void deleteUserCV(String jwt) throws IOException{
+
+        UsernamePasswordAuthenticationToken token = TokenUtils.getAuthentication(jwt);
+        if (token == null) {
+            return;
+        }
+
+        Optional<User> usuarioOpt = userRepository.findByEmail(token.getPrincipal().toString());
+        if (!usuarioOpt.isPresent()) {
+            return;
+        }
+
+        if(usuarioOpt.get().getCv() != null){
+            UserCV cvToDelete = usuarioOpt.get().getCv();
+            fileService.deleteFile(cvToDelete.getPath());
+            usuarioOpt.get().setCv(null);
+            userRepository.save(usuarioOpt.get());
+            userCVRepository.delete(cvToDelete);
+
+        }
 
     }
 
