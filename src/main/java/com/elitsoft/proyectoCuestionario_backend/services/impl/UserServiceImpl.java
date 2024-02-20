@@ -289,30 +289,19 @@ public class UserServiceImpl implements UserService {
         userInDatabase.setAddress(user.getAddress());
 
         userInDatabase.setGender(user.getGender());
-        System.out.println("this is the incoming gender: " + user.getGender());
+        System.out.println("Gender provided in the request: " + user.getGender());
 
-        if(user.getGender().getId() == null){
-            System.out.println("Gender to save"+ user.getGender());
-            Gender newGender = genderRepository.save(user.getGender());
-            System.out.println("New gender to save "+ newGender);
-            userInDatabase.setGender(newGender);
-        }
-        else{
-            Optional<Gender> gender = genderRepository.findById(user.getGender().getId());
-            System.out.println("Optional gender:"+ gender);
-            if(!gender.isPresent()){
-                System.out.println("No se encontró gender con esa id");
-                return;
-            }
-            userInDatabase.setGender(gender.get());
-        }
+        if(user.getGender() != null) {
 
+            System.out.println("Gender assigned to the user: " + userInDatabase.getGender());
+        } else {
+            System.out.println("No gender assigned to the user");
+        }
 
         User userActualizado = userRepository.save(userInDatabase);
-        System.out.println("This is the new gender" + userActualizado.getGender());
+        System.out.println("This is the new gender: " + userActualizado.getGender());
         System.out.println("Usuario actualizado con éxito");
-        return;
-
+        return ;
     }
 
 
