@@ -35,7 +35,6 @@ public class Question {
     private String answer;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prd_id")
-
     private Product product;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "level_id")
